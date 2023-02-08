@@ -1,0 +1,41 @@
+diff --git a/waybar/.config/waybar/config b/waybar/.config/waybar/config
+index e74622d..7a4030a 100644
+--- a/waybar/.config/waybar/config
++++ b/waybar/.config/waybar/config
+@@ -17,6 +17,8 @@
+         "memory",
+         "disk#home",
+         "disk#root",
++        "battery",
++        "backlight",
+         "pulseaudio",
+         "bluetooth",
+         "network",
+@@ -82,7 +84,7 @@
+         "tooltip": false
+     },
+     "temperature#cpu": {
+-        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input", // check if path is correct for CPU temps
++        "hwmon-path": "/sys/class/hwmon/hwmon4/temp1_input", // check if path is correct for CPU temps
+         "critical-threshold": 80,
+         "format-critical": "{icon} CPU: {temperatureC}°C",
+         "format": "{icon} CPU: {temperatureC}°C",
+@@ -128,6 +130,7 @@
+             "default": ["", ""]
+         },
+         "scroll-step": 1,
++        "smooth-scrolling-threshold": 2,
+         "on-click": "pavucontrol"
+     },
+     "network": {
+diff --git a/zsh/.zprofile b/zsh/.zprofile
+index 9799050..4877116 100644
+--- a/zsh/.zprofile
++++ b/zsh/.zprofile
+@@ -1,5 +1,5 @@
+ # used to differentiate laptop/desktop configs
+-export LAPTOP_CONFIG=false
++export LAPTOP_CONFIG=true
+ 
+ # default programs
+ export EDITOR="nvim"
