@@ -1,0 +1,8 @@
+# NOTE: needed until https://gitlab.freedesktop.org/xdg/xdg-utils/-/issues/84 is fixed
+[Desktop Entry]
+Type=Application
+Name=Neovim
+Exec=kitty nvim %F
+Terminal=false
+Icon=nvim
+Categories=Utility;TextEditor;

@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+
+# TODO: if I ever make changes to this file again: refactor everything first
+import json
+import subprocess
+
+command = "focus"
+
+result_raw = subprocess.check_output("swaymsg -t get_tree", shell=True)
+result_parsed = json.loads(result_raw)
+
+# get all the open apps
+queue = [result_parsed["nodes"]]
+apps = []
+while len(queue) > 0:
+    cur = queue.pop()
+    for node in cur:
+        if node["type"] == "workspace":
+            # for all workspaces, find the apps in that workspace
+            queue2 = []
+            queue2.extend(node["nodes"])
+            queue2.extend(node["floating_nodes"])
+            workspace_number = "s" if node["name"] == "__i3_scratch" else node["name"]
+
+            while len(queue2) > 0:
+                node2 = queue2.pop()
+                queue2.extend(node2["nodes"])
+                queue2.extend(node2["floating_nodes"])
+                if node2["name"] != None and (node2["type"] == "con" or "floating_con"):
+                    app = node2
+                    app["workspace"] = workspace_number
+                    apps.append(node2)
+        else:
+            queue.append(node["nodes"])
+            queue.append(node["floating_nodes"])
+
+# generate rofi input (figure out: focused app, app_id, workspace, name, icon)
+rofi_input = ""
+focus_index = -1
+for i, app in enumerate(apps):
+    if app["focused"]:
+        focus_index = i
+
+    pid = app["pid"]
+    name = app["name"]
+    workspace = app["workspace"]
+    app_id = app["app_id"]
+    icon = app_id
+
+    # default icon name is equal to the app_id => exeptions manually added
+    # terminal child process (terminal based applications) => icon name
+    terminal_child_icon = {
+        # terminal command : icon name
+        "nvim": "nvim",
+        "htop": "htop",
+    }
+    # terminals to apply the previous rules to
+    terminals = [
+        # app_id
+        "Alacritty",
+        "kitty",
+        "foot"
+    ]
+    # app_id => icon name
+    app_id_icon = {
+        # app_id : icon name
+        "firefoxdeveloperedition": "firefox-developer-edition"
+    }
+    # no app_id => spawn command => icon name
+    cmd_override = {
+        # process launch command : icon name
+        "steam": "steam",
+        "vlc": "vlc"
+    }
+
+    # get the correct icon for the applications (app_id OR with overrides)
+    # if app_id == "Alacritty" or app_id == "kitty":
+    if terminals.count(app_id):
+        # !! EXPIRIMENTAL !!
+        # terminal applications launched with `rofi -show drun` 
+        #   don't have a descriptive app name (title stays alacritty instead of the applications name)
+        cur_id = app["pid"]
+        while True:
+            nex = subprocess.run("pgrep -P {} -l".format(cur_id), text=True, shell=True, capture_output=True, check=False).stdout[:-1].split(" ")
+            if nex[0] == '': break
+            cur_id = nex[0]
+            temp_override = terminal_child_icon.get(nex[1])
+            icon = temp_override if temp_override != None else icon
+    elif app_id_icon.get(app_id) != None:
+        icon = app_id_icon.get(app_id)
+    elif app_id == None:
+        # TODO probably more reliable to do with pidof
+        cmd = subprocess.run("ps -o cmd -h {}".format(pid), capture_output=True, text=True, shell=True).stdout[:-1]
+        bin = cmd.split(" ")[0].split("/")[-1]
+        temp_override = cmd_override.get(bin)
+        icon = temp_override if temp_override != None else icon
+        
+    rofi_input += "{} | [{}] | {} | {}\0icon\x1f{}\n".format(pid, workspace, app_id, name, icon)
+    if i == len(apps) - 1:
+        rofi_input = rofi_input[:-1] # remove the last empty line
+
+# start the rofi with the previously generated input
+# and switch to that app when it is selected in rofi
+try:
+    # -dmenu => use stdin stdout
+    # -p => prompt to display
+    # -a => highlighted row (index)
+    # -selected-row => selected row at startup (index)
+    # -i => case insensitive search
+    # -format i => return the selected index instead of string
+    # -no-custom => can only select item in the provided list (but allow to exit rofi with <esc>)
+    selected_index = 0 if focus_index != 0 else 1
+    focus_options = "-a {0} -selected-row {1}".format(focus_index, selected_index) if focus_index != -1 else ""
+    rofi_command = "rofi -dmenu -p focus {} -i -format i -no-custom".format(focus_options)
+    id_app = subprocess.run(rofi_command, input=rofi_input, text=True, capture_output=True, shell=True).stdout
+
+    subprocess.run('swaymsg "[con_id={}] {}"'.format(apps[int(id_app)]["id"], command), shell=True)
+except:
+    print("No option selected in rofi")

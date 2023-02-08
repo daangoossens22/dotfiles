@@ -1,0 +1,192 @@
+/* kanagawa nvim theme */
+@define-color sumiInk0 #16161D;
+@define-color sumiInk1b #181820;
+@define-color sumiInk1 #1F1F28; /* default bg color */
+@define-color sumiInk2 #2A2A37;
+@define-color sumiInk3 #363646; /* selected/active bg color */
+@define-color sumiInk4 #54546D;
+@define-color waveBlue1 #223249;
+@define-color waveBlue2 #2D4F67; /* bg hover color */
+@define-color winterGreen #2B3328;
+@define-color winterYellow #49443C;
+@define-color winterRed #43242B;
+@define-color winterBlue #252535;
+@define-color autumnGreen #76946A; /* cpu accent color */
+@define-color autumnRed #C34043;
+@define-color autumnYellow #DCA561; /* temperature accent color */
+@define-color samuraiRed #E82424;
+@define-color roninYellow #FF9E3B;
+@define-color waveAqua1 #6A9589; /* custom-bluetooth accent color */
+@define-color dragonBlue #658594;
+@define-color oldWhite #C8C093; /* tooltip border color */
+@define-color fujiWhite #DCD7BA; /* text color */
+@define-color fujiGray #727169;
+@define-color springViolet #938AA9; /* disk accent color */
+@define-color oniViolet #957FB8; /* memory accent color */
+@define-color crystalBlue #7E9CD8; /* custom-pacman accent color */
+@define-color springViolet2 #9CABCA; /* backlight accent color */
+@define-color springBlue #7FB4CA; /* tray accent color */
+@define-color lightBlue #A3D4D5; /* battery/upower accent color */
+@define-color waveAqua2 #7AA89F; /* clock accent color */
+@define-color springGreen #98BB6C; /* custom-media accent color */
+@define-color boatYellow #938056;
+@define-color boatYellow #C0A36E;
+@define-color carpYellow #E6C384;
+@define-color sakuraPink #D27E99;
+@define-color waveRed #E46876; /* network accent color */
+@define-color peachRed #FF5D62;
+@define-color surimiOrange #FFA066;
+@define-color katanaGray #717C7C;
+
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: Helvetica, FontAwesome6Free, FontAwesome6Brands;
+    font-size: 13px;
+    min-height: 0;
+
+    color: @fujiWhite;
+}
+/* TODO: for laptop */
+window.eDP-1 * { 
+    font-size: 15px;
+}
+
+
+window#waybar {
+    background: @sumiInk1;
+    /* border-bottom: 3px solid @sumiInk3; */
+    /* color: @fujiWhite; */
+}
+
+tooltip {
+    background: @sumiInk1;
+    border: 1px solid @oldWhite;
+}
+/* tooltip label { */
+/*     color: @fujiWhite; */
+/* } */
+
+#workspaces button {
+    padding: 0px 4px;
+}
+#taskbar button {
+    padding-right: 2px; /* NOTE: why is this not centered normally */
+}
+#workspaces button,
+#taskbar button {
+    background: @sumiInk2;
+    border-bottom: 3px solid transparent;
+}
+#taskbar button:hover,
+#workspaces button:hover {
+    /* background: @sumiInk4; */
+    background: @waveBlue2;
+    /* border-bottom: 3px solid @fujiWhite; */ /* NOTE: doesn't work */
+}
+#workspaces button.focused,
+#taskbar button.active {
+    background: @sumiInk3;
+    border-bottom: 3px solid @fujiWhite;
+}
+
+#custom-media {
+    border-bottom: 3px solid @springGreen;
+}
+
+#clock {
+    border-bottom: 3px solid @waveAqua2;
+}
+
+#custom-pacman {
+    border-bottom: 3px solid @crystalBlue;
+}
+
+#temperature {
+    border-bottom: 3px solid @autumnYellow;
+}
+
+#cpu {
+    border-bottom: 3px solid @autumnGreen;
+}
+
+#memory {
+    border-bottom: 3px solid @oniViolet;
+}
+
+#disk {
+    border-bottom: 3px solid @springViolet;
+}
+
+#battery, #upower {
+    border-bottom: 3px solid @lightBlue;
+}
+#battery.critical:not(.charging) {
+    background-color: @peachRed;
+}
+
+#backlight {
+    border-bottom: 3px solid @springViolet2;
+}
+
+#pulseaudio {
+    border-bottom: 3px solid @carpYellow;
+}
+
+#custom-bluetooth,
+#bluetooth {
+    border-bottom: 3px solid @waveAqua1;
+}
+
+#network {
+    border-bottom: 3px solid @waveRed;
+}
+
+#tray {
+    border-bottom: 3px solid @springBlue;
+}
+
+
+#custom-media,
+#mode,
+#clock,
+#tray,
+#custom-bluetooth,
+#bluetooth,
+#custom-pacman,
+#temperature,
+#cpu,
+#memory,
+#battery,
+#upower,
+#backlight,
+#pulseaudio,
+#network
+{
+    /* border-left: 1px solid @peachRed; */
+    margin-right: 4px;
+    padding: 0px 6px;
+    background: @sumiInk2;
+}
+
+
+/* NOTE: attaches itselft to the module on the right */
+#disk.home {
+    background: @sumiInk2;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+#disk.root {
+    background: @sumiInk2;
+    padding-left: 0px;
+    padding-right: 6px;
+    margin-right: 4px;
+    /* fixes text alignment issue with #disk.root (because that one uses an icon) */
+    padding-top: 5px;
+}
+
+#workspaces,
+#taskbar {
+    margin-right: 4px;
+}

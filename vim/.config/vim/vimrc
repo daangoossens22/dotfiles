@@ -1,0 +1,123 @@
+" do not use vi
+set nocompatible
+
+" absolute line number on current line and relative line numbers elsewhere
+set number
+set relativenumber
+
+" enable syntax and plugins (for netrw)
+syntax enable
+filetype plugin indent on
+
+let mapleader = " "
+nnoremap <Leader>o o<Esc>
+nnoremap <Leader>O O<Esc>
+" inoremap jk <Esc>
+" vnoremap jk <Esc>
+
+set encoding=utf-8
+set ignorecase
+set incsearch
+set hlsearch
+nnoremap <Leader>\ :nohlsearch<CR>
+set showmatch
+set splitright
+set nomodeline
+
+" delete without putting the content in a register _ is the blackhole reigster
+noremap <Leader>d "_d
+" paste with the 0 register (yy puts in the " and 0 register
+noremap <Leader>p "0p
+
+" set auto-indenting on for programming
+set autoindent
+
+" show incomplete commands
+set showcmd
+
+" show the current row and column
+set ruler
+
+" how many spaces for a tab
+"retab
+set expandtab
+set smarttab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+" set tabstop=2
+" set softtabstop=2
+" set shiftwidth=2
+"TODO not working currently
+"au BufNewFile,BufRead *.py set tabstop=4,set softtabstop=4,set shiftwidth=4
+
+"TODO set tab to esc and tabtab to esc:
+
+" vim -b : edit binary using xxd-format!
+augroup Binary
+  au!
+  au BufReadPre  *.bin let &bin=1
+  au BufReadPost *.bin if &bin | %!xxd
+  au BufReadPost *.bin set ft=xxd | endif
+  au BufWritePre *.bin if &bin | %!xxd -r
+  au BufWritePre *.bin endif
+  au BufWritePost *.bin if &bin | %!xxd
+  au BufWritePost *.bin set nomod | endif
+augroup END
+
+" search down into subfolders
+set path+=**
+
+" tab/shift-tab options
+set wildmenu
+
+" paste an empty template
+" nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>a
+nnoremap ,py :-1read $HOME/.vim/.skeleton.py<CR>6l
+
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+" themes
+Plug 'morhetz/gruvbox'
+" Plug 'HenryNewcomer/vim-theme-papaya'
+" Plug 'altercation/vim-colors-solarized'
+
+" bar at bottom
+Plug 'itchyny/lightline.vim'
+" language pack for syntax highlighting
+Plug 'sheerun/vim-polyglot'
+" show colorcodes
+"Plug 'lilydjwg/colorizer' " too slow when loading large files
+Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' } " norcalli/nvim-colorizer.lua for neovim
+call plug#end()
+
+" executes ctags -R . to make tags for the current directory
+command! MakeTags !ctags -R .
+command! MakeTagsC !ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++ --exclude=Makefile,.git 
+"set tags+=~/.vim/tags/tags_opencv
+
+let g:solarized_termcolors=256
+
+set bg=dark
+"colorscheme papaya
+"colorscheme solarized
+"let g:gruvbox_contrast_dark = 'hard'
+"autocmd vimenter * ++nested colorscheme gruvbox
+colorscheme gruvbox
+autocmd BufNewFile,BufRead *.vert,*.tesc,*.tese,*.glsl,*.geom,*.frag,*.comp set filetype=glsl
+
+set termguicolors
+let g:Hexokinase_highlighters = ['backgroundfull']
+
+"lightline settings
+set laststatus=2
+set noshowmode
+set ttimeout ttimeoutlen=50 " otherwise changing back to normal mode is slow
+"let g:lightline = { 'colorscheme': 'solarized' }
+"let g:lightline = { 'colorscheme': 'wombat' }
+let g:lightline = { 'colorscheme': 'one' }

@@ -1,0 +1,13 @@
+theme = "gruvbox"
+
+[editor]
+line-number = "relative"
+
+[editor.cursor-shape]
+insert = "bar"
+
+[editor.file-picker]
+hidden = false
+
+[keys.normal]
+Z = { Z = ":wq", Q = ":q!" }

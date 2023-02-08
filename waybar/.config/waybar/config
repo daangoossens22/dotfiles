@@ -1,0 +1,214 @@
+{
+    "position": "top",
+    "height": 20,
+    "fixed-center": false,
+    "modules-left": [
+        "sway/workspaces",
+        "wlr/taskbar",
+        "custom/media",
+        "sway/mode"
+    ],
+    "modules-right": [
+        "tray",
+        "custom/pacman",
+        "temperature#cpu",
+        "temperature#gpu",
+        "cpu",
+        "memory",
+        "disk#home",
+        "disk#root",
+        "pulseaudio",
+        "bluetooth",
+        "network",
+        "clock"
+    ],
+    // TODO:
+    // - network module to display speed
+    // - combine CPU and GPU temps into a single custom module
+
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "all-outputs": true,
+        //"icon-size": 16,
+        "app_ids-mapping": {
+            "firefoxdeveloperedition": "firefox-developer-edition"
+        },
+        //"ignore-list": ["Alacritty"],
+        "tooltip-format": "{app_id}: {title}",
+        "on-click": "activate",
+        "on-click-middle": "close"
+    },
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{name}: {icon}",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "urgent": "",
+            "focused": "",
+            "default": ""
+        }
+    },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "sway/window": {
+        "format": "{}",
+        "max-length": 30,
+        "tooltip": false
+    },
+    "custom/media": {
+        "format": "{icon}{}",
+        "return-type": "json",
+        "format-icons": {
+            "Playing": " ",
+            "Paused": " "
+        },
+        "max-length":30,
+        "exec": "playerctl -a metadata --format '{\"text\": \"{{playerName}}: {{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+        "on-click": "playerctl play-pause"
+    },
+    "custom/pacman": {
+        "format": "  {}",
+        "interval": 3600,                     // every hour
+        "exec": "checkupdates | wc -l",       // # of updates
+        "exec-if": "exit 0",                  // always run; consider advanced run conditions
+        "on-click": "kitty --hold paru; pkill -SIGRTMIN+8 waybar", // update system
+        "signal": 8,
+        "tooltip": false
+    },
+    "temperature#cpu": {
+        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input", // check if path is correct for CPU temps
+        "critical-threshold": 80,
+        "format-critical": "{icon} CPU: {temperatureC}°C",
+        "format": "{icon} CPU: {temperatureC}°C",
+        "format-icons": ["", "", ""],
+        "tooltip": false
+    },
+    "temperature#gpu": {
+        "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input", // GPU temps
+        "critical-threshold": 90,
+        "format-critical": "{icon} {temperatureC}°C",
+        "format": "{icon} GPU: {temperatureC}°C",
+        "format-icons": ["", "", ""],
+        "tooltip": false
+    },
+    "tray": {
+        "show-passive-items": true,
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "cpu": {
+        "interval": 10,
+        "format": " {usage}%",
+        "on-click": "kitty htop",
+        "tooltip": false
+    },
+    "memory": {
+        "interval": 20,
+        "format": " {}%",
+        "format-alt": "{used:0.1f}G/{total:0.1f}G ",
+        "tooltip": false
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-muted": " {volume}%",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", ""]
+        },
+        "scroll-step": 1,
+        "on-click": "pavucontrol"
+    },
+    "network": {
+        "format-wifi": " {signalStrength}%",
+        "format-ethernet": "",
+        "format-linked": "",
+        "format-disconnected": "⚠ Disconnected",
+        "format-disabled": "",
+        // "interval": 1,
+        "on-click": "kitty iwctl",
+        "tooltip-format": "{essid}  {ifname}  {ipaddr}/{cidr}"
+    },
+    "clock": {
+        "timezone": "Europe/Amsterdam",
+        "interval": 1,
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "calendar-weeks-pos": "left",
+        "format": " {:%d-%m-%Y  %H:%M:%S}"
+    },
+    "battery": {
+        "interval": 60,
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-icons": ["", "", "", "", ""],
+        "format-charging": " {icon} {capacity}%",
+        "format-plugged": " {icon} {capacity}%",
+        "on-click": "", // update module on click
+        "signal": 10, // for udev rule to force update the module when it doesn't do so itself
+        "max-length": 25
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon} {percent}%",
+        "format-icons": ["🌑", "🌘", "🌗", "🌖", "🌕"],
+        "on-scroll-down": "$HOME/.config/sway/change_brightness_log.sh -",
+        "on-scroll-up": "$HOME/.config/sway/change_brightness_log.sh +",
+        "smooth-scrolling-threshold": 2
+    },
+    "disk#home": {
+        "interval": 60,
+        "format": "🖴 ~ {percentage_used}%",
+        "tooltip-format": "{free} free out of {total} on {path}",
+        "path": "/home/daang"
+    },
+    "disk#root": {
+        "interval": 60,
+        "format": "/ {percentage_used}%",
+        "tooltip-format": "{free} free out of {total} on {path}",
+        "path": "/"
+    },
+    "upower": {
+        "icon-size": 20,
+        "hide-if-empty": true,
+        "tooltip": true,
+        "tooltip-spacing": 20
+    },
+    "bluetooth": {
+        "format-disabled": "",
+        "format-connected": " {device_alias}",
+        "format-connected-battery": " {device_battery_percentage}%",
+        "format-icons": ["", "", "", "", ""],
+        "on-click": "bluetoothctl power on; kitty bluetoothctl",
+        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%"
+    }
+    // "custom/bluetooth": {
+    //     "format": "{}",
+    //     "max-length": 20,
+    //     // TODO: do something similar to `playerctl -F` module
+    //     "interval": 30,
+    //     "exec-if": "pgrep bluetoothd",
+    //     "exec": "~/.config/waybar/bluetooth.sh",
+    //     "on-click": "bluetoothctl power on; kitty bluetoothctl; pkill -SIGRTMIN+9 waybar",
+    //     // NOTE: sometimes when connecting there needs to be a small period for the battery percentage to be polled correctly
+    //     // "on-click": "kitty bluetoothctl; sleep 2; pkill -SIGRTMIN+9 waybar",
+    //     "signal": 9
+    // }
+}
+// vim: ft=jsonc

@@ -1,0 +1,48 @@
+autoload -Uz promptinit && promptinit
+# autoload -U colors && colors
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+# zstyle ':vcs_info:*' get-revision true
+zstyle ':vcs_info:*' check-for-changes true # NOTE: if slow => set to false and remove from formats below
+zstyle ':vcs_info:*' stagedstr '*'
+zstyle ':vcs_info:*' unstagedstr '*'
+zstyle ':vcs_info:git:*' formats '%F{#2D4F67} ~>|%F{#9CABCA}%b%f%F{#C34043}%u%f%F{#6ea459}%c%f%F{#2D4F67}|%f'
+zstyle ':vcs_info:git:*' actionformats '%F{#2D4F67} ~>|%F{#9CABCA}%b%f%F{#C34043}%u%f%F{#6ea459}%c%f %F{#FF5D62}%a%f%F{#2D4F67}|%f'
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+
+# NOTE: from https://virtualenvwrapper.readthedocs.io/en/latest/tips.html#enhanced-bash-zsh-prompt
+virtualenv_prompt() {
+    # If not in a virtualenv, print nothing
+    [[ "$VIRTUAL_ENV" == "" ]] && return
+
+    # Distinguish between the shell where the virtualenv was activated and its children
+    local venv_name="${VIRTUAL_ENV##*/}"
+    if typeset -f deactivate >/dev/null; then
+        echo "[%F{#6ea459}${venv_name}%f] "
+    else
+        echo "<%F{#6ea459}${venv_name}%f> "
+    fi
+}
+VIRTUAL_ENV_DISABLE_PROMPT=1
+
+setopt PROMPT_SUBST PROMPT_PERCENT
+prompt_daang_setup() {
+    PROMPT='%(?..%B%F{#C34043}~~> %?%f%b)
+%B%F{#6A9589}%~${vcs_info_msg_0_}%f%b $(virtualenv_prompt)
+%B%F{#7E9CD8}%(!.#.->)%f%b '
+    RPROMPT='%F{#717C7C}%* %n@%M%f'
+}
+
+prompt_themes+=( daang )
+prompt daang
+# prompt adam2 # looks like alacritty theme: af-magic
+
+REPORTTIME=2
+TIMEFMT='
+%J
+%MKb memory
+%U user
+%S system
+%P cpu
+%*E elapsed'

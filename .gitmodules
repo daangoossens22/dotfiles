@@ -1,0 +1,4 @@
+[submodule "dotfiles_private"]
+	path = personal
+	url = git@github.com:daangoossens22/dotfiles_private.git
+	update = rebase

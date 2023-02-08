@@ -1,0 +1,128 @@
+# add color
+# use --color=always, since color doesn't get passed down to pipes when doing for example tree | less
+alias ls='ls --color=always --hyperlink=auto'
+alias grep='grep --color=always --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
+alias diff='diff --color=always'
+alias ip='ip -color=always'
+alias tree="tree -C -a"
+alias less='less --use-color -R --ignore-case --incsearch'
+# alias egrep='egrep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
+# alias fgrep='fgrep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
+# alias globurl='noglob urlglobber '
+
+alias - -="cd -"
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+alias rm="rm -rf"
+alias srm="sudo rm -r"
+alias mkdir="mkdir -pv"
+alias md='mkdir'
+alias mv='mv -iv'
+alias cp='cp -riv'
+alias la='ls -lAhr --sort=time'
+alias lad='lsd -lAhr --timesort --hyperlink always' # --extensionsort --sizesort --timesort
+alias lf="du -shc * | sort -h"
+open() {
+    command xdg-open 2>/dev/null $@ &
+}
+paru() {
+    command paru $@
+    pkill -SIGRTMIN+8 waybar # update waybar module
+}
+alias hx="helix"
+
+# git aliases
+alias g="git"
+alias gs="git status"
+alias gc="git commit"
+alias gcl="git clone"
+alias gcb="git checkout -b"
+alias gco="git checkout"
+alias gd="git diff --diff-algorithm=patience"
+alias gdc="gd --cached"
+alias ga="git add"
+alias gpl="git pull"
+alias gps="git push"
+alias grt="git restore"
+alias grts="git restore --staged"
+alias gl="git log --oneline --decorate --graph"
+alias gbD="git branch --delete"
+alias gbs="git bisect"
+alias gbsg="git bisect good"
+alias gbsb="git bisect bad"
+alias gbsr="git bisect reset"
+alias gbss="git bisect start"
+alias gcp="git cherry-pick"
+alias gr="git rebase"
+alias gra="git rebase --abort"
+alias grc="git rebase --continue"
+alias gri="git rebase --interactive"
+alias grs="git rebase --skip"
+alias gst="git stash"
+alias gstp="git stash pop"
+alias gstl="git stash list"
+alias gwt="git worktree"
+alias gwta="git worktree add"
+alias gwtl="git worktree list"
+alias gwtm="git worktree move"
+alias gwtd="git worktree remove"
+
+# always make compile_commands.json so that lsp in nvim works
+alias make='make -j $(nproc --ignore 1)'
+alias makev="bear -- make"
+alias cmake="cmake -G Ninja"
+alias cmakev="cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1"
+
+alias grubmc="sudo grub-mkconfig -o /boot/grub/grub.cfg"
+alias rnvim="cfn && git fetch && git log HEAD..origin/master --oneline && git pull && sudo chown -R $USER:$USER .deps build && make CMAKE_BUILD_TYPE=Release && sudo rm -rf /usr/local/share/nvim/runtime/ && sudo make install"
+alias stowh="stow -t $HOME"
+
+# clean up home folder
+alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
+alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings'
+alias vim="vim -i $XDG_STATE_HOME/vim/viminfo"
+
+# quick access config files
+alias cfd='cd $HOME/Documents/dotfiles'
+alias cfn='cd $HOME/Documents/neovim'
+alias cfv='$EDITOR $XDG_CONFIG_HOME/nvim/init.lua'
+alias cfvp='cd $XDG_DATA_HOME/nvim/lazy'
+alias cfz='$EDITOR $ZDOTDIR/.zshrc'
+alias cfza='$EDITOR $ZDOTDIR/.zsh_aliases'
+alias cfzp='$EDITOR $ZDOTDIR/.zsh_prompt'
+alias cfp='$EDITOR $HOME/.zprofile'
+alias cfk='$EDITOR $XDG_CONFIG_HOME/kitty/kitty.conf'
+alias cfs='$EDITOR $XDG_CONFIG_HOME/sway/config'
+alias cfw='$EDITOR $XDG_CONFIG_HOME/waybar/config'
+alias cfws='$EDITOR $XDG_CONFIG_HOME/waybar/style.css'
+
+# NOTE: source: https://github.com/ChrisTitusTech/zsh/blob/master/aliasrc
+# usage: ex <file>
+ex ()
+{
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1   ;;
+            *.tar.gz)    tar xzf $1   ;;
+            *.tar.xz)    tar xJf $1   ;;
+            *.xz)        unxz $1      ;;
+            *.bz2)       bunzip2 $1   ;;
+            *.rar)       unrar x $1   ;;
+            *.gz)        gunzip $1    ;;
+            *.tar)       tar xf $1    ;;
+            *.tbz2)      tar xjf $1   ;;
+            *.tgz)       tar xzf $1   ;;
+            *.zip)       unzip $1     ;;
+            *.Z)         uncompress $1;;
+            *.7z)        7z x $1      ;;
+            *)           echo "'$1' cannot be extracted via ex()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# kitty aliases
+alias icat='kitty +kitten icat'
