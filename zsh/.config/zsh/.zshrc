@@ -160,7 +160,6 @@ bindkey '|' zcalc-auto-insert
 bindkey '&' zcalc-auto-insert
 
 source $ZDOTDIR/.zsh_aliases
-
 source $ZDOTDIR/.zsh_fzf
 # load plugins ; should be last (use 2>/dev/null at the end of the line to ignore errors)
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

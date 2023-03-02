@@ -8,7 +8,7 @@ function M.config()
     vim.opt.showmode = false
     vim.g.qf_disable_statusline = 1 -- draw the normal statusline in a quickfix window
 
-    -- inspired from: https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/evil_lualine.lua
+    -- REF: https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/evil_lualine.lua
     local function lualine_lsp_name()
         local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
         local clients = vim.lsp.get_active_clients()

@@ -6,7 +6,7 @@ local M = {
         "jose-elias-alvarez/null-ls.nvim",
         "p00f/clangd_extensions.nvim",
         "folke/neodev.nvim",
-        -- "simrat39/rust-tools.nvim",
+        "simrat39/rust-tools.nvim",
         { url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
     },
 }
@@ -16,7 +16,7 @@ function M.config()
 
     local function toggle_autoformat() vim.b.autoformat = not vim.b.autoformat end
 
-    local ignore = { "sumneko_lua", "jedi_language_server" }
+    local ignore = { "lua_ls", "jedi_language_server" }
     local function lsp_format()
         vim.lsp.buf.format {
             filter = function(format_client) return not vim.tbl_contains(ignore, format_client.name) end,
@@ -70,7 +70,7 @@ function M.config()
         client.server_capabilities.semanticTokensProvider = nil
 
         -- use null-ls formatting instead of the default formatting for the languageserver
-        if client.name == "sumneko_lua" or client.name == "rust_analyzer" then toggle_autoformat() end
+        if client.name == "lua_ls" or client.name == "rust_analyzer" then toggle_autoformat() end
 
         local function buf_opts(desc)
             local opts = lsp_opts(desc)
@@ -170,34 +170,35 @@ function M.config()
     end
 
     local rust_analyzer_setup = {
-        cmd = { "rustup", "run", "stable", "rust-analyzer" },
+        cmd = { "rustup", "run", "nightly", "rust-analyzer" },
         on_attach = on_attach,
         capabilities = capabilities,
         settings = {
             ["rust-analyzer"] = {
                 checkOnSave = {
                     command = "clippy",
+                    allTargets = false,
                 },
             },
         },
     }
-    nvim_lsp.rust_analyzer.setup(rust_analyzer_setup)
+    -- nvim_lsp.rust_analyzer.setup(rust_analyzer_setup)
     -- TODO: this also seems to require "dap", see how to seperate them
     -- TODO: once nvim natively supports inlay_hints -> don't need rust-tools anymore
-    -- local extension_path = vim.env.HOME .. "/.local/share/nvim/mason/packages/codelldb/extension/"
-    -- local codelldb_path = extension_path .. "adapter/codelldb"
-    -- local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
-    -- require("rust-tools").setup {
-    --     server = rust_analyzer_setup,
-    --     tools = {
-    --         inlay_hints = {
-    --             auto = false,
-    --         },
-    --     },
-    --     dap = {
-    --         adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-    --     },
-    -- }
+    local extension_path = vim.env.HOME .. "/.local/share/nvim/mason/packages/codelldb/extension/"
+    local codelldb_path = extension_path .. "adapter/codelldb"
+    local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
+    require("rust-tools").setup {
+        server = rust_analyzer_setup,
+        tools = {
+            inlay_hints = {
+                auto = false,
+            },
+        },
+        dap = {
+            adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+        },
+    }
 
     -- automatically sets up clangd language server
     require("clangd_extensions").setup {
@@ -226,7 +227,7 @@ function M.config()
     require("neodev").setup {
         setup_jsonls = false,
     }
-    nvim_lsp.sumneko_lua.setup {
+    nvim_lsp.lua_ls.setup {
         on_attach = on_attach,
         capabilities = capabilities,
         settings = {

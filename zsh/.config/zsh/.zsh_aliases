@@ -4,7 +4,7 @@ alias ls='ls --color=always --hyperlink=auto'
 alias grep='grep --color=always --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
 alias diff='diff --color=always'
 alias ip='ip -color=always'
-alias tree="tree -C -a"
+alias tree="tree -C -a -I '.git|build|target'"
 alias less='less --use-color -R --ignore-case --incsearch'
 # alias egrep='egrep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
 # alias fgrep='fgrep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'

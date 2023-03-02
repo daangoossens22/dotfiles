@@ -4,7 +4,7 @@ local M = {
 }
 
 local function get_spinner()
-    -- NOTE: from https://github.com/rcarriga/nvim-notify/issues/70#issuecomment-1168653926
+    -- REF: https://github.com/rcarriga/nvim-notify/issues/70#issuecomment-1168653926
     local notify = require "notify"
 
     local Spinner = {}
@@ -82,7 +82,7 @@ function M.config()
     local notify = require "notify"
     vim.notify = notify
 
-    -- NOTE: from https://github.com/rcarriga/nvim-notify/issues/70#issuecomment-1168653926
+    -- REF: https://github.com/rcarriga/nvim-notify/issues/70#issuecomment-1168653926
     -- TODO: bit of a messy setup & produces a bunch of notifications sometimes
     -- swith back again to fidget.nvim or try noice.nvim??
     vim.api.nvim_create_autocmd("UIEnter", {

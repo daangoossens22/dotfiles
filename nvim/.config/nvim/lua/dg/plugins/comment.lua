@@ -37,7 +37,7 @@ function M.config()
 end
 
 ---Textobject for adjacent commented lines
--- NOTE: from https://github.com/numToStr/Comment.nvim/issues/22
+-- REF: https://github.com/numToStr/Comment.nvim/issues/22
 local function commented_lines_textobject()
     local U = require "Comment.utils"
     local cl = vim.api.nvim_win_get_cursor(0)[1] -- current line
@@ -70,7 +70,7 @@ local function commented_lines_textobject()
 end
 
 ---Operator function to invert comments on each line
--- NOTE: from https://github.com/numToStr/Comment.nvim/issues/17
+-- REF: https://github.com/numToStr/Comment.nvim/issues/17
 function _G.__flip_flop_comment()
     local U = require "Comment.utils"
     local s = vim.api.nvim_buf_get_mark(0, "[")

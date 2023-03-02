@@ -27,6 +27,7 @@ MAP("n", "N", "Nzz", "N but center the location")
 MAP("n", "}", "}zz", "} but center the location")
 MAP("n", "{", "{zz", "{ but center the location")
 
+MAP("n", "<leader>tn", "<cmd>tabnew<cr>")
 MAP("n", "<leader>tc", "<cmd>tabclose<cr>")
 
 -- MAP("n", "]c", "]czz", "]c but center the location (diff mode)")

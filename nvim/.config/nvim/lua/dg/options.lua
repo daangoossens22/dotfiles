@@ -92,7 +92,7 @@ vim.api.nvim_create_autocmd("FileType", {
     group = dg_options,
 })
 -- persistant folds and cursor position when opening and closing nvim
--- gotten from: https://vim.fandom.com/wiki/Make_views_automatic
+-- REF: https://vim.fandom.com/wiki/Make_views_automatic
 vim.opt.viewoptions = {
     "folds",
     "cursor",

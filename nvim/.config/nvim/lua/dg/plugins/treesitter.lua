@@ -15,7 +15,7 @@ return {
                     "bibtex",
                     "c",
                     "cmake",
-                    "comment", -- NOTE: wait for treesitter code injection becomes more optimized https://github.com/nvim-treesitter/nvim-treesitter/issues/3967#issuecomment-1349589581
+                    "comment",
                     "cpp",
                     "css",
                     "dockerfile",
