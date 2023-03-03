@@ -1,6 +1,9 @@
 local M = {
     "nvim-lualine/lualine.nvim",
     lazy = false,
+    dependencies = {
+        "nvim-lua/lsp-status.nvim",
+    },
 }
 
 function M.config()
@@ -8,8 +11,10 @@ function M.config()
     vim.opt.showmode = false
     vim.g.qf_disable_statusline = 1 -- draw the normal statusline in a quickfix window
 
-    -- REF: https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/evil_lualine.lua
+    require("lsp-status").register_progress()
+    vim.g.spinner_index = 1
     local function lualine_lsp_name()
+        -- REF: https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/evil_lualine.lua
         local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
         local clients = vim.lsp.get_active_clients()
         local client_names = {}
@@ -24,7 +29,15 @@ function M.config()
                 end
             end
         end
-        return table.concat(client_names, "|")
+
+        local res = table.concat(client_names, "|")
+        if require("lsp-status").status_progress() ~= "" then
+            local moon = { "🌑 ", "🌒 ", "🌓 ", "🌔 ", "🌕 ", "🌖 ", "🌗 ", "🌘 " }
+            res = moon[vim.g.spinner_index] .. res
+            vim.g.spinner_index = vim.g.spinner_index % #moon
+            vim.g.spinner_index = vim.g.spinner_index + 1
+        end
+        return res
     end
 
     local kanagawa_colors = require("kanagawa.colors").setup()
@@ -48,6 +61,9 @@ function M.config()
             disabled_filetypes = {},
             always_divide_middle = true,
             globalstatus = true,
+            refresh = {
+                statusline = 400,
+            },
         },
         sections = {
             lualine_a = { "mode" },
@@ -66,8 +82,8 @@ function M.config()
                 { component_separators = "", "filename" },
                 { component_separators = "", "%=" },
                 {
-                    icons_enabled = true,
-                    icon = "LSP:",
+                    -- icons_enabled = true,
+                    -- icon = "LSP:",
                     color = { fg = kanagawa_colors.oniViolet },
                     lualine_lsp_name,
                 },
