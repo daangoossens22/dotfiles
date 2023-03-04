@@ -3,6 +3,7 @@ local M = {
     lazy = false,
     dependencies = {
         "nvim-lua/lsp-status.nvim",
+        "rebelot/kanagawa.nvim",
     },
 }
 
@@ -43,10 +44,14 @@ function M.config()
     local kanagawa_colors = require("kanagawa.colors").setup()
     local custom_kanagawa = require "lualine.themes.kanagawa"
     -- normal => green ; insert => blue
+    local temp_a = custom_kanagawa.insert.a.bg
+    local temp_b = custom_kanagawa.insert.b.fg
     custom_kanagawa.insert.a.bg = custom_kanagawa.normal.a.bg
     custom_kanagawa.insert.b.fg = custom_kanagawa.normal.b.fg
-    custom_kanagawa.normal.a.bg = "#6ea459"
-    custom_kanagawa.normal.b.fg = "#6ea459"
+    custom_kanagawa.normal.a.bg = temp_a
+    custom_kanagawa.normal.b.fg = temp_b
+    -- custom_kanagawa.normal.a.bg = "#6ea459"
+    -- custom_kanagawa.normal.b.fg = "#6ea459"
 
     require("lualine").setup {
         options = {
@@ -84,7 +89,7 @@ function M.config()
                 {
                     -- icons_enabled = true,
                     -- icon = "LSP:",
-                    color = { fg = kanagawa_colors.oniViolet },
+                    color = { fg = kanagawa_colors.palette.oniViolet },
                     lualine_lsp_name,
                 },
             },
