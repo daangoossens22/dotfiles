@@ -29,6 +29,7 @@ return {
                     "jsonc",
                     "latex",
                     "lua",
+                    "luap",
                     "make",
                     "markdown",
                     "markdown_inline",

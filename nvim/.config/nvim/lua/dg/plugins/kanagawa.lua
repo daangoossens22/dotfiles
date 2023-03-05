@@ -6,7 +6,9 @@ local M = {
 
 function M.config()
     require("kanagawa").setup {
+        compile = true, -- set to false to not need to run ':KanagawaCompile' after each config change
         dimInactive = true,
+        ---@type fun(colors: { theme: ThemeColors, palette: PaletteColors}): table<string, table>
         overrides = function(colors)
             return {
                 Todo = { fg = colors.theme.ui.bg_m1, bg = colors.theme.diag.hint, bold = true },

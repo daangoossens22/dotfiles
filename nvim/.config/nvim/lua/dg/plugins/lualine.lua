@@ -41,22 +41,46 @@ function M.config()
         return res
     end
 
-    local kanagawa_colors = require("kanagawa.colors").setup()
-    local custom_kanagawa = require "lualine.themes.kanagawa"
-    -- normal => green ; insert => blue
-    local temp_a = custom_kanagawa.insert.a.bg
-    local temp_b = custom_kanagawa.insert.b.fg
-    custom_kanagawa.insert.a.bg = custom_kanagawa.normal.a.bg
-    custom_kanagawa.insert.b.fg = custom_kanagawa.normal.b.fg
-    custom_kanagawa.normal.a.bg = temp_a
-    custom_kanagawa.normal.b.fg = temp_b
-    -- custom_kanagawa.normal.a.bg = "#6ea459"
-    -- custom_kanagawa.normal.b.fg = "#6ea459"
+    local k_colors = require("kanagawa.colors").setup()
+    -- local normal_highligth = k_colors.palette.autumnGreen
+    local normal_highligth = k_colors.palette.springGreen
+    local insert_highligth = k_colors.palette.crystalBlue
+    local command_highligth = k_colors.palette.boatYellow2
+    local visual_highligth = k_colors.palette.oniViolet
+    local replace_highligth = k_colors.palette.autumnRed
+    local k_theme = {
+        normal = {
+            a = { bg = normal_highligth, fg = k_colors.theme.ui.bg_m3 },
+            b = { bg = k_colors.palette.winterBlue, fg = normal_highligth },
+            c = { bg = k_colors.theme.ui.bg_p1, fg = k_colors.theme.ui.fg },
+        },
+        insert = {
+            a = { bg = insert_highligth, fg = k_colors.theme.ui.bg },
+            b = { bg = k_colors.theme.ui.bg, fg = insert_highligth },
+        },
+        command = {
+            a = { bg = command_highligth, fg = k_colors.theme.ui.bg },
+            b = { bg = k_colors.theme.ui.bg, fg = command_highligth },
+        },
+        visual = {
+            a = { bg = visual_highligth, fg = k_colors.theme.ui.bg },
+            b = { bg = k_colors.theme.ui.bg, fg = visual_highligth },
+        },
+        replace = {
+            a = { bg = replace_highligth, fg = k_colors.theme.ui.bg },
+            b = { bg = k_colors.theme.ui.bg, fg = replace_highligth },
+        },
+        inactive = {
+            a = { bg = k_colors.theme.ui.bg_m3, fg = k_colors.theme.ui.fg_dim },
+            b = { bg = k_colors.theme.ui.bg_m3, fg = k_colors.theme.ui.fg_dim, gui = "bold" },
+            c = { bg = k_colors.theme.ui.bg_m3, fg = k_colors.theme.ui.fg_dim },
+        },
+    }
 
     require("lualine").setup {
         options = {
             icons_enabled = false,
-            theme = custom_kanagawa,
+            theme = k_theme,
             -- theme = 'kanagawa',
             -- theme = 'gruvbox_dark',
 
@@ -89,7 +113,7 @@ function M.config()
                 {
                     -- icons_enabled = true,
                     -- icon = "LSP:",
-                    color = { fg = kanagawa_colors.palette.oniViolet },
+                    color = { fg = k_colors.palette.oniViolet },
                     lualine_lsp_name,
                 },
             },
