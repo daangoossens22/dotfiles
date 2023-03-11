@@ -36,13 +36,25 @@ function M.config()
                 end
                 local min_col = math.min(unpack(line_starts))
                 local max_col = math.max(unpack(line_ends))
-                local has_code_snipped_started = false
+                -- skip the empty lines at the start of the codeblock or end of the codeblocks
+                local code_block_start_index = 0
+                local code_block_end_index = #lines
+                for i, line in ipairs(lines) do
+                    if line ~= "" then
+                        code_block_start_index = i
+                        break
+                    end
+                end
+                for i = #lines, 1, -1 do
+                    if lines[i] ~= "" then
+                        code_block_end_index = i
+                        break
+                    end
+                end
                 -- NOTE: adds virtual lines to make highlighting beyond the end of the line possible
                 for i, _ in ipairs(lines) do
-                    local line_width = line_ends[i]
-                    -- skip the empty lines at the start of the codeblock
-                    if has_code_snipped_started or line_width ~= 0 then
-                        has_code_snipped_started = true
+                    if i >= code_block_start_index and i <= code_block_end_index then
+                        local line_width = line_ends[i]
                         if line_width > min_col then
                             vim.api.nvim_buf_set_extmark(ev.buf, namespace, start_row + i - 1, min_col, {
                                 end_row = start_row + i,
