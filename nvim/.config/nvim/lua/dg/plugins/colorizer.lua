@@ -6,9 +6,13 @@ return {
         { "<leader>ct", "<cmd>ColorizerToggle<cr>", desc = "toggle showing color codes visually" },
     },
     config = function()
-        require("colorizer").setup({ nil }, {
-            mode = "background",
-            css = true,
-        })
+        require("colorizer").setup {
+            filetypes = {},
+            user_default_options = {
+                mode = "background",
+                css = true,
+            },
+            buftypes = {},
+        }
     end,
 }

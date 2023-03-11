@@ -66,8 +66,7 @@ function M.config()
     local on_attach = function(client, bufnr)
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-        -- NOTE: track this for now https://github.com/neovim/neovim/issues/21576 (make sure you can override Todo comments highlight groups)
-        client.server_capabilities.semanticTokensProvider = nil
+        -- client.server_capabilities.semanticTokensProvider = nil
 
         -- use null-ls formatting instead of the default formatting for the languageserver
         if client.name == "lua_ls" or client.name == "rust_analyzer" then toggle_autoformat() end
@@ -236,7 +235,6 @@ function M.config()
                 diagnostics = { globals = { "vim", "describe", "it", "before_each" } },
                 completion = { callSnippet = "Replace" },
                 workspace = { checkThirdParty = false },
-                -- doesn't work with my highlight groups for TODO/NOTE comments
                 semantic = { enable = false },
             },
         },

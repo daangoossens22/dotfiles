@@ -28,17 +28,20 @@ function M.config()
             -- documentation = cmp.config.window.bordered(),
         },
         mapping = {
+            -- TODO: add mappings for`close`, `abort`, `complete`, `complete_common_string`
             ["<C-p>"] = cmp.mapping.select_prev_item(),
             ["<C-n>"] = cmp.mapping.select_next_item(),
-            ["<C-f>"] = cmp.mapping.scroll_docs(4),
-            ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+            ["<C-u>"] = cmp.mapping.scroll_docs(-4),
+            ["<C-d>"] = cmp.mapping.scroll_docs(4),
             ["<C-e>"] = cmp.mapping.abort(),
-            -- ['<C-Space>'] = cmp.mapping.complete(),
-            ["<C-Space>"] = cmp.mapping.close(),
-            ["<CR>"] = cmp.mapping.confirm {
+            ["<C-Space>"] = cmp.mapping.confirm {
                 behavior = cmp.ConfirmBehavior.Insert,
-                select = false,
+                select = true,
             },
+            -- ["<CR>"] = cmp.mapping.confirm {
+            --     behavior = cmp.ConfirmBehavior.Insert,
+            --     select = false,
+            -- },
         },
         sources = cmp.config.sources {
             { name = "nvim_lsp" },

@@ -120,12 +120,22 @@ function M.config()
 
             lualine_x = {
                 {
+                    "b:autoformat",
+                    fmt = function(str)
+                        if str == "true" then
+                            return "AF"
+                        else
+                            return ""
+                        end
+                    end,
+                },
+                {
                     "g:qflistglobal",
                     fmt = function(str)
                         if str == "true" then
-                            return "QF global"
+                            return "QF" -- quickfix
                         else
-                            return "QF local"
+                            return "LL" -- location-list
                         end
                     end,
                 },

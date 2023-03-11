@@ -34,6 +34,8 @@ function M.config()
         sticky = true, -- cursor stays at position
         -- ignore = "^$", -- ignore empty lines
     }
+
+    require("Comment.ft").set("query", ";%s")
 end
 
 ---Textobject for adjacent commented lines
