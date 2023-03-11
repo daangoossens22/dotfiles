@@ -36,15 +36,29 @@ function M.config()
                 end
                 local min_col = math.min(unpack(line_starts))
                 local max_col = math.max(unpack(line_ends))
+                local has_code_snipped_started = false
                 -- NOTE: adds virtual lines to make highlighting beyond the end of the line possible
                 for i, _ in ipairs(lines) do
                     local line_width = line_ends[i]
-                    vim.api.nvim_buf_set_extmark(ev.buf, namespace, start_row + i - 1, min_col, {
-                        end_row = start_row + i,
-                        virt_text = { { string.rep(" ", max_col - line_width), "CodeBg" } },
-                        virt_text_win_col = line_width,
-                        hl_group = "CodeBg",
-                    })
+                    -- skip the empty lines at the start of the codeblock
+                    if has_code_snipped_started or line_width ~= 0 then
+                        has_code_snipped_started = true
+                        if line_width > min_col then
+                            vim.api.nvim_buf_set_extmark(ev.buf, namespace, start_row + i - 1, min_col, {
+                                end_row = start_row + i,
+                                virt_text = { { string.rep(" ", max_col - line_width), "CodeBg" } },
+                                virt_text_win_col = line_width,
+                                hl_group = "CodeBg",
+                                -- strict = false,
+                            })
+                        else
+                            -- lines that do not have any text in the codeblock need only the virtual lines
+                            vim.api.nvim_buf_set_extmark(ev.buf, namespace, start_row + i - 1, 0, {
+                                virt_text = { { string.rep(" ", max_col - min_col), "CodeBg" } },
+                                virt_text_win_col = min_col,
+                            })
+                        end
+                    end
                 end
 
                 -- -- highlight the whole lines of the codeblock with the "CodeBg" hl group
