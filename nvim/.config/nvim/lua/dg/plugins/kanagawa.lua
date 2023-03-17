@@ -25,18 +25,8 @@ function M.config()
                 local start_row, _, end_row, _ = node:range()
                 local namespace = vim.api.nvim_create_namespace "codeblock"
 
-                -- highlight codeblock with the "CodeBg" hl group which just covers the width of the codeblock
                 local lines = vim.api.nvim_buf_get_lines(ev.buf, start_row, end_row, false)
-                local line_ends = {}
-                local line_starts = {}
-                for _, line in ipairs(lines) do
-                    table.insert(line_ends, vim.api.nvim_strwidth(line))
-                    local start_col = line:find "[^%s]"
-                    if start_col then table.insert(line_starts, start_col - 1) end
-                end
-                local min_col = math.min(unpack(line_starts))
-                local max_col = math.max(unpack(line_ends))
-                -- skip the empty lines at the start of the codeblock or end of the codeblocks
+                -- skip the empty lines at the start and end of the codeblock
                 local code_block_start_index = 0
                 local code_block_end_index = #lines
                 for i, line in ipairs(lines) do
@@ -51,6 +41,17 @@ function M.config()
                         break
                     end
                 end
+
+                -- highlight codeblock with the "CodeBg" hl group which just covers the width of the codeblock
+                local line_ends = {}
+                local line_starts = {}
+                for _, line in ipairs(lines) do
+                    table.insert(line_ends, vim.api.nvim_strwidth(line))
+                    local start_col = line:find "[^%s]"
+                    if start_col then table.insert(line_starts, start_col - 1) end
+                end
+                local min_col = math.min(unpack(line_starts))
+                local max_col = math.max(unpack(line_ends))
                 -- NOTE: adds virtual lines to make highlighting beyond the end of the line possible
                 for i, _ in ipairs(lines) do
                     if i >= code_block_start_index and i <= code_block_end_index then
@@ -74,8 +75,8 @@ function M.config()
                 end
 
                 -- -- highlight the whole lines of the codeblock with the "CodeBg" hl group
-                -- vim.api.nvim_buf_set_extmark(ev.buf, namespace, start_row, 0, {
-                --     end_row = end_row,
+                -- vim.api.nvim_buf_set_extmark(ev.buf, namespace, start_row + code_block_start_index - 1, 0, {
+                --     end_row = end_row - #lines + code_block_end_index,
                 --     hl_group = "CodeBg",
                 --     hl_eol = true,
                 -- })
