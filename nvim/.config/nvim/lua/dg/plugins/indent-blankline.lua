@@ -17,6 +17,7 @@ function M.config()
 
         -- don't show indent lines for empty lines
         show_trailing_blankline_indent = false,
+        show_first_indent_level = false,
 
         -- -- a bit buggy / try again later
         -- show_current_context = true,

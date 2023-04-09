@@ -68,9 +68,14 @@ function M.config()
     require("nvim-dap-virtual-text").setup {}
     -- -- configure a small subset of debug adapters in visual studio code (see `:help dap-launch.json`)
     -- require("dap.ext.vscode").load_launchjs()
-    -- -- configure signs
-    -- -- available signs: DapBreakpoint (B), DapBreakpointCondition (C), DapLogPoint (L), DapStopped (→), DapBreakpointRejected (R)
-    -- vim.fn.sign_define("DapBreakpoint", { text = "🛑", texthl = "", linehl = "", numhl = "" })
+
+    -- configure signs
+    vim.fn.sign_define("DapBreakpoint", { text = "B", texthl = "DapSigns" })
+    vim.fn.sign_define("DapBreakpointCondition", { text = "C", texthl = "DapSigns" })
+    vim.fn.sign_define("DapLogPoint", { text = "L", texthl = "DapSigns" })
+    vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapSigns" })
+    vim.fn.sign_define("DapBreakpointRejected", { text = "R", texthl = "DapSigns" })
+
     dapui.setup {}
     dap.listeners.after.event_initialized["dapui_config"] = dapui.open
     dap.listeners.before.event_terminated["dapui_config"] = dapui.close
@@ -114,8 +119,7 @@ function M.config()
             name = "Attach to running Neovim instance",
         },
     }
-    dap.adapters.nlua =
-        function(callback, _) callback { type = "server", host = "127.0.0.1", port = 8088 } end
+    dap.adapters.nlua = function(callback, _) callback { type = "server", host = "127.0.0.1", port = 8088 } end
 end
 
 return M

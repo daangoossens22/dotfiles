@@ -9,8 +9,8 @@ function M.config()
     vim.api.nvim_create_autocmd("FileType", {
         pattern = "help",
         callback = function(ev)
-            local query = vim.treesitter.query.parse_query(
-                "help",
+            local query = vim.treesitter.query.parse(
+                "vimdoc",
                 [[
 (codeblock
   (language)
@@ -18,7 +18,7 @@ function M.config()
 )
 ]]
             )
-            local parser = vim.treesitter.get_parser(ev.buf, "help", {})
+            local parser = vim.treesitter.get_parser(ev.buf, "vimdoc", {})
             local tree = parser:parse()[1]
             local root = tree:root()
             for _, node in query:iter_captures(root, ev.buf, 0, -1) do
@@ -86,7 +86,7 @@ function M.config()
     })
 
     require("kanagawa").setup {
-        compile = true, -- set to false to not need to run ':KanagawaCompile' after each config change
+        compile = false,
         dimInactive = true,
         ---@type fun(colors: { theme: ThemeColors, palette: PaletteColors}): table<string, table>
         overrides = function(colors)
@@ -102,9 +102,9 @@ function M.config()
                 WinSeparator = {
                     fg = colors.theme.ui.bg_p1,
                 },
-                ["@include"] = { fg = colors.palette.oniViolet },
-                ["@function.macro"] = { fg = colors.palette.surimiOrange },
+                ["@lsp.type.comment"] = {}, -- don't have semantic highlighting for comments (overwriting my todo highlighting)
                 CodeBg = { bg = colors.theme.ui.bg_m3, bold = true },
+                DapSigns = { bg = colors.theme.ui.bg_gutter },
             }
         end,
     }

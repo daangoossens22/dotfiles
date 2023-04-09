@@ -2,7 +2,7 @@ return {
     "nvim-lua/plenary.nvim",
     "nvim-tree/nvim-web-devicons",
     { "alvarosevilla95/luatab.nvim", event = "TabNew", config = true },
-    "tpope/vim-repeat",
+    { "tpope/vim-repeat", event = "VeryLazy" },
     { "tpope/vim-sleuth", event = "BufReadPre" },
     { "tpope/vim-surround", keys = { "ds", "cs", "ys", { "S", mode = "v" } } },
     {
@@ -12,12 +12,14 @@ return {
             -- REF: https://github.com/karb94/neoscroll.nvim/issues/80
             require("neoscroll").setup {
                 pre_hook = function()
+                    ---@diagnostic disable-next-line: param-type-mismatch
                     vim.opt.eventignore:append {
                         "WinScrolled",
                         "CursorMoved",
                     }
                 end,
                 post_hook = function()
+                    ---@diagnostic disable-next-line: param-type-mismatch
                     vim.opt.eventignore:remove {
                         "WinScrolled",
                         "CursorMoved",

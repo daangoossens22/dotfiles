@@ -21,7 +21,7 @@ return {
                     "dockerfile",
                     "glsl",
                     "gitcommit",
-                    "help",
+                    "vimdoc",
                     "html",
                     "javascript",
                     "json",
