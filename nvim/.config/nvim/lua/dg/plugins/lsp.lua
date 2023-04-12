@@ -6,7 +6,7 @@ local M = {
         "jose-elias-alvarez/null-ls.nvim",
         "p00f/clangd_extensions.nvim",
         "folke/neodev.nvim",
-        "simrat39/rust-tools.nvim",
+        -- "simrat39/rust-tools.nvim",
         { url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
     },
 }
@@ -32,12 +32,17 @@ function M.config()
 
     local function lsp_opts(desc) return { silent = true, desc = "[LSP] " .. desc } end
 
-    require("lsp_lines").setup()
+    vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError" })
+    vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn" })
+    vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo" })
+    vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
     vim.diagnostic.config {
-        -- update_in_insert = false, -- keep diagnostics while typing
+        severity_sort = true,
+        -- -- update_in_insert = false, -- keep diagnostics while typing
         virtual_lines = false,
         virtual_text = true,
     }
+    require("lsp_lines").setup()
     MAP("n", "<leader>e", function()
         local virtual_lines = vim.diagnostic.config().virtual_lines
         vim.diagnostic.config {
@@ -181,23 +186,23 @@ function M.config()
             },
         },
     }
-    -- nvim_lsp.rust_analyzer.setup(rust_analyzer_setup)
-    -- TODO: this also seems to require "dap", see how to seperate them
-    -- TODO: once nvim natively supports inlay_hints -> don't need rust-tools anymore
-    local extension_path = vim.env.HOME .. "/.local/share/nvim/mason/packages/codelldb/extension/"
-    local codelldb_path = extension_path .. "adapter/codelldb"
-    local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
-    require("rust-tools").setup {
-        server = rust_analyzer_setup,
-        tools = {
-            inlay_hints = {
-                auto = false,
-            },
-        },
-        dap = {
-            adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-        },
-    }
+    nvim_lsp.rust_analyzer.setup(rust_analyzer_setup)
+    -- -- TODO: this also seems to require "dap", see how to seperate them
+    -- -- TODO: once nvim natively supports inlay_hints -> don't need rust-tools anymore
+    -- local extension_path = vim.env.HOME .. "/.local/share/nvim/mason/packages/codelldb/extension/"
+    -- local codelldb_path = extension_path .. "adapter/codelldb"
+    -- local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
+    -- require("rust-tools").setup {
+    --     server = rust_analyzer_setup,
+    --     tools = {
+    --         inlay_hints = {
+    --             auto = false,
+    --         },
+    --     },
+    --     dap = {
+    --         adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+    --     },
+    -- }
 
     -- automatically sets up clangd language server
     require("clangd_extensions").setup {
@@ -235,7 +240,7 @@ function M.config()
                 diagnostics = { globals = { "vim", "describe", "it", "before_each" } },
                 completion = { callSnippet = "Replace" },
                 workspace = { checkThirdParty = false },
-                semantic = { enable = false },
+                -- semantic = { enable = false },
             },
         },
     }

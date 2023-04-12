@@ -18,8 +18,9 @@ require("lazy").setup("dg.plugins", {
     defaults = { lazy = true },
     install = { colorscheme = { "kanagawa", "habamax" } },
     dev = { path = "~/Documents" },
-    ui = { border = "rounded" },
+    ui = { border = "rounded", wrap = false },
     diff = { cmd = "diffview.nvim" },
+    change_detection = { notify = false },
     performance = {
         cache = { enabled = true },
         rtp = {

@@ -97,6 +97,10 @@ function M.config()
         sections = {
             lualine_a = { "mode" },
             lualine_b = {
+                {
+                    require("noice").api.status.mode.get,
+                    cond = require("noice").api.status.mode.has,
+                },
                 { "branch", icons_enabled = true },
                 "diff",
                 {
@@ -143,7 +147,13 @@ function M.config()
                 "fileformat",
                 "filetype",
             },
-            lualine_y = { "progress" },
+            lualine_y = {
+                "progress",
+                {
+                    require("noice").api.status.command.get,
+                    cond = require("noice").api.status.command.has,
+                },
+            },
             lualine_z = { "location" },
         },
         inactive_sections = {

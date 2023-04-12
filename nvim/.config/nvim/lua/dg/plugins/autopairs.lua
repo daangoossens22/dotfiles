@@ -4,7 +4,10 @@ local M = {
 }
 
 function M.config()
-    require("nvim-autopairs").setup {}
+    require("nvim-autopairs").setup {
+        check_ts = true,
+        -- ts_config = { java = false },
+    }
     -- If you want insert `(` after select function or method item
     local cmp_autopairs = require "nvim-autopairs.completion.cmp"
     local cmp = require "cmp"
@@ -29,6 +32,8 @@ function M.config()
     -- TODO(lua): add rule for function and if statement to insert the end
     -- TODO: add way to easily cancel a pair in insert mode
     -- TODO: when adding brackets and pressing space add 2 spaces e.g. '" |' results in '" | "'
+    -- TODO: check `check_ts` and `ts_config` config options
+    -- TODO: check out the `fast_wrap` config option
 end
 
 return M
