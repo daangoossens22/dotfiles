@@ -28,12 +28,19 @@ function M.init()
         function() require("telescope.builtin").find_files() end,
         "[TEL] find files in current working directory"
     )
-    MAP(
-        "n",
-        "<leader>fg",
-        function() require("telescope.builtin").live_grep() end,
-        "[TEL] ripgrep in current working directory"
-    )
+    MAP("n", "<leader>fg", function()
+        local workspaces = vim.lsp.buf.list_workspace_folders()
+        local other_workspaces = { require("telescope.utils").buffer_dir(), vim.fn.getcwd() }
+        for _, dir in ipairs(other_workspaces) do
+            if not vim.tbl_contains(workspaces, dir) then table.insert(workspaces, dir) end
+        end
+
+        vim.ui.select(
+            workspaces,
+            { prompt = "select workspace to search in" },
+            function(choice) require("telescope.builtin").live_grep { cwd = choice } end
+        )
+    end, "[TEL] ripgrep in current working directory")
     MAP(
         "n",
         "<leader>fc",
@@ -52,7 +59,7 @@ function M.init()
         function() require("telescope.builtin").current_buffer_fuzzy_find() end,
         "[TEL] find in current buffer"
     )
-    -- MAP("n", "<leader>fb", require("telescope.builtin").buffers, "[TEL] find open buffers") -- TODO: change keybind (add keybind <M-d> to :bd selected entries)
+    MAP("n", "<leader>fo", require("telescope.builtin").buffers, "[TEL] find open buffers") -- TODO: add keybind <M-d> to :bd selected entries
     MAP("n", "<leader>fh", function()
         for _, plugin in ipairs(require("lazy").plugins()) do
             if plugin._.loaded == nil then vim.cmd([[Lazy load ]] .. plugin.name) end
@@ -150,12 +157,10 @@ function M.init()
         prompt_title = "Nvim Config",
         cwd = "~/.config/nvim",
     }
-    MAP(
-        "n",
-        "<leader>cv",
-        function() require("telescope.builtin").find_files(nvim_config_opt) end,
-        { desc = "[TEL] find nvim config file" }
-    )
+    MAP("n", "<leader>cv", function()
+        require("telescope.builtin").find_files(nvim_config_opt)
+        vim.api.nvim_feedkeys("!scratch 'lua ", "n", false)
+    end, { desc = "[TEL] find nvim config file" })
 end
 
 function M.config()

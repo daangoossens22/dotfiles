@@ -8,12 +8,11 @@ local M = {
         "folke/neodev.nvim",
         -- "simrat39/rust-tools.nvim",
         { url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
+        -- "kevinhwang91/nvim-ufo",
     },
 }
 
 function M.config()
-    local lsp_augroup = vim.api.nvim_create_augroup("dg_lsp", { clear = true })
-
     local function toggle_autoformat() vim.b.autoformat = not vim.b.autoformat end
 
     local ignore = { "lua_ls", "jedi_language_server" }
@@ -27,7 +26,7 @@ function M.config()
         callback = function()
             if vim.b.autoformat then lsp_format() end
         end,
-        group = lsp_augroup,
+        group = AUGROUP "lsp_autoformat",
     })
 
     local function lsp_opts(desc) return { silent = true, desc = "[LSP] " .. desc } end
@@ -85,6 +84,7 @@ function M.config()
         local lb = vim.lsp.buf
 
         -- See `:help vim.lsp.*` for documentation on any of the below functions
+        MAP("n", "<leader>cl", vim.lsp.codelens.run, buf_opts "run one of the codelens actions")
         MAP("n", "gD", lb.declaration, buf_opts "jumps to the declaration of the symbol under the cursor")
         MAP("n", "gd", lb.definition, buf_opts "jumps to the definition of the symbol under the cursor")
         MAP("n", "K", lb.hover, buf_opts "display hover information of the symbol under the cursor")
@@ -112,10 +112,12 @@ function M.config()
             lb.remove_workspace_folder,
             buf_opts "remove the folder at the path to the workspace folders"
         )
-        -- -- NOTE: conflicts with window mapping CTRL-W l -> <space>w l
-        -- MAP("n", "<leader>wl", function()
-        --     vim.inspect(lb.list_workspace_folders())
-        -- end, buf_opts "list workspace folders")
+        MAP(
+            "n",
+            "<leader>lw",
+            function() P(lb.list_workspace_folders()) end,
+            buf_opts "list workspace folders"
+        )
         MAP(
             "n",
             "<leader>D",
@@ -142,6 +144,10 @@ function M.config()
     local nvim_lsp = require "lspconfig"
     -- Add additional capabilities supported by nvim-cmp
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
+    -- capabilities.textDocument.foldingRange = {
+    --     dynamicRegistration = false,
+    --     lineFoldingOnly = true,
+    -- }
 
     local null_ls = require "null-ls"
     null_ls.setup {
@@ -165,7 +171,16 @@ function M.config()
         capabilities = capabilities,
     }
 
-    local servers = { "jedi_language_server", "bashls", "texlab", "tsserver", "cssls", "html", "jsonls" }
+    local servers = {
+        "pyright",
+        "bashls",
+        "texlab",
+        "tsserver",
+        "cssls",
+        "html",
+        "jsonls",
+        -- "arduino-language-server"
+    }
     for _, lsp in ipairs(servers) do
         nvim_lsp[lsp].setup {
             on_attach = on_attach,
@@ -229,7 +244,7 @@ function M.config()
     }
 
     require("neodev").setup {
-        setup_jsonls = false,
+        -- setup_jsonls = false,
     }
     nvim_lsp.lua_ls.setup {
         on_attach = on_attach,
@@ -249,8 +264,9 @@ function M.config()
     vim.api.nvim_create_autocmd("LspAttach", {
         pattern = "*/.config/waybar/style.css",
         command = "LspStop cssls",
-        group = lsp_augroup,
+        group = AUGROUP "lsp_disable_certain_files",
     })
+    -- vim.cmd [[autocmd LspAttach,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
 end
 
 return M

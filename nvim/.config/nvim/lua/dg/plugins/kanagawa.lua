@@ -5,20 +5,27 @@ local M = {
 }
 
 function M.config()
-    -- helptags add darker background for code snippets
+    -- help/markdown add darker background for code injections
     vim.api.nvim_create_autocmd("FileType", {
-        pattern = "help",
+        pattern = { "help", "markdown" },
         callback = function(ev)
-            local query = vim.treesitter.query.parse(
-                "vimdoc",
-                [[
+            local ts_parser = ev.match == "help" and "vimdoc" or "markdown"
+            local ts_query = [[
 (codeblock
   (language)
   (code) @codebg
 )
 ]]
-            )
-            local parser = vim.treesitter.get_parser(ev.buf, "vimdoc", {})
+            if ev.match == "markdown" then
+                ts_query = [[
+(fenced_code_block
+  (info_string (language))
+  (code_fence_content) @codebg
+  )
+]]
+            end
+            local query = vim.treesitter.query.parse(ts_parser, ts_query)
+            local parser = vim.treesitter.get_parser(ev.buf, ts_parser, {})
             local tree = parser:parse()[1]
             local root = tree:root()
             local namespace = vim.api.nvim_create_namespace "codeblock"

@@ -36,7 +36,7 @@ function M.config()
     -- see: https://github.com/lukas-reineke/indent-blankline.nvim/issues/489
     vim.api.nvim_create_autocmd("CursorMoved", {
         command = "IndentBlanklineRefresh",
-        group = vim.api.nvim_create_augroup("indent_blankline_workaround", { clear = true }),
+        group = AUGROUP "indent_blankline_workaround",
     })
 end
 

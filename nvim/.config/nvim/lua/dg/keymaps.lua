@@ -82,7 +82,6 @@ MAP("n", "<leader>ls", ToggleQFList, "show all contents of currently selected QF
 MAP("n", "<C-l>", WRAP(MoveQFList, true), "move to next item in currently selected QF list")
 MAP("n", "<C-h>", WRAP(MoveQFList, false), "move to prev item in currently selected QF list")
 
-local dg_maps = vim.api.nvim_create_augroup("dg_maps", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "*.md",
     callback = function()
@@ -90,7 +89,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
             vim.cmd [[silent !pandoc -f markdown-implicit_figures -s %:p -o %:p:r.pdf --highlight-style=tango &]]
         end
     end,
-    group = dg_maps,
+    group = AUGROUP "markdown_autopdf",
 })
 MAP(
     "n",

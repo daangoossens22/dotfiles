@@ -4,12 +4,12 @@ if not vim.loop.fs_stat(lazypath) then
         "git",
         "clone",
         "--filter=blob:none",
-        "--single-branch",
         "https://github.com/folke/lazy.nvim.git",
+        "--branch=main",
         lazypath,
     }
 end
-vim.opt.runtimepath:prepend(lazypath)
+vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -18,7 +18,7 @@ require("lazy").setup("dg.plugins", {
     defaults = { lazy = true },
     install = { colorscheme = { "kanagawa", "habamax" } },
     dev = { path = "~/Documents" },
-    ui = { border = "rounded", wrap = false },
+    ui = { border = "rounded" },
     diff = { cmd = "diffview.nvim" },
     change_detection = { notify = false },
     performance = {

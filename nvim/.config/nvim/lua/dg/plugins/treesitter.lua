@@ -33,6 +33,7 @@ return {
                     "jsonc",
                     "latex",
                     "lua",
+                    -- "luadoc",
                     "luap",
                     "make",
                     "markdown",

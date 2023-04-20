@@ -76,7 +76,8 @@ alias cmake="cmake -G Ninja"
 alias cmakev="cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1"
 
 alias grubmc="sudo grub-mkconfig -o /boot/grub/grub.cfg"
-alias rnvim="cfn && git fetch && git log HEAD..origin/master --oneline && git pull && sudo chown -R $USER:$USER .deps build && make CMAKE_BUILD_TYPE=Release && sudo rm -rf /usr/local/share/nvim/runtime/ && sudo make install"
+alias rnvim="cfn && git checkout master && git fetch && git log HEAD..origin/master --oneline && git pull && invim"
+alias invim="sudo chown -R $USER:$USER .deps build && make CMAKE_BUILD_TYPE=Release && sudo rm -rf /usr/local/share/nvim/runtime/ && sudo make install"
 alias stowh="stow -t $HOME"
 
 # clean up home folder

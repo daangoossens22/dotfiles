@@ -63,6 +63,7 @@ function M.config()
     vim.api.nvim_create_autocmd("FileType", {
         pattern = "dap-repl",
         callback = function() require("dap.ext.autocompl").attach() end,
+        group = AUGROUP "dap_autocomplete",
     })
 
     require("nvim-dap-virtual-text").setup {}

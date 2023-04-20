@@ -2,7 +2,6 @@ local M = {
     "nvim-lualine/lualine.nvim",
     lazy = false,
     dependencies = {
-        "nvim-lua/lsp-status.nvim",
         "rebelot/kanagawa.nvim",
     },
 }
@@ -12,8 +11,6 @@ function M.config()
     vim.opt.showmode = false
     vim.g.qf_disable_statusline = 1 -- draw the normal statusline in a quickfix window
 
-    require("lsp-status").register_progress()
-    vim.g.spinner_index = 1
     local function lualine_lsp_name()
         -- REF: https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/evil_lualine.lua
         local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
@@ -30,13 +27,15 @@ function M.config()
                 end
             end
         end
-
         local res = table.concat(client_names, "|")
-        if require("lsp-status").status_progress() ~= "" then
+
+        -- REF: https://github.com/NvChad/ui/blob/3e52dbbfff31912a5d1897fcb15051ad62d0c300/lua/nvchad_ui/statusline/minimal.lua#L97-L121
+        local progress_message = vim.lsp.util.get_progress_messages()[1]
+        if progress_message then
             local moon = { "🌑 ", "🌒 ", "🌓 ", "🌔 ", "🌕 ", "🌖 ", "🌗 ", "🌘 " }
-            res = moon[vim.g.spinner_index] .. res
-            vim.g.spinner_index = vim.g.spinner_index % #moon
-            vim.g.spinner_index = vim.g.spinner_index + 1
+            local ms = vim.loop.hrtime() / 1000000
+            local frame = math.floor(ms / 400) % #moon
+            res = (progress_message.percentage or 0) .. "%% " .. moon[frame + 1] .. res
         end
         return res
     end

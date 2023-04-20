@@ -23,8 +23,10 @@ opt.autowriteall = true
 opt.title = true
 opt.titlestring = "nvim - %t"
 opt.mouse = "n" -- enable mouse in normal, visual
+opt.mousescroll = "ver:1,hor:1"
+vim.keymap.set("n", "<RightMouse>", "<Nop>")
 -- opt.clipboard = "unnamedplus" -- automatically copy to clipboard
-opt.foldlevelstart = 20
+-- opt.foldlevelstart = 20
 opt.splitkeep = "screen"
 -- opt.diffopt:append { "linematch:60", "algorithm:patience" }
 opt.diffopt:append "vertical"
@@ -49,7 +51,9 @@ opt.relativenumber = true
 opt.wrap = false
 opt.textwidth = 110
 opt.colorcolumn = { "+1" }
-opt.foldenable = false
+-- opt.foldenable = false
+opt.conceallevel = 2
+opt.foldcolumn = "1"
 
 -- NOTE: local to buffer options
 opt.autoindent = true
@@ -84,12 +88,11 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_pythonx_provider = 0
 vim.g.loaded_python3_provider = 0
 
-local dg_options = vim.api.nvim_create_augroup("dg_option", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
     callback = function(ev)
         if ev.match ~= "gitcommit" then vim.opt_local.formatoptions:remove { "o", "t" } end
     end,
-    group = dg_options,
+    group = AUGROUP "formatoptions",
 })
 -- persistant folds and cursor position when opening and closing nvim
 -- REF: https://vim.fandom.com/wiki/Make_views_automatic
@@ -98,13 +101,31 @@ vim.opt.viewoptions = {
     "cursor",
     -- "curdir",
 }
+local augroup_persistant_cursor_folds = AUGROUP "persistant_cursor_folds"
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufLeave", "WinLeave" }, {
     pattern = "?*",
     command = "mkview",
-    group = dg_options,
+    group = augroup_persistant_cursor_folds,
 })
 vim.api.nvim_create_autocmd("BufWinEnter", {
     pattern = "?*",
     command = "silent! loadview",
-    group = dg_options,
+    group = augroup_persistant_cursor_folds,
+})
+
+-- REF: https://github.com/LazyVim/LazyVim/blob/ef21bea975df97694f7491dcd199d9d116227235/lua/lazyvim/config/autocmds.lua#L42
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = {
+        "help",
+        "notify",
+        "qf",
+        "tsplayground",
+        "checkhealth",
+        "neotest-summary",
+    },
+    callback = function(event)
+        vim.bo[event.buf].buflisted = false
+        vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+    end,
+    group = AUGROUP "close_with_q",
 })
