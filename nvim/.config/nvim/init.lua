@@ -17,7 +17,7 @@ require "dg.globals"
 require("lazy").setup("dg.plugins", {
     defaults = { lazy = true },
     install = { colorscheme = { "kanagawa", "habamax" } },
-    dev = { path = "~/Documents" },
+    dev = { path = "~/Documents/nvim_plugins" },
     ui = { border = "rounded" },
     diff = { cmd = "diffview.nvim" },
     change_detection = { notify = false },

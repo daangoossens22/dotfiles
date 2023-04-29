@@ -179,6 +179,7 @@ function M.config()
         "cssls",
         "html",
         "jsonls",
+        "vhdl_ls",
         -- "arduino-language-server"
     }
     for _, lsp in ipairs(servers) do

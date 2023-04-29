@@ -9,26 +9,46 @@ local M = {
 
 function M.config()
     require("noice").setup {
+        cmdline = {
+            view = "cmdline",
+            format = {
+                -- filter = { icon = "!" },
+                -- lua = false, -- NOTE: no lua hl when having `:=` in the command line
+                help = false,
+                calculator = false,
+            },
+        },
+        messages = {
+            -- view = "notify",
+            -- view_error = "mini",
+            -- view_warn = "mini",
+            view_search = false,
+        },
+        popupmenu = {
+            enabled = false,
+            backend = "cmp",
+        },
         lsp = {
             progress = {
                 enabled = false,
             },
-            -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+            signature = {
+                -- enabled = false,
+                auto_open = {
+                    enabled = false,
+                },
+            },
             override = {
                 ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
                 ["vim.lsp.util.stylize_markdown"] = true,
                 ["cmp.entry.get_documentation"] = true,
             },
         },
-        -- you can enable a preset for easier configuration
         presets = {
-            bottom_search = true, -- use a classic bottom cmdline for search
-            command_palette = true, -- position the cmdline and popupmenu together
-            long_message_to_split = true, -- long messages will be sent to a split
-            inc_rename = false, -- enables an input dialog for inc-rename.nvim
-            lsp_doc_border = false, -- add a border to hover docs and signature help
+            -- long_message_to_split = true,
         },
     }
+    MAP("c", "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, "Redirect Cmdline")
 end
 
 return M

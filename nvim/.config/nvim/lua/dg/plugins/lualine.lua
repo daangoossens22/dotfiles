@@ -148,6 +148,7 @@ function M.config()
             },
             lualine_y = {
                 "progress",
+                { "searchcount" },
                 {
                     require("noice").api.status.command.get,
                     cond = require("noice").api.status.command.has,

@@ -34,8 +34,11 @@ function M.config()
     MAP("n", "<leader>ri", require("indent_blankline.commands").refresh, "refresh indent guidelines")
     -- NOTE: workaround for guidelines dissapearing when scrolling horizontally
     -- see: https://github.com/lukas-reineke/indent-blankline.nvim/issues/489
-    vim.api.nvim_create_autocmd("CursorMoved", {
-        command = "IndentBlanklineRefresh",
+    vim.api.nvim_create_autocmd("WinScrolled", {
+        -- command = "IndentBlanklineRefresh",
+        callback = function()
+            if vim.v.event.all.leftcol ~= 0 then vim.cmd [[silent! IndentBlanklineRefresh]] end
+        end,
         group = AUGROUP "indent_blankline_workaround",
     })
 end

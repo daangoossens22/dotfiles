@@ -35,6 +35,7 @@ function M.config()
                 local lines = vim.api.nvim_buf_get_lines(ev.buf, start_row, end_row, false)
                 if #lines ~= 0 then
                     -- skip the empty lines at the start and end of the codeblock
+                    -- TODO: check for any whitespace characters (e.g. also \t and spaces)
                     local code_block_start_index = 0
                     local code_block_end_index = #lines
                     for i, line in ipairs(lines) do
@@ -51,32 +52,43 @@ function M.config()
                     end
 
                     -- highlight codeblock with the "CodeBg" hl group which just covers the width of the codeblock
-                    local line_ends = {}
-                    local line_starts = {}
+                    local display_ends = {}
+                    local display_starts = {}
+                    local str_starts = {}
                     for _, line in ipairs(lines) do
-                        table.insert(line_ends, vim.api.nvim_strwidth(line))
+                        table.insert(display_ends, vim.fn.strdisplaywidth(line))
                         local start_col = line:find "[^%s]"
-                        if start_col then table.insert(line_starts, start_col - 1) end
+                        if start_col then
+                            local substr = line:sub(1, start_col - 1)
+                            table.insert(display_starts, vim.fn.strdisplaywidth(substr))
+                            table.insert(str_starts, vim.api.nvim_strwidth(substr))
+                        end
                     end
-                    local min_col = math.min(unpack(line_starts))
-                    local max_col = math.max(unpack(line_ends))
+                    local min_display_col = math.min(unpack(display_starts))
+                    local max_display_col = math.max(unpack(display_ends))
+                    local min_str_col = math.min(unpack(str_starts))
                     -- NOTE: adds virtual lines to make highlighting beyond the end of the line possible
+                    -- NOTE: virtual text uses the column numbers
+                    -- NOTE: normal text uses number of characters regardless of column numbers
                     for i, _ in ipairs(lines) do
                         if i >= code_block_start_index and i <= code_block_end_index then
-                            local line_width = line_ends[i]
-                            if line_width > min_col then
-                                vim.api.nvim_buf_set_extmark(ev.buf, namespace, start_row + i - 1, min_col, {
+                            local line_width = display_ends[i]
+                            if line_width > min_display_col then
+                                vim.api.nvim_buf_set_extmark(ev.buf, namespace, start_row + i - 1, min_str_col, {
                                     end_row = start_row + i,
-                                    virt_text = { { string.rep(" ", max_col - line_width), "CodeBg" } },
+                                    virt_text = {
+                                        { string.rep(" ", max_display_col - line_width), "CodeBg" },
+                                    },
                                     virt_text_win_col = line_width,
                                     hl_group = "CodeBg",
-                                    -- strict = false,
                                 })
                             else
                                 -- lines that do not have any text in the codeblock need only the virtual lines
                                 vim.api.nvim_buf_set_extmark(ev.buf, namespace, start_row + i - 1, 0, {
-                                    virt_text = { { string.rep(" ", max_col - min_col), "CodeBg" } },
-                                    virt_text_win_col = min_col,
+                                    virt_text = {
+                                        { string.rep(" ", max_display_col - min_display_col), "CodeBg" },
+                                    },
+                                    virt_text_win_col = min_display_col,
                                 })
                             end
                         end
@@ -114,6 +126,8 @@ function M.config()
                 ["@lsp.type.comment"] = {}, -- don't have semantic highlighting for comments (overwriting my todo highlighting)
                 CodeBg = { bg = colors.theme.ui.bg_m3, bold = true },
                 DapSigns = { bg = colors.theme.ui.bg_gutter },
+                InclineNormal = { bg = colors.palette.crystalBlue, fg = colors.theme.ui.bg_m1 },
+                InclineNormalNC = { link = "InclineNormal" },
             }
         end,
     }
