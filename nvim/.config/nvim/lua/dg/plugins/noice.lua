@@ -7,7 +7,9 @@ local M = {
     },
 }
 
+-- TODO: help: 1) vsplit when only 1 pane horizontally 2) split when multiple splits side by side
 function M.config()
+    vim.opt.shortmess = "filmnrxoOscF"
     require("noice").setup {
         cmdline = {
             view = "cmdline",
@@ -15,7 +17,7 @@ function M.config()
                 -- filter = { icon = "!" },
                 -- lua = false, -- NOTE: no lua hl when having `:=` in the command line
                 help = false,
-                calculator = false,
+                -- calculator = false,
             },
         },
         messages = {
@@ -33,9 +35,10 @@ function M.config()
                 enabled = false,
             },
             signature = {
-                -- enabled = false,
                 auto_open = {
                     enabled = false,
+                    -- trigger = false,
+                    -- luasnip = false,
                 },
             },
             override = {
@@ -47,8 +50,32 @@ function M.config()
         presets = {
             -- long_message_to_split = true,
         },
+        routes = {
+            {
+                filter = {
+                    event = "msg_show",
+                    kind = "",
+                    cmdline = true,
+                    find = "written",
+                },
+                opts = { skip = true },
+            },
+        },
     }
-    MAP("c", "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, "Redirect Cmdline")
+
+    local map_documentation_scroll = function(lhs, scroll_amount)
+        MAP({ "i", "s" }, lhs, function()
+            if not require("noice.lsp").scroll(scroll_amount) then return lhs end
+        end, { silent = true, expr = true, desc = "[NOICE] scroll in documentation window" })
+    end
+    map_documentation_scroll("<C-d>", 4)
+    map_documentation_scroll("<C-u>", -4)
+    MAP(
+        "c",
+        "<S-Enter>",
+        function() require("noice").redirect(vim.fn.getcmdline()) end,
+        "[NOICE] Redirect Cmdline"
+    )
 end
 
 return M

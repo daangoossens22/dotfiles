@@ -159,6 +159,10 @@ bindkey '^' zcalc-auto-insert
 bindkey '|' zcalc-auto-insert
 bindkey '&' zcalc-auto-insert
 
+# autoload -Uz quote-and-complete-word
+# zle -N quote-and-complete-word
+# bindkey '\t' quote-and-complete-word
+
 source $ZDOTDIR/.zsh_aliases
 source $ZDOTDIR/.zsh_fzf
 # load plugins ; should be last (use 2>/dev/null at the end of the line to ignore errors)

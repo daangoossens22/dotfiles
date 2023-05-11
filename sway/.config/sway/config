@@ -26,6 +26,9 @@ output eDP-1 resolution 1920x1080
 # NOTE: for half framerate on prime-run fullscreen (remove when fixed)
 output eDP-1 max_render_time 5
 
+output DP-1 resolution 1920x1080
+output DP-2 resolution 1920x1080
+
 ### Idle configuration
 # Not needed desktop
 

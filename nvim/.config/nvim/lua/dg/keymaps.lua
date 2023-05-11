@@ -14,10 +14,15 @@ MAP("v", "J", ":m '>+1<cr>gv=gv", "move selected lines down")
 MAP("v", "K", ":m '<-2<cr>gv=gv", "move selected lines up")
 
 -- MAP("n", "<leader>Y", "ggyG<C-o>", "yank whole file")
-MAP("n", "<leader>\\", "<cmd>nohlsearch<cr>", "disable search highlighting")
+-- MAP("n", "<leader>\\", "<cmd>nohlsearch<cr>", "disable search highlighting")
+MAP("n", "<leader>\\", function()
+    vim.cmd.nohlsearch()
+    require("notify").dismiss()
+end, "disable search highlighting")
 
 MAP("", "<leader>d", '"_d', "delete operant doesn't overwrite any register")
 MAP("", "<leader>p", '"0p', "paste yank contents when it when the default register is overwritten by delete")
+MAP("v", "p", "P", "paste without yanking the contents of the visual selection")
 
 MAP("n", "J", "mzJ`z", "J but don't change cursor position")
 MAP("n", "gi", "gi<esc>zza", "gi but center the location")

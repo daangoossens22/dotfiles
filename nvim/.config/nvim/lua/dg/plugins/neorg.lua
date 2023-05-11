@@ -41,7 +41,7 @@ function M.config()
                 config = {
                     -- TODO: customize keybinds so there are no gt* mappings (since those are used for tabs)
                     default_keybinds = true,
-                    neorg_leader = "<Leader>n",
+                    neorg_leader = "<Leader>",
                 },
             },
             -- other modules
@@ -50,7 +50,20 @@ function M.config()
                 config = {
                     dim_code_blocks = { conceal = false, width = "content" },
                     icon_preset = "diamond",
-                    icons = { todo = { undone = { enabled = false } } },
+                    icons = {
+                        todo = {
+                            undone = { enabled = false },
+                            done = { icon = "", highlight = "@neorg.todo_items.done.1" },
+                            uncertain = { icon = "?", highlight = "@neorg.todo_items.uncertain.1" },
+
+                            urgent = { icon = "", highlight = "@neorg.todo_items.urgent.1" },
+                            recurring = { icon = "", highlight = "@neorg.todo_items.recurring.1" },
+
+                            pending = { icon = "󰅐", highlight = "@neorg.todo_items.pending.1" },
+                            on_hold = { icon = "", highlight = "@neorg.todo_items.on_hold.1" },
+                            cancelled = { icon = "󰩹", highlight = "@neorg.todo_items.cancelled.1" },
+                        },
+                    },
                 },
             },
             ["core.dirman"] = {

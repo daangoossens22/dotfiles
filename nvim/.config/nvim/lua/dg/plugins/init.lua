@@ -1,6 +1,6 @@
 return {
     "nvim-lua/plenary.nvim",
-    "nvim-tree/nvim-web-devicons",
+    { "nvim-tree/nvim-web-devicons", lazy = false },
     { "alvarosevilla95/luatab.nvim", event = "TabNew", config = true },
     { "tpope/vim-repeat", event = "VeryLazy" },
     { "tpope/vim-sleuth", event = "BufReadPre" },

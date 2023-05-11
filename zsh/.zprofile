@@ -43,6 +43,10 @@ export MOZ_ENABLE_WAYLAND=1
 # export __EGL_VENDOR_LIBRARY_FILENAMES=/usr/share/glvnd/egl_vendor.d/50_mesa.json
 export _JAVA_AWT_WM_NONREPARENTING=1
 
+# export WLR_DRM_NO_MODIFIERS=1
+# export WLR_DRM_NO_ATOMIC=1
+# export WLR_RENDERER=vulkan
+
 # start sway (only once) automatically on /det/tty1
 if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
     # NOTE: see https://wiki.archlinux.org/title/Hardware_video_acceleration

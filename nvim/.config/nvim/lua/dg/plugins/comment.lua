@@ -36,6 +36,7 @@ function M.config()
     }
 
     require("Comment.ft").set("query", ";%s")
+    require("Comment.ft").set("vhdl", "--%s")
 end
 
 ---Textobject for adjacent commented lines

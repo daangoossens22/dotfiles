@@ -123,17 +123,16 @@ function M.init()
     )
 
     -- extensions
-    local function custom_file_explorer()
+    MAP("n", "<leader>fe", function()
         require("telescope").extensions.file_browser.file_browser {
             cwd = require("telescope.utils").buffer_dir(), -- function so this is evaluated when opening the file explorer
-            -- previewer = false,
+            previewer = false,
             -- initial_mode = "normal",
             hidden = true,
             depth = 1,
             respect_gitignore = false,
         }
-    end
-    MAP("n", "<leader>fe", custom_file_explorer, "[TEL] file explorer")
+    end, "[TEL] file explorer")
     MAP(
         "n",
         "<leader>fn",

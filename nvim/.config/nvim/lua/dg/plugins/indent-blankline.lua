@@ -24,6 +24,7 @@ function M.config()
         -- show_current_context_start = true,
         -- -- context_patterns = {'class', 'function', 'method', 'for', 'if'},
         -- -- use_treesitter = true,
+        max_indent_increase = 2,
 
         show_foldtext = false,
 
@@ -37,7 +38,9 @@ function M.config()
     vim.api.nvim_create_autocmd("WinScrolled", {
         -- command = "IndentBlanklineRefresh",
         callback = function()
-            if vim.v.event.all.leftcol ~= 0 then vim.cmd [[silent! IndentBlanklineRefresh]] end
+            if vim.v.event.all and vim.v.event.all.leftcol ~= 0 then
+                vim.cmd [[silent! IndentBlanklineRefresh]]
+            end
         end,
         group = AUGROUP "indent_blankline_workaround",
     })

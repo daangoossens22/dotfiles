@@ -3,6 +3,7 @@ local M = {
     lazy = false,
     dependencies = {
         "rebelot/kanagawa.nvim",
+        "folke/noice.nvim",
     },
 }
 
@@ -32,7 +33,7 @@ function M.config()
         -- REF: https://github.com/NvChad/ui/blob/3e52dbbfff31912a5d1897fcb15051ad62d0c300/lua/nvchad_ui/statusline/minimal.lua#L97-L121
         local progress_message = vim.lsp.util.get_progress_messages()[1]
         if progress_message then
-            local moon = { "🌑 ", "🌒 ", "🌓 ", "🌔 ", "🌕 ", "🌖 ", "🌗 ", "🌘 " }
+            local moon = { "🌑 ", "🌘 ", "🌗 ", "🌖 ", "🌕 ", "🌔 ", "🌓 ", "🌒 " }
             local ms = vim.loop.hrtime() / 1000000
             local frame = math.floor(ms / 400) % #moon
             res = (progress_message.percentage or 0) .. "%% " .. moon[frame + 1] .. res

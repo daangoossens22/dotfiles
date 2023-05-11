@@ -31,13 +31,13 @@ function M.config()
 
     local function lsp_opts(desc) return { silent = true, desc = "[LSP] " .. desc } end
 
-    vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError" })
-    vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn" })
-    vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo" })
-    vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+    vim.fn.sign_define("DiagnosticSignError", { text = "󰅚", texthl = "DiagnosticSignError" })
+    vim.fn.sign_define("DiagnosticSignWarn", { text = "󰀪", texthl = "DiagnosticSignWarn" })
+    vim.fn.sign_define("DiagnosticSignInfo", { text = "󰋽", texthl = "DiagnosticSignInfo" })
+    vim.fn.sign_define("DiagnosticSignHint", { text = "󰌶", texthl = "DiagnosticSignHint" })
     vim.diagnostic.config {
         severity_sort = true,
-        -- -- update_in_insert = false, -- keep diagnostics while typing
+        -- update_in_insert = false, -- keep diagnostics while typing
         virtual_lines = false,
         virtual_text = true,
     }
@@ -95,7 +95,7 @@ function M.config()
             buf_opts "list all implementations for the symbol under the cursor"
         )
         MAP(
-            "i",
+            { "i", "s" },
             "<C-h>",
             lb.signature_help,
             buf_opts "display signature information about the symbol under the cursor"
@@ -246,6 +246,9 @@ function M.config()
 
     require("neodev").setup {
         -- setup_jsonls = false,
+        -- library = {
+        --     plugins = false,
+        -- },
     }
     nvim_lsp.lua_ls.setup {
         on_attach = on_attach,
@@ -253,7 +256,7 @@ function M.config()
         settings = {
             Lua = {
                 telemetry = { enable = false },
-                diagnostics = { globals = { "vim", "describe", "it", "before_each" } },
+                -- diagnostics = { globals = { "vim", "describe", "it", "before_each" } },
                 completion = { callSnippet = "Replace" },
                 workspace = { checkThirdParty = false },
                 -- semantic = { enable = false },
