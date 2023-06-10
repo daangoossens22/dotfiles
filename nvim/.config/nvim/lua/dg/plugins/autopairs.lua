@@ -5,6 +5,8 @@ local M = {
 
 function M.config()
     require("nvim-autopairs").setup {
+        disable_in_macro = true,
+        disable_in_visualblock = true,
         check_ts = true,
         -- ts_config = { java = false },
     }

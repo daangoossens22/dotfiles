@@ -37,10 +37,10 @@ function M.config()
             -- documentation = cmp.config.window.bordered(),
         },
         mapping = {
-            ["<C-p>"] = cmp.mapping(complete_fallback(cmp.mapping.select_prev_item()), { "i", "c" }),
-            ["<C-n>"] = cmp.mapping(complete_fallback(cmp.mapping.select_next_item()), { "i", "c" }),
-            ["<C-u>"] = cmp.mapping.scroll_docs(-4),
-            ["<C-d>"] = cmp.mapping.scroll_docs(4),
+            ["<C-p>"] = cmp.mapping(complete_fallback(cmp.mapping.select_prev_item()), { "i" }),
+            ["<C-n>"] = cmp.mapping(complete_fallback(cmp.mapping.select_next_item()), { "i" }),
+            ["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i" }),
+            ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i" }),
             ["<C-e>"] = cmp.mapping(cmp.mapping.abort(), { "i", "c" }),
             -- ["<C-e>"] = cmp.mapping(cmp.mapping.close(), { "i", "c" }),
             ["<C-l>"] = cmp.mapping(cmp.mapping.complete_common_string(), { "i", "c" }),
@@ -69,16 +69,42 @@ function M.config()
                 },
             },
         },
-        experimental = {
-            ghost_text = true,
-        },
+        -- experimental = {
+        --     ghost_text = true,
+        -- },
     }
 
     -- NOTE: doesn't work if `native_menu` is enabled
+    local cmdline_mappings = {
+        ["<C-n>"] = cmp.mapping(function()
+            local key = vim.api.nvim_replace_termcodes("<Down>", true, false, true)
+            if cmp.visible() then
+                cmp.select_next_item()
+            else
+                vim.api.nvim_feedkeys(key, "c", false)
+            end
+        end, { "c" }),
+        ["<C-p>"] = cmp.mapping(function()
+            local key = vim.api.nvim_replace_termcodes("<Up>", true, false, true)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            else
+                vim.api.nvim_feedkeys(key, "c", false)
+            end
+        end, { "c" }),
+        ["<Tab>"] = cmp.mapping(function()
+            if cmp.visible() then
+                cmp.select_next_item()
+            else
+                cmp.complete()
+            end
+        end, { "c" }),
+    }
     cmp.setup.cmdline("/", {
         completion = {
             autocomplete = false,
         },
+        mapping = cmdline_mappings,
         -- mapping = cmp.mapping.preset.cmdline(),
         sources = {
             { name = "buffer", keyword_length = 5 },
@@ -88,6 +114,7 @@ function M.config()
         completion = {
             autocomplete = false,
         },
+        mapping = cmdline_mappings,
         -- mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources {
             { name = "path" }, -- start path with ~/ or ./ for it to work

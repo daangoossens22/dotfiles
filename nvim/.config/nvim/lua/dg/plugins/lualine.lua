@@ -12,32 +12,39 @@ function M.config()
     vim.opt.showmode = false
     vim.g.qf_disable_statusline = 1 -- draw the normal statusline in a quickfix window
 
+    LSP_PERCENTAGES = {}
+    vim.api.nvim_create_autocmd("LspProgress", {
+        callback = function(event)
+            local lsp_id = event.data.client_id
+            LSP_PERCENTAGES[lsp_id] = event.data.result.value.percentage or LSP_PERCENTAGES[lsp_id]
+            if event.data.result.value.kind == "end" then LSP_PERCENTAGES[lsp_id] = nil end
+            require("lualine").refresh()
+        end,
+        group = AUGROUP "lualine_lsp_progress_refresh",
+    })
     local function lualine_lsp_name()
-        -- REF: https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/evil_lualine.lua
-        local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
-        local clients = vim.lsp.get_active_clients()
+        -- REF: https://github.com/NvChad/ui/blob/3e52dbbfff31912a5d1897fcb15051ad62d0c300/lua/nvchad_ui/statusline/minimal.lua#L97-L121
+        local moons = { "🌑 ", "🌘 ", "🌗 ", "🌖 ", "🌕 ", "🌔 ", "🌓 ", "🌒 " }
+        local ms = vim.loop.hrtime() / 1000000
+        local frame = math.floor(ms / 400) % #moons
+        local moon = moons[frame + 1]
+
+        local bufnr = vim.fn.bufnr()
+        local clients = vim.lsp.get_active_clients { bufnr = bufnr }
         local client_names = {}
         for _, client in ipairs(clients) do
-            local filetypes = client.config.filetypes
-            if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-                -- always put null-ls at the end of the list displayed
-                if client.name == "null-ls" then
-                    table.insert(client_names, client.name)
-                else
-                    table.insert(client_names, 1, client.name)
-                end
+            local client_str = client.name
+            local percentage = LSP_PERCENTAGES[client.id]
+            if percentage then client_str = moon .. percentage .. "%% " .. client_str end
+
+            if client.name == "null-ls" then
+                table.insert(client_names, client_str)
+            else
+                table.insert(client_names, 1, client_str)
             end
         end
         local res = table.concat(client_names, "|")
 
-        -- REF: https://github.com/NvChad/ui/blob/3e52dbbfff31912a5d1897fcb15051ad62d0c300/lua/nvchad_ui/statusline/minimal.lua#L97-L121
-        local progress_message = vim.lsp.util.get_progress_messages()[1]
-        if progress_message then
-            local moon = { "🌑 ", "🌘 ", "🌗 ", "🌖 ", "🌕 ", "🌔 ", "🌓 ", "🌒 " }
-            local ms = vim.loop.hrtime() / 1000000
-            local frame = math.floor(ms / 400) % #moon
-            res = (progress_message.percentage or 0) .. "%% " .. moon[frame + 1] .. res
-        end
         return res
     end
 
@@ -112,7 +119,7 @@ function M.config()
             },
             lualine_c = {
                 -- 'filename',
-                { component_separators = "", "filename" },
+                -- { component_separators = "", "filename" },
                 { component_separators = "", "%=" },
                 {
                     -- icons_enabled = true,

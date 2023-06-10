@@ -129,6 +129,10 @@ change_window_title # change title on opening terminal
 
 path+=($HOME'/.local/bin')
 path+=($HOME'/.local/share/cargo/bin')
+path+=($HOME'/.local/share/python/bin')
+path+=($HOME'/Documents/Xilinx/Vitis/2022.2/bin')
+path+=($HOME'/Documents/Xilinx/Vivado/2022.2/bin')
+path+=($HOME'/Documents/Xilinx/Vitis_HLS/2022.2/bin')
 export PATH
 
 # open man pages in nvim where it is easier to navigate with colors (same as ':Man (opt:section) {pagename}' command in nvim)
@@ -165,6 +169,7 @@ bindkey '&' zcalc-auto-insert
 
 source $ZDOTDIR/.zsh_aliases
 source $ZDOTDIR/.zsh_fzf
+
 # load plugins ; should be last (use 2>/dev/null at the end of the line to ignore errors)
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh

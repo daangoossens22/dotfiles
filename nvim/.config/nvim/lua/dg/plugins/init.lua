@@ -35,8 +35,8 @@ return {
         config = function()
             require("incline").setup {
                 hide = {
-                    -- cursorline = true,
-                    focused_win = true,
+                    cursorline = true,
+                    -- focused_win = true,
                 },
                 ignore = {
                     unlisted_buffers = false,

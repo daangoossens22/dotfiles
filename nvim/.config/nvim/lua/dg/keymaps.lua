@@ -17,7 +17,7 @@ MAP("v", "K", ":m '<-2<cr>gv=gv", "move selected lines up")
 -- MAP("n", "<leader>\\", "<cmd>nohlsearch<cr>", "disable search highlighting")
 MAP("n", "<leader>\\", function()
     vim.cmd.nohlsearch()
-    require("notify").dismiss()
+    require("notify").dismiss {}
 end, "disable search highlighting")
 
 MAP("", "<leader>d", '"_d', "delete operant doesn't overwrite any register")
@@ -84,8 +84,8 @@ end
 -- location/quickfix list mappings (state shown in lualine)
 MAP("n", "<leader>lt", ToggleQFType, "toggle between global and local QF list")
 MAP("n", "<leader>ls", ToggleQFList, "show all contents of currently selected QF list")
-MAP("n", "<C-l>", WRAP(MoveQFList, true), "move to next item in currently selected QF list")
-MAP("n", "<C-h>", WRAP(MoveQFList, false), "move to prev item in currently selected QF list")
+MAP("n", "<C-l>", function() MoveQFList(true) end, "move to next item in currently selected QF list")
+MAP("n", "<C-h>", function() MoveQFList(false) end, "move to prev item in currently selected QF list")
 
 vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "*.md",

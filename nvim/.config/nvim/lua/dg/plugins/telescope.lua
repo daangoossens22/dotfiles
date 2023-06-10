@@ -25,7 +25,7 @@ function M.init()
     MAP(
         "n",
         "<leader>ff",
-        function() require("telescope.builtin").find_files() end,
+        function() require("telescope.builtin").find_files { no_ignore = false, hidden = true } end,
         "[TEL] find files in current working directory"
     )
     MAP("n", "<leader>fg", function()
@@ -126,7 +126,7 @@ function M.init()
     MAP("n", "<leader>fe", function()
         require("telescope").extensions.file_browser.file_browser {
             cwd = require("telescope.utils").buffer_dir(), -- function so this is evaluated when opening the file explorer
-            previewer = false,
+            previewer = true,
             -- initial_mode = "normal",
             hidden = true,
             depth = 1,

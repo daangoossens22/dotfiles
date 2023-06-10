@@ -19,6 +19,7 @@ function M.config()
         ui = {
             border = "rounded",
         },
+        PATH = "append",
     }
     local mason_packages = {
         "stylua",
@@ -37,7 +38,6 @@ function M.config()
     require("mason-lspconfig").setup {
         ensure_installed = {},
         automatic_installation = { exclude = { "rust_analyzer" } },
-        PATH = "append",
     }
 end
 

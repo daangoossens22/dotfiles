@@ -9,6 +9,9 @@ function M.config()
         -- default augends used when no group name is specified
         default = {
             augend.integer.alias.decimal_int,
+            augend.integer.alias.binary,
+            augend.integer.alias.hex,
+            augend.integer.alias.octal,
             augend.hexcolor.new {
                 radix = 16,
                 prefix = "0x",

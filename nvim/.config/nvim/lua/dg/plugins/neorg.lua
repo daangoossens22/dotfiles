@@ -44,6 +44,15 @@ function M.config()
                     neorg_leader = "<Leader>",
                 },
             },
+            ["core.qol.todo_items"] = {
+                config = {
+                    order = {
+                        { "pending", "-" },
+                        { "done", "x" },
+                        { "undone", " " },
+                    },
+                },
+            },
             -- other modules
             ["core.completion"] = { config = { engine = "nvim-cmp" } },
             ["core.concealer"] = {
@@ -53,15 +62,15 @@ function M.config()
                     icons = {
                         todo = {
                             undone = { enabled = false },
-                            done = { icon = "", highlight = "@neorg.todo_items.done.1" },
-                            uncertain = { icon = "?", highlight = "@neorg.todo_items.uncertain.1" },
+                            done = { icon = "" },
+                            uncertain = { icon = "?" },
 
-                            urgent = { icon = "", highlight = "@neorg.todo_items.urgent.1" },
-                            recurring = { icon = "", highlight = "@neorg.todo_items.recurring.1" },
+                            urgent = { icon = "" },
+                            recurring = { icon = "" },
 
-                            pending = { icon = "󰅐", highlight = "@neorg.todo_items.pending.1" },
-                            on_hold = { icon = "", highlight = "@neorg.todo_items.on_hold.1" },
-                            cancelled = { icon = "󰩹", highlight = "@neorg.todo_items.cancelled.1" },
+                            pending = { icon = "󰅐" },
+                            on_hold = { icon = "" },
+                            cancelled = { icon = "󰩹" },
                         },
                     },
                 },
@@ -77,6 +86,9 @@ function M.config()
             },
             ["core.export"] = {},
             ["core.export.markdown"] = {},
+            ["core.summary"] = {},
+            ["core.ui.calendar"] = {},
+            -- third party modules
             ["core.integrations.telescope"] = {},
         },
     }

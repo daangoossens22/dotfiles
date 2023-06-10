@@ -6,7 +6,8 @@
         "sway/workspaces",
         "wlr/taskbar",
         "custom/media",
-        "sway/mode"
+        "sway/mode",
+        "custom/recording"
     ],
     "modules-right": [
         "tray",
@@ -55,6 +56,12 @@
     },
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
+    },
+    "custom/recording": {
+        "interval": 2,
+        "exec-if" : "pgrep wf-recorder",
+        "exec": "echo '󰑊'",
+        "tooltip": false
     },
     "sway/window": {
         "format": "{}",
@@ -143,8 +150,20 @@
     "clock": {
         "timezone": "Europe/Amsterdam",
         "interval": 1,
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "calendar-weeks-pos": "left",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 2,
+            "weeks-pos": "left",
+            "on-click-right": "mode",
+            "format": {
+                "months":     "<span color='#ffead3'><b>{}</b></span>",
+                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        },
         "format": " {:%d-%m-%Y  %H:%M:%S}"
     },
     "battery": {

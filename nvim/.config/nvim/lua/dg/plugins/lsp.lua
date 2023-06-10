@@ -19,6 +19,7 @@ function M.config()
     local function lsp_format()
         vim.lsp.buf.format {
             filter = function(format_client) return not vim.tbl_contains(ignore, format_client.name) end,
+            timeout_ms = 5000,
         }
     end
 
@@ -58,6 +59,30 @@ function M.config()
     end, lsp_opts "toggle diagnostics underline")
     MAP("n", "[d", vim.diagnostic.goto_prev, lsp_opts "move to the previous buffer diagnostic")
     MAP("n", "]d", vim.diagnostic.goto_next, lsp_opts "move to the next buffer diagnostic")
+    MAP(
+        "n",
+        "[w",
+        function() vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.WARN } end,
+        lsp_opts "move to the previous buffer diagnostic warning"
+    )
+    MAP(
+        "n",
+        "]w",
+        function() vim.diagnostic.goto_next { severity = vim.diagnostic.severity.WARN } end,
+        lsp_opts "move to the next buffer diagnostic warning"
+    )
+    MAP(
+        "n",
+        "[e",
+        function() vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR } end,
+        lsp_opts "move to the previous buffer diagnostic error"
+    )
+    MAP(
+        "n",
+        "]e",
+        function() vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR } end,
+        lsp_opts "move to the next buffer diagnostic error"
+    )
     MAP("n", "<leader>q", function()
         if next(vim.diagnostic.get(nil, { severity = vim.diagnostic.severity.ERROR })) == nil then
             vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
@@ -143,7 +168,8 @@ function M.config()
 
     local nvim_lsp = require "lspconfig"
     -- Add additional capabilities supported by nvim-cmp
-    local capabilities = require("cmp_nvim_lsp").default_capabilities()
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
     -- capabilities.textDocument.foldingRange = {
     --     dynamicRegistration = false,
     --     lineFoldingOnly = true,
@@ -156,6 +182,7 @@ function M.config()
             null_ls.builtins.formatting.prettier,
             null_ls.builtins.formatting.yapf,
             null_ls.builtins.formatting.shellharden,
+            null_ls.builtins.formatting.emacs_vhdl_mode,
             null_ls.builtins.diagnostics.shellcheck,
             null_ls.builtins.code_actions.shellcheck,
             -- null_ls.builtins.diagnostics.zsh,
@@ -179,7 +206,7 @@ function M.config()
         "cssls",
         "html",
         "jsonls",
-        "vhdl_ls",
+        "ghdl_ls",
         -- "arduino-language-server"
     }
     for _, lsp in ipairs(servers) do
@@ -241,6 +268,9 @@ function M.config()
         },
         extensions = {
             autoSetHints = false,
+            -- inlay_hints = {
+            --     highlight = "LspReferenceText",
+            -- },
         },
     }
 

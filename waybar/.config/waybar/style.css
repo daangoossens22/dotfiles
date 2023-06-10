@@ -91,6 +91,21 @@ tooltip {
     border-bottom: 3px solid @fujiWhite;
 }
 
+@keyframes blink {
+    to {
+        color: @sumiInk1;
+    }
+}
+
+#custom-recording {
+    color: @samuraiRed;
+    animation-name: blink;
+    animation-duration: 1.0s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
 #custom-media {
     border-bottom: 3px solid @springGreen;
 }

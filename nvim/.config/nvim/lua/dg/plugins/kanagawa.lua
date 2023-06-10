@@ -128,6 +128,9 @@ function M.config()
                 DapSigns = { bg = colors.theme.ui.bg_gutter },
                 InclineNormal = { bg = colors.palette.crystalBlue, fg = colors.theme.ui.bg_m1 },
                 InclineNormalNC = { link = "InclineNormal" },
+                ["@neorg.todo_items.on_hold"] = { fg = colors.theme.diag.info, bold = true },
+                ["@neorg.todo_items.urgent"] = { fg = colors.palette.sakuraPink, bold = true },
+                ["@neorg.todo_items.urgent.content"] = { bold = true },
             }
         end,
     }

@@ -27,6 +27,8 @@ function M.config()
                 click = "v:lua.ScSa",
             },
         },
+        ft_ignore = nil,
+        bt_ignore = nil,
     }
 end
 
