@@ -29,11 +29,10 @@ function M.init()
         "[TEL] find files in current working directory"
     )
     MAP("n", "<leader>fg", function()
-        local workspaces = vim.lsp.buf.list_workspace_folders() -- TODO: workspaces can also contain duplicates -> remove them
-        local other_workspaces = { require("telescope.utils").buffer_dir(), vim.fn.getcwd() }
-        for _, dir in ipairs(other_workspaces) do
-            if not vim.tbl_contains(workspaces, dir) then table.insert(workspaces, dir) end
-        end
+        local workspaces = vim.lsp.buf.list_workspace_folders()
+        table.insert(workspaces, require("telescope.utils").buffer_dir())
+        table.insert(workspaces, vim.fn.getcwd())
+        workspaces = REM_DUP(workspaces)
 
         if #workspaces == 1 then
             require("telescope.builtin").live_grep { cwd = workspaces[1] }

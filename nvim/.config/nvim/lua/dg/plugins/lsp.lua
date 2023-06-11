@@ -108,6 +108,16 @@ function M.config()
 
         local lb = vim.lsp.buf
 
+        vim.cmd [[autocmd BufEnter,InsertLeave,BufWritePost <buffer> lua if vim.b.autolsphints then vim.lsp._inlay_hint.refresh() end]]
+        MAP("n", "<leader>th", function()
+            vim.b.autolsphints = not vim.b.autolsphints
+            if vim.b.autolsphints then
+                vim.lsp._inlay_hint.refresh { bufnr = bufnr }
+            else
+                vim.lsp._inlay_hint.clear(nil, bufnr)
+            end
+        end)
+
         -- See `:help vim.lsp.*` for documentation on any of the below functions
         MAP("n", "<leader>cl", vim.lsp.codelens.run, buf_opts "run one of the codelens actions")
         MAP("n", "gD", lb.declaration, buf_opts "jumps to the declaration of the symbol under the cursor")

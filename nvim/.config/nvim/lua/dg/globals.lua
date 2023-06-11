@@ -22,6 +22,24 @@ end
 ---@param v any
 P = function(v) print(vim.inspect(v)) end
 
+DEB = function(v)
+    require("noice").redirect(function() P(v) end)
+end
+
+REM_DUP = function(tab)
+    local hash = {}
+    local res = {}
+
+    for _, x in ipairs(tab) do
+        if not hash[x] then
+            res[#res + 1] = x
+            hash[x] = true
+        end
+    end
+
+    return res
+end
+
 ---@param module_name string
 RELOAD = function(module_name) return require("plenary.reload").reload_module(module_name) end
 

@@ -59,6 +59,16 @@ return {
         end,
     },
 
+    {
+        "daangoossens22/query-highlighter.nvim",
+        dev = true,
+        opts = {
+            skip_empty_lines_start_and_end = true,
+        },
+        config = true,
+        ft = { "help", "markdown" },
+    },
+
     -- {
     --     "kevinhwang91/nvim-ufo",
     --     dependencies = "kevinhwang91/promise-async",

@@ -30,6 +30,10 @@ function M.config()
             enabled = false,
             backend = "cmp",
         },
+        redirect = {
+            view = "split",
+            filter = { event = "msg_show" },
+        },
         lsp = {
             progress = {
                 enabled = false,

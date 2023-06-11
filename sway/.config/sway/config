@@ -137,6 +137,10 @@ bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
 bindsym $mod+$right focus right
+# bindgesture pinch:inward+up move up
+# bindgesture pinch:inward+down move down
+# bindgesture pinch:inward+left move left
+# bindgesture pinch:inward+right move right
 
 bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+$down move down
