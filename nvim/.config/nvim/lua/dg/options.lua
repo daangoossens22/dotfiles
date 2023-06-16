@@ -1,131 +1,91 @@
 local opt = vim.opt
+local o = vim.o
+local g = vim.g
 
 -- NOTE: global options
-opt.termguicolors = true
-opt.fsync = true
+o.termguicolors = true
+o.fsync = true
 opt.wildmode = "longest:full"
-opt.splitright = true
-opt.splitbelow = true
-opt.errorbells = false
-opt.hlsearch = true
-opt.incsearch = true
-opt.ignorecase = true
-opt.showmatch = true
-opt.showcmd = true
--- opt.cmdheight = 0
-opt.ruler = true
-opt.smarttab = true
+o.splitright = true
+o.splitbelow = true
+o.errorbells = false
+o.hlsearch = true
+o.incsearch = true
+o.ignorecase = true
+o.showmatch = true
+o.showcmd = true
+-- o.cmdheight = 0
+o.ruler = true
+o.smarttab = true
 opt.path:append { "**" }
-opt.undofile = true
-opt.scrolloff = 4 -- scroll before reaching beginning/end screen
-opt.autowrite = true
-opt.autowriteall = true
-opt.title = true
-opt.titlestring = "nvim - %t"
-opt.mouse = "n" -- enable mouse in normal, visual
+o.undofile = true
+o.scrolloff = 4 -- scroll before reaching beginning/end screen
+o.autowrite = true
+o.autowriteall = true
+o.title = true
+o.titlestring = "nvim - %t"
+o.mouse = "n" -- enable mouse in normal, visual
 opt.mousescroll = "ver:1,hor:1"
 vim.keymap.set("n", "<RightMouse>", "<Nop>")
--- opt.clipboard = "unnamedplus" -- automatically copy to clipboard
--- opt.foldlevelstart = 20
-opt.splitkeep = "screen"
+-- o.clipboard = "unnamedplus" -- automatically copy to clipboard
+-- o.foldlevelstart = 20
+o.splitkeep = "screen"
 -- opt.diffopt:append { "linematch:60", "algorithm:patience" }
 opt.diffopt:append "vertical"
--- opt.virtualedit = "all"
+-- o.virtualedit = "all"
 opt.fillchars:append "diff:╱"
 
 -- backup for writefailures
 -- successfull save => backup removed
-opt.backup = false
-opt.writebackup = true
-opt.backupext = ".bak"
+o.backup = false
+o.writebackup = true
+o.backupext = ".bak"
 
 opt.wildignore:append { "*.o", "*.pyc", "*pycache*", "*.png", "*.jpg", "build/*" }
 
--- opt.hidden = false
+-- o.hidden = false
 
 -- NOTE: local to window options
-opt.cursorline = true
-opt.cursorlineopt = "number"
-opt.number = true
-opt.relativenumber = true
-opt.wrap = false
-opt.textwidth = 110
+o.cursorline = true
+o.cursorlineopt = "number"
+o.number = true
+o.relativenumber = true
+o.wrap = false
+o.textwidth = 110
 opt.colorcolumn = { "+1" }
--- opt.foldenable = false
-opt.conceallevel = 2
-opt.foldcolumn = "1"
+-- o.foldenable = false
+o.conceallevel = 2
+o.foldcolumn = "1"
 
 -- NOTE: local to buffer options
-opt.autoindent = true
---opt.copyindent = true
-opt.expandtab = true
-opt.smartindent = true
-opt.tabstop = 4
-opt.softtabstop = 4
-opt.shiftwidth = 4
-opt.modeline = true
--- opt.scrollback = 1000 -- number of lines beyond the screen that are kept in memory
+o.autoindent = true
+--o.copyindent = true
+o.expandtab = true
+o.smartindent = true
+o.tabstop = 4
+o.softtabstop = 4
+o.shiftwidth = 4
+o.modeline = true
+-- o.scrollback = 1000 -- number of lines beyond the screen that are kept in memory
 
 -- -- NOTE: disable builtin plugins (now done in lazy.nvim)
--- vim.g.loaded_gzip = 1
--- vim.g.loaded_zip = 1
--- vim.g.loaded_zipPlugin = 1
--- vim.g.loaded_tar = 1
--- vim.g.loaded_tarPlugin = 1
--- vim.g.loaded_vimball = 1
--- vim.g.loaded_vimballPlugin = 1
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwPlugin = 1
--- vim.g.loaded_netrwFileHandlers = 1
--- vim.g.loaded_netrwSettings = 1
--- vim.g.loaded_matchit = 1
--- vim.g.loaded_2html_plugin = 1
--- vim.g.loaded_tutor_mode_plugin = 1
+-- g.loaded_gzip = 1
+-- g.loaded_zip = 1
+-- g.loaded_zipPlugin = 1
+-- g.loaded_tar = 1
+-- g.loaded_tarPlugin = 1
+-- g.loaded_vimball = 1
+-- g.loaded_vimballPlugin = 1
+-- g.loaded_netrw = 1
+-- g.loaded_netrwPlugin = 1
+-- g.loaded_netrwFileHandlers = 1
+-- g.loaded_netrwSettings = 1
+-- g.loaded_matchit = 1
+-- g.loaded_2html_plugin = 1
+-- g.loaded_tutor_mode_plugin = 1
 
-vim.g.loaded_ruby_provider = 0
-vim.g.loaded_node_provider = 0
-vim.g.loaded_perl_provider = 0
-vim.g.loaded_pythonx_provider = 0
-vim.g.loaded_python3_provider = 0
-
-vim.api.nvim_create_autocmd("FileType", {
-    callback = function(ev)
-        if ev.match ~= "gitcommit" then vim.opt_local.formatoptions:remove { "o", "t" } end
-    end,
-    group = AUGROUP "formatoptions",
-})
--- persistant folds and cursor position when opening and closing nvim
--- REF: https://vim.fandom.com/wiki/Make_views_automatic
-vim.opt.viewoptions = {
-    "folds",
-    "cursor",
-    -- "curdir",
-}
-local augroup_persistant_cursor_folds = AUGROUP "persistant_cursor_folds"
-vim.api.nvim_create_autocmd({ "BufWritePost", "BufLeave", "WinLeave" }, {
-    pattern = "?*",
-    command = "mkview",
-    group = augroup_persistant_cursor_folds,
-})
-vim.api.nvim_create_autocmd("BufWinEnter", {
-    pattern = "?*",
-    command = "silent! loadview",
-    group = augroup_persistant_cursor_folds,
-})
-
--- REF: https://github.com/LazyVim/LazyVim/blob/ef21bea975df97694f7491dcd199d9d116227235/lua/lazyvim/config/autocmds.lua#L42
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = {
-        "help",
-        "notify",
-        "qf",
-        "tsplayground",
-        "checkhealth",
-        "neotest-summary",
-    },
-    callback = function(event)
-        vim.bo[event.buf].buflisted = false
-        vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-    end,
-    group = AUGROUP "close_with_q",
-})
+g.loaded_ruby_provider = 0
+g.loaded_node_provider = 0
+g.loaded_perl_provider = 0
+g.loaded_pythonx_provider = 0
+g.loaded_python3_provider = 0

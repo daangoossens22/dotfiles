@@ -13,7 +13,10 @@ local M = {
 }
 
 function M.config()
-    local function toggle_autoformat() vim.b.autoformat = not vim.b.autoformat end
+    local function toggle_autoformat(lang)
+        lang = lang or vim.bo.filetype
+        AUTOFORMAT_LANGUAGES[lang] = not AUTOFORMAT_LANGUAGES[lang]
+    end
 
     local ignore = { "lua_ls", "jedi_language_server" }
     local function lsp_format()
@@ -25,7 +28,7 @@ function M.config()
 
     vim.api.nvim_create_autocmd("BufWritePre", {
         callback = function()
-            if vim.b.autoformat then lsp_format() end
+            if AUTOFORMAT_LANGUAGES[vim.bo.filetype] then lsp_format() end
         end,
         group = AUGROUP "lsp_autoformat",
     })
@@ -94,11 +97,8 @@ function M.config()
     -- after the language server attaches to the current buffer
     local on_attach = function(client, bufnr)
         -- Enable completion triggered by <c-x><c-o>
-        vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+        vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
         -- client.server_capabilities.semanticTokensProvider = nil
-
-        -- use null-ls formatting instead of the default formatting for the languageserver
-        if client.name == "lua_ls" or client.name == "rust_analyzer" then toggle_autoformat() end
 
         local function buf_opts(desc)
             local opts = lsp_opts(desc)
@@ -149,7 +149,7 @@ function M.config()
         )
         MAP(
             "n",
-            "<leader>lw",
+            "<leader>wl",
             function() P(lb.list_workspace_folders()) end,
             buf_opts "list workspace folders"
         )

@@ -41,3 +41,4 @@ MAP("n", "<leader>pl", "<cmd>Lazy<cr>", { desc = "list plugins" })
 
 require "dg.options"
 require "dg.keymaps"
+require "dg.autocmds"

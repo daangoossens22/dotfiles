@@ -48,7 +48,7 @@ function M.config()
         return res
     end
 
-    local k_colors = require("kanagawa.colors").setup()
+    local k_colors = require("kanagawa.colors").setup { theme = "wave" }
     -- local normal_highligth = k_colors.palette.autumnGreen
     local normal_highligth = k_colors.palette.springGreen
     local insert_highligth = k_colors.palette.crystalBlue
@@ -131,9 +131,8 @@ function M.config()
 
             lualine_x = {
                 {
-                    "b:autoformat",
-                    fmt = function(str)
-                        if str == "true" then
+                    function()
+                        if AUTOFORMAT_LANGUAGES[vim.bo.filetype] then
                             return "AF"
                         else
                             return ""

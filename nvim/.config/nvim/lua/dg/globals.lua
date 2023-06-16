@@ -48,3 +48,5 @@ R = function(name)
     RELOAD(name)
     return require(name)
 end
+
+AUTOFORMAT_LANGUAGES = { lua = true, rust = true, vhdl = true }
