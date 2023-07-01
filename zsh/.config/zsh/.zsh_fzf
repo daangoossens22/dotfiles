@@ -10,10 +10,11 @@ fman() {
 }
 
 fpi() {
-    pacman -Slq | fzf -q "$1" -m --preview 'paru -Si {1}' | xargs -ro paru -S
+    pacman -Sl --color=always | fzf --ansi -q "$1" -m --preview "paru -Si {2}" --bind 'ctrl-a:reload(paru -Sl --color=always)' | awk '{print $2}' | xargs -ro paru -S
 }
 
 fpr() {
     # paru -Qq | fzf -q "$1" -m --preview 'paru -Qi {1}' | xargs -ro paru -Rns
-    paru -Qq | fzf -q "$1" -m --preview 'pactree -r {1}' | xargs -ro paru -Rns
+    # paru -Sl --color=always | fzf --ansi -q "[installed]$ $1" -m --preview 'pactree -r {2}' | xargs -ro paru -Rns
+    paru -Q --color=always | fzf --ansi -q "$1" -m --preview 'paru -Si {1} | grep -P -x "(Repository|Description|URL).*"; pactree -c -r {1}' | awk '{print $1}' | xargs -ro paru -Rns
 }

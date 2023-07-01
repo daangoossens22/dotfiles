@@ -15,6 +15,7 @@ SAVEHIST=1000
 setopt hist_ignore_all_dups
 setopt share_history
 setopt autocd autopushd pushdignoredups
+setopt interactivecomments
 
 # autocomplete
 autoload -Uz compinit
@@ -34,6 +35,7 @@ zstyle ':completion:*:*:killall:*' menu yes select
 # zstyle ':completion:*:man:*'       menu yes select
 
 zmodload zsh/complist
+zmodload zsh/zpty
 compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 _comp_options+=(globdots) # include hidden files
 
@@ -172,4 +174,5 @@ source $ZDOTDIR/.zsh_fzf
 
 # load plugins ; should be last (use 2>/dev/null at the end of the line to ignore errors)
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+ZSH_HIGHLIGHT_STYLES[comment]='fg=8,bold'
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh

@@ -24,9 +24,8 @@ o.autowrite = true
 o.autowriteall = true
 o.title = true
 o.titlestring = "nvim - %t"
-o.mouse = "n" -- enable mouse in normal, visual
+o.mouse = "nv" -- enable mouse in normal, visual
 opt.mousescroll = "ver:1,hor:1"
-vim.keymap.set("n", "<RightMouse>", "<Nop>")
 -- o.clipboard = "unnamedplus" -- automatically copy to clipboard
 -- o.foldlevelstart = 20
 o.splitkeep = "screen"
@@ -53,9 +52,9 @@ o.relativenumber = true
 o.wrap = false
 o.textwidth = 110
 opt.colorcolumn = { "+1" }
--- o.foldenable = false
 o.conceallevel = 2
 o.foldcolumn = "1"
+o.foldenable = true
 
 -- NOTE: local to buffer options
 o.autoindent = true

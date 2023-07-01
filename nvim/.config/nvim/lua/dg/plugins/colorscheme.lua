@@ -27,13 +27,13 @@ function M.config()
 
         return string.format("#%02x%02x%02x", blendChannel(1), blendChannel(2), blendChannel(3))
     end
-    local blend_ratio = 0.1
 
     require("kanagawa").setup {
         compile = false,
-        dimInactive = true,
+        dimInactive = false,
         ---@type fun(colors: { theme: ThemeColors, palette: PaletteColors}): table<string, table>
         overrides = function(colors)
+            local blend_ratio = 0.1
             return {
                 -- make todo/warning/note/danger highlight more noticable by highlighting the bg
                 Todo = { fg = colors.theme.ui.bg_m1, bg = colors.theme.diag.hint, bold = true },
@@ -69,8 +69,8 @@ function M.config()
                 },
                 CodeBlock = { bg = colors.theme.ui.bg_m3, bold = true },
                 DapSigns = { bg = colors.theme.ui.bg_gutter },
-                InclineNormal = { bg = colors.palette.crystalBlue, fg = colors.theme.ui.bg_m1 },
-                InclineNormalNC = { link = "InclineNormal" },
+                InclineNormal = { fg = colors.theme.ui.bg_m1, bg = colors.palette.crystalBlue },
+                InclineNormalNC = { fg = colors.palette.crystalBlue, bg = colors.theme.ui.bg_m1 },
                 ["@neorg.todo_items.on_hold"] = { fg = colors.theme.diag.info, bold = true },
                 ["@neorg.todo_items.urgent"] = { fg = colors.palette.sakuraPink, bold = true },
                 ["@neorg.todo_items.urgent.content"] = { bold = true },

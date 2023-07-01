@@ -118,5 +118,4 @@ return {
     -- "stevearc/aerial.nvim" -- use telescope lsp_document_symbols??
     -- "famiu/bufdelete.nvim"
     -- "ThePrimeagen/refactoring.nvim"
-    -- "folke/noice.nvim"
 }

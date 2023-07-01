@@ -49,4 +49,4 @@ R = function(name)
     return require(name)
 end
 
-AUTOFORMAT_LANGUAGES = { lua = true, rust = true, vhdl = true }
+AUTOFORMAT_LANGUAGES = { lua = true, rust = true }

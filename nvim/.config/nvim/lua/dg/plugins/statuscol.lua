@@ -7,6 +7,7 @@ function M.config()
     local builtin = require "statuscol.builtin"
     require("statuscol").setup {
         relculright = true,
+        clickmod = "c",
         segments = {
             { text = { builtin.foldfunc }, click = "v:lua.ScFa", auto = true },
             {
@@ -27,7 +28,7 @@ function M.config()
                 click = "v:lua.ScSa",
             },
         },
-        ft_ignore = nil,
+        ft_ignore = { "tsplayground", "lazy", "neotest-summary" },
         bt_ignore = nil,
     }
 end

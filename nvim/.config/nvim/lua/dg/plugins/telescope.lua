@@ -22,12 +22,50 @@ function M.init()
         function() require("telescope.builtin").resume { initial_mode = "normal" } end,
         "[TEL] resume last picker"
     )
-    MAP(
-        "n",
-        "<leader>ff",
-        function() require("telescope.builtin").find_files { no_ignore = false, hidden = true } end,
-        "[TEL] find files in current working directory"
-    )
+    MAP("n", "<leader>ff", function()
+        local default_fd_command = { "fd", "--type", "f", "--color", "never", "--exclude", ".git" }
+        local hidden = true
+        local no_ignore = false
+        local notification = nil
+        local function refresh_find_files(prompt_bufnr)
+            notification = vim.notify(
+                ((hidden and "" or "no ") .. "hidden\n") .. ((no_ignore and "no " or "") .. "ignore"),
+                "info",
+                { replace = notification }
+            )
+            local finders = require "telescope.finders"
+            local make_entry = require "telescope.make_entry"
+            local action_state = require "telescope.actions.state"
+
+            local opts = {}
+            opts.entry_maker = make_entry.gen_from_file(opts)
+
+            local cmd = vim.deepcopy(default_fd_command)
+            if hidden then table.insert(cmd, "--hidden") end
+            if no_ignore then table.insert(cmd, "--no-ignore") end
+            local current_picker = action_state.get_current_picker(prompt_bufnr)
+
+            current_picker:refresh(finders.new_oneshot_job(cmd, opts), { reset_prompt = false })
+        end
+        local function toggle_hidden(prompt_bufnr)
+            hidden = not hidden
+            refresh_find_files(prompt_bufnr)
+        end
+        local function toggle_no_ignore(prompt_bufnr)
+            no_ignore = not no_ignore
+            refresh_find_files(prompt_bufnr)
+        end
+        require("telescope.builtin").find_files {
+            attach_mappings = function(_, map)
+                map({ "i", "n" }, "<c-h>", toggle_hidden)
+                map({ "i", "n" }, "<c-i>", toggle_no_ignore)
+                return true
+            end,
+            find_command = vim.deepcopy(default_fd_command),
+            no_ignore = no_ignore,
+            hidden = hidden,
+        }
+    end, "[TEL] find files in current working directory")
     MAP("n", "<leader>fg", function()
         local workspaces = vim.lsp.buf.list_workspace_folders()
         table.insert(workspaces, require("telescope.utils").buffer_dir())
@@ -62,8 +100,14 @@ function M.init()
         function() require("telescope.builtin").current_buffer_fuzzy_find() end,
         "[TEL] find in current buffer"
     )
-    -- TODO: add keybind <M-d> to :bd selected entries
-    MAP("n", "<leader>fo", function() require("telescope.builtin").buffers() end, "[TEL] find open buffers")
+    MAP("n", "<leader>fo", function()
+        require("telescope.builtin").buffers {
+            attach_mappings = function(_, map)
+                map({ "i", "n" }, "<a-d>", require("telescope.actions").delete_buffer)
+                return true
+            end,
+        }
+    end, "[TEL] find open buffers")
     MAP("n", "<leader>fh", function()
         for _, plugin in ipairs(require("lazy").plugins()) do
             if plugin._.loaded == nil then vim.cmd([[Lazy load ]] .. plugin.name) end
@@ -173,6 +217,26 @@ function M.config()
 
     local actions = require "telescope.actions"
 
+    local dynamic_split_direction = function(win_width_boundary)
+        return function(prompt_bufnr)
+            local winnr_prev_win = vim.fn.winnr "#"
+            local wininfo = vim.fn.getwininfo()
+            local win_info = vim.tbl_filter(function(v) return v.winnr == winnr_prev_win end, wininfo)[1]
+            local win_width = win_info.width
+            -- local num_win_nonflaoting_curtab = #vim.tbl_filter(
+            --     function(v)
+            --         return v.tabnr == win_info.tabnr and vim.api.nvim_win_get_config(v.winid).relative == ""
+            --     end,
+            --     wininfo
+            -- )
+            if win_width > win_width_boundary then
+                actions.select_vertical(prompt_bufnr)
+            else
+                actions.select_horizontal(prompt_bufnr)
+            end
+        end
+    end
+
     require("telescope").setup {
         defaults = {
             mappings = {
@@ -182,7 +246,12 @@ function M.config()
                     -- change horizontal split shortcut
                     ["<C-x>"] = false,
                     ["<C-s>"] = actions.select_horizontal,
+                    ["<C-Down>"] = function(...) return require("telescope.actions").cycle_history_next(...) end,
+                    ["<C-Up>"] = function(...) return require("telescope.actions").cycle_history_prev(...) end,
                 },
+                -- n = {
+                --     ["q"] = function(...) return require("telescope.actions").close(...) end,
+                -- },
             },
 
             layout_strategy = "flex",
@@ -192,7 +261,22 @@ function M.config()
                 },
             },
         },
-        pickers = {},
+        pickers = {
+            help_tags = {
+                mappings = {
+                    i = {
+                        ["<cr>"] = dynamic_split_direction(164),
+                    },
+                },
+            },
+            man_pages = {
+                mappings = {
+                    i = {
+                        ["<cr>"] = dynamic_split_direction(180),
+                    },
+                },
+            },
+        },
         extensions = {
             ["fzf"] = {
                 fuzzy = true,
@@ -205,6 +289,11 @@ function M.config()
             },
             ["file_browser"] = {
                 hijack_netrw = true,
+                mappings = {
+                    i = {
+                        ["<bs>"] = false,
+                    },
+                },
             },
         },
     }

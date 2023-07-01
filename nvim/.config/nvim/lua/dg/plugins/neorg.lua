@@ -39,7 +39,6 @@ function M.config()
             },
             ["core.keybinds"] = {
                 config = {
-                    -- TODO: customize keybinds so there are no gt* mappings (since those are used for tabs)
                     default_keybinds = true,
                     neorg_leader = "<Leader>",
                 },
