@@ -67,6 +67,7 @@ function M.config()
                 WinSeparator = {
                     fg = colors.theme.ui.bg_p1,
                 },
+                LspInlayHint = { link = "LspReferenceText" },
                 CodeBlock = { bg = colors.theme.ui.bg_m3, bold = true },
                 DapSigns = { bg = colors.theme.ui.bg_gutter },
                 InclineNormal = { fg = colors.theme.ui.bg_m1, bg = colors.palette.crystalBlue },
@@ -74,7 +75,7 @@ function M.config()
                 ["@neorg.todo_items.on_hold"] = { fg = colors.theme.diag.info, bold = true },
                 ["@neorg.todo_items.urgent"] = { fg = colors.palette.sakuraPink, bold = true },
                 ["@neorg.todo_items.urgent.content"] = { bold = true },
-                LspInlayHint = { link = "LspReferenceText" },
+                Folded = { bg = blend(colors.palette.oniViolet, colors.theme.ui.bg, 0.2), bold = true },
             }
         end,
     }

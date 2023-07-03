@@ -165,20 +165,20 @@ function M.config(_, opts)
     -- vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
     -- vim.o.foldnestmax = 1 -- don't like nested folds
     -- vim.o.foldlevel = 99
-    vim.api.nvim_create_autocmd({ "FileType" }, {
-        pattern = "*",
-        callback = function()
-            vim.schedule(function()
-                if not vim.o.diff then
-                    vim.o.foldmethod = "expr"
-                    vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-                    vim.o.foldnestmax = 1 -- don't like nested folds
-                    vim.o.foldlevel = 99
-                end
-            end)
-        end,
-        group = AUGROUP "treesitter_fold_workaround",
-    })
+    -- vim.api.nvim_create_autocmd({ "FileType" }, {
+    --     pattern = "*",
+    --     callback = function()
+    --         vim.schedule(function()
+    --             if not vim.o.diff then
+    --                 vim.o.foldmethod = "expr"
+    --                 vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    --                 vim.o.foldnestmax = 1 -- don't like nested folds
+    --                 vim.o.foldlevel = 99
+    --             end
+    --         end)
+    --     end,
+    --     group = AUGROUP "treesitter_fold_workaround",
+    -- })
 end
 
 return M

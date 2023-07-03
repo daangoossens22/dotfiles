@@ -126,6 +126,12 @@ function M.init()
         function() require("telescope.builtin").keymaps { show_plug = false } end,
         "[TEL] find keymaps"
     )
+    MAP(
+        "n",
+        "<leader>fq",
+        function() require("telescope.builtin").quickfixhistory() end,
+        "[TEL] browse quickfix history"
+    )
 
     -- builtin git stuff
     MAP(

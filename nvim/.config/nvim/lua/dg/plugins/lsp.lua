@@ -54,9 +54,14 @@ M.opts = {
         severity_sort = true,
     },
     additional_capabilities = {
-        -- dynamicRegistration = false,
-        -- lineFoldingOnly = true,
-        -- semanticTokensProvider = false
+        textDocument = {
+            -- NOTE: for "kevinhwang91/nvim-ufo"
+            -- foldingRange = {
+            --     dynamicRegistration = false,
+            --     lineFOldingOnly = true,
+            -- },
+        },
+        -- semanticTokensProvider = nil
     },
     format = {
         ignore_lsp = { "lua_ls", "jedi_language_server" },
@@ -211,7 +216,11 @@ function M.config(_, opts)
             MAP("n", "<leader>cl", vim.lsp.codelens.run, lsp_opts "run one of the codelens actions")
             MAP("n", "gD", lb.declaration, lsp_opts "jumps to the declaration of the symbol under the cursor")
             MAP("n", "gd", lb.definition, lsp_opts "jumps to the definition of the symbol under the cursor")
-            MAP("n", "K", lb.hover, lsp_opts "display hover information of the symbol under the cursor")
+            MAP("n", "K", function()
+                local winid = nil
+                if pcall(require, "ufo") then winid = require("ufo").peekFoldedLinesUnderCursor() end
+                if not winid then vim.lsp.buf.hover() end
+            end, lsp_opts "display hover information of the symbol under the cursor")
             MAP(
                 "n",
                 "<leader>gi",

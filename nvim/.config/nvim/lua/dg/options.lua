@@ -32,7 +32,7 @@ o.splitkeep = "screen"
 -- opt.diffopt:append { "linematch:60", "algorithm:patience" }
 opt.diffopt:append "vertical"
 -- o.virtualedit = "all"
-opt.fillchars:append "diff:╱"
+opt.fillchars = { diff = "╱", fold = " ", foldopen = "⮟", foldsep = " ", foldclose = "⮞" }
 
 -- backup for writefailures
 -- successfull save => backup removed
@@ -54,7 +54,6 @@ o.textwidth = 110
 opt.colorcolumn = { "+1" }
 o.conceallevel = 2
 o.foldcolumn = "1"
-o.foldenable = true
 
 -- NOTE: local to buffer options
 o.autoindent = true

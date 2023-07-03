@@ -28,7 +28,7 @@ function M.config()
                 click = "v:lua.ScSa",
             },
         },
-        ft_ignore = { "tsplayground", "lazy", "neotest-summary" },
+        ft_ignore = { "lazy", "neotest-summary" },
         bt_ignore = nil,
     }
 end
