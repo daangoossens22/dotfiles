@@ -43,6 +43,9 @@ function M.config()
             -- completion = cmp.config.window.bordered(),
             -- documentation = cmp.config.window.bordered(),
         },
+        view = {
+            entries = { name = "custom", selection_order = "near_cursor" },
+        },
         mapping = {
             ["<C-p>"] = cmp.mapping(complete_fallback(cmp.mapping.select_prev_item()), { "i" }),
             ["<C-n>"] = cmp.mapping(complete_fallback(cmp.mapping.select_next_item()), { "i" }),
@@ -51,10 +54,17 @@ function M.config()
             ["<C-e>"] = cmp.mapping(cmp.mapping.abort(), { "i", "c" }),
             -- ["<C-e>"] = cmp.mapping(cmp.mapping.close(), { "i", "c" }),
             ["<C-l>"] = cmp.mapping(cmp.mapping.complete_common_string(), { "i", "c" }),
-            ["<C-Space>"] = cmp.mapping(
-                cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true },
-                { "i", "c" }
-            ),
+            ["<C-Space>"] = cmp.mapping {
+                i = function()
+                    -- NOTE: exactly matching snippets will show on top so there is no confusion which snippets will expand
+                    if cmp.get_selected_entry() == nil and require("luasnip").expandable() then
+                        require("luasnip").expand()
+                    else
+                        cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true }()
+                    end
+                end,
+                c = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true },
+            },
         },
         sources = cmp.config.sources {
             { name = "nvim_lsp" },
@@ -67,6 +77,30 @@ function M.config()
         sorting = {
             priority_weight = 2,
             comparators = {
+                -- shows exactly matching snippets up top
+                ---@param entry1 cmp.Entry
+                ---@param entry2 cmp.Entry
+                function(entry1, entry2)
+                    if entry1:get_kind() ~= entry2:get_kind() then
+                        ---@param entry cmp.Entry
+                        local is_exactly_matching_snippet = function(entry)
+                            local snippet_type = require("cmp.types").lsp.CompletionItemKind.Snippet
+                            if entry:get_kind() == snippet_type and entry.matches and #entry.matches == 1 then
+                                local match = entry.matches[1]
+                                local match_len = match.word_match_end - match.word_match_start + 1
+                                local word_len = #entry:get_word()
+                                return match_len == word_len
+                            end
+                            return false
+                        end
+                        if is_exactly_matching_snippet(entry1) then
+                            return true
+                        elseif is_exactly_matching_snippet(entry2) then
+                            return false
+                        end
+                    end
+                end,
+
                 cmp.config.compare.offset,
                 cmp.config.compare.exact,
                 -- cmp.config.compare.scopes,
@@ -75,6 +109,8 @@ function M.config()
                 cmp.config.compare.recently_used,
 
                 -- REF: lukas-reineke/cmp-under-comparator
+                ---@param entry1 cmp.Entry
+                ---@param entry2 cmp.Entry
                 function(entry1, entry2)
                     local _, entry1_under = entry1.completion_item.label:find "^_+"
                     local _, entry2_under = entry2.completion_item.label:find "^_+"
@@ -92,6 +128,13 @@ function M.config()
                 cmp.config.compare.length,
                 cmp.config.compare.order,
             },
+        },
+        matching = {
+            disallow_fuzzy_matching = false,
+            disallow_fullfuzzy_matching = false,
+            disallow_partial_fuzzy_matching = true,
+            disallow_partial_matching = false,
+            disallow_prefix_unmatching = false,
         },
         formatting = {
             format = require("lspkind").cmp_format {

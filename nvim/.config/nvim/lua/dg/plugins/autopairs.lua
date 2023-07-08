@@ -47,14 +47,15 @@ function M.config()
     local cond = require "nvim-autopairs.conds"
     local ts_conds = require "nvim-autopairs.ts-conds"
 
+    autopairs.clear_rules()
     autopairs.add_rules {
         Rule("$", "$", "tex"),
 
         Rule(" ", " "):with_pair(function(opts) return opts.line:sub(opts.col - 1, opts.col) == "{}" end),
-        Rule("{ ", " }")
-            :with_pair(function() return false end)
-            :with_move(function(opts) return opts.prev_char:match ".%}" ~= nil end)
-            :use_key "}",
+        -- Rule("{ ", " }")
+        --     :with_pair(function() return false end)
+        --     :with_move(function(opts) return opts.prev_char:match ".%}" ~= nil end)
+        --     :use_key "}",
 
         Rule("then", "end", "lua"):end_wise(
             function(opts) return string.match(opts.line, "^%s*if") ~= nil end

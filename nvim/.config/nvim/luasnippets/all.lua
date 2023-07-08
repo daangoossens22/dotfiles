@@ -25,4 +25,32 @@ local types = require "luasnip.util.types"
 local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
 
-return {}
+local function pair(pair_begin, pair_end)
+    return s({
+        trig = pair_begin,
+        wordTrig = false,
+        -- show_condition = function() return false end,
+    }, {
+        t(pair_begin),
+        c(1, {
+            r(1, "inside_pairs"),
+            sn(nil, {
+                t { "", "\t" },
+                r(1, "inside_pairs"),
+                t { "", "" },
+            }),
+        }),
+        t(pair_end),
+    }, { stored = { ["inside_pairs"] = i(1) } })
+end
+
+return {
+    pair("(", ")"),
+    pair("{", "}"),
+    pair("{", "}"),
+    pair("[", "]"),
+    pair("<", ">"),
+    pair("'", "'"),
+    pair('"', '"'),
+    pair("`", "`"),
+}
