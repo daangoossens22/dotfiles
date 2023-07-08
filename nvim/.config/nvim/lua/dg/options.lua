@@ -5,7 +5,7 @@ local g = vim.g
 -- NOTE: global options
 o.termguicolors = true
 o.fsync = true
-opt.wildmode = "longest:full"
+o.wildmode = "longest:full"
 o.splitright = true
 o.splitbelow = true
 o.errorbells = false
@@ -25,7 +25,7 @@ o.autowriteall = true
 o.title = true
 o.titlestring = "nvim - %t"
 o.mouse = "nv" -- enable mouse in normal, visual
-opt.mousescroll = "ver:1,hor:1"
+o.mousescroll = "ver:1,hor:1"
 -- o.clipboard = "unnamedplus" -- automatically copy to clipboard
 -- o.foldlevelstart = 20
 o.splitkeep = "screen"
@@ -51,7 +51,7 @@ o.number = true
 o.relativenumber = true
 o.wrap = false
 o.textwidth = 110
-opt.colorcolumn = { "+1" }
+o.colorcolumn = "+1"
 o.conceallevel = 2
 o.foldcolumn = "1"
 

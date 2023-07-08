@@ -18,7 +18,7 @@ function M.config()
             local lsp_id = event.data.client_id
             LSP_PERCENTAGES[lsp_id] = event.data.result.value.percentage or LSP_PERCENTAGES[lsp_id]
             if event.data.result.value.kind == "end" then LSP_PERCENTAGES[lsp_id] = nil end
-            require("lualine").refresh()
+            require("lualine").refresh { place = { "statusline" } }
         end,
         group = AUGROUP "lualine_lsp_progress_refresh",
     })
@@ -115,6 +115,10 @@ function M.config()
                     sources = { "nvim_diagnostic" },
                     always_visible = false,
                     icons_enabled = true,
+                    on_click = function()
+                        vim.diagnostic.setloclist()
+                        vim.g.qflistglobal = false
+                    end,
                 },
             },
             lualine_c = {
@@ -125,6 +129,7 @@ function M.config()
                     -- icons_enabled = true,
                     -- icon = "LSP:",
                     color = { fg = k_colors.palette.oniViolet },
+                    on_click = function() vim.cmd [[:LspInfo]] end,
                     lualine_lsp_name,
                 },
             },
@@ -135,8 +140,11 @@ function M.config()
                         if AUTOFORMAT_LANGUAGES[vim.bo.filetype] then
                             return "AF"
                         else
-                            return ""
+                            return "MF"
                         end
+                    end,
+                    on_click = function()
+                        AUTOFORMAT_LANGUAGES[vim.bo.filetype] = not AUTOFORMAT_LANGUAGES[vim.bo.filetype]
                     end,
                 },
                 {
@@ -148,6 +156,7 @@ function M.config()
                             return "LL" -- location-list
                         end
                     end,
+                    on_click = function() vim.g.qflistglobal = not vim.g.qflistglobal end,
                 },
                 "encoding",
                 "fileformat",

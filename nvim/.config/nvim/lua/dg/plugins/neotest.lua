@@ -4,6 +4,7 @@ local M = {
         "nvim-neotest/neotest-python",
         "nvim-neotest/neotest-plenary",
         { "nvim-neotest/neotest-vim-test", dependencies = "vim-test/vim-test" },
+        -- "andythigpen/nvim-coverage"
     },
 }
 

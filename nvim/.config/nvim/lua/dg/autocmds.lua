@@ -1,29 +1,31 @@
 vim.api.nvim_create_autocmd("FileType", {
     callback = function(ev)
-        vim.opt_local.formatoptions =
-            -- "t" .. -- auto-wrap
-            "c" -- auto-wrap comments
-            .. "r" -- add comment leader after hitting <Enter> in a comment
-            .. "o" -- add comment leader after hitting 'o' or 'O' (undo with i<C-u>)
-            -- "/" .. -- ???
-            .. "q" -- allow formatting of comments using 'gq'
-            -- "w" .. -- line that ends in a non-wite space character denotes the end of the paragraph
-            -- "a" .. -- auto-format paragraphs (+c flag -> only do this in comments)
-            .. "n" -- indents text when wrapping when using a numbered list (autoindent needs to be set)
-            -- "2" .. -- copy indent of second line in paragraph (autoindent needs to be set)
-            -- "v" .. -- vi-compatible auto-wrap in insert mode
-            -- "b" .. -- ???
-            .. "l" -- long line is not wrapped in insert mode when the line was already longer than textwidth
-            -- "m" .. -- breaks multibyte characters above 255 (usefull for asian characters)
-            -- "M" .. -- when joining lines don't insert space before or after multibyte character
-            -- "B" .. -- when joining lines don't insert space between multibyte character
-            -- "1" .. -- don't break line before one-letter words (do it before that)
-            -- "]" .. -- no line can be longer than textwidth (only works for utf-8)
-            .. "j" -- remove comment leader when joining lines
-            -- "p" .. -- don't break lines at period followed by a space but one before that
-            .. ""
+        if ev.match ~= "norg" then
+            vim.opt_local.formatoptions = table.concat {
+                -- "t", -- auto-wrap
+                "c", -- auto-wrap comments
+                "r", -- add comment leader after hitting <Enter> in a comment
+                "o", -- add comment leader after hitting 'o' or 'O' (undo with i<C-u>)
+                -- "/", -- ???
+                "q", -- allow formatting of comments using 'gq'
+                -- "w", -- line that ends in a non-wite space character denotes the end of the paragraph
+                -- "a", -- auto-format paragraphs (+c flag -> only do this in comments)
+                "n", -- indents text when wrapping when using a numbered list (autoindent needs to be set)
+                -- "2", -- copy indent of second line in paragraph (autoindent needs to be set)
+                -- "v", -- vi-compatible auto-wrap in insert mode
+                -- "b", -- ???
+                "l", -- long line is not wrapped in insert mode when the line was already longer than textwidth
+                -- "m", -- breaks multibyte characters above 255 (usefull for asian characters)
+                -- "M", -- when joining lines don't insert space before or after multibyte character
+                -- "B", -- when joining lines don't insert space between multibyte character
+                -- "1", -- don't break line before one-letter words (do it before that)
+                -- "]", -- no line can be longer than textwidth (only works for utf-8)
+                "j", -- remove comment leader when joining lines
+                -- "p", -- don't break lines at period followed by a space but one before that
+            }
 
-        if ev.match == "gitcommit" then vim.opt_local.formatoptions:append { "t" } end
+            if ev.match == "gitcommit" then vim.opt_local.formatoptions:append { "t" } end
+        end
     end,
     group = AUGROUP "formatoptions",
 })

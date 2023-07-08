@@ -191,28 +191,22 @@ function M.init()
     -- NMAP("<leader>fp", require("telescope").extensions.project.project, "[TEL] add and open a project")
 
     -- custom functions
-    local dotfiles_opt = {
-        hidden = true,
-        -- follow = true,
-        find_command = { "fd", "--type", "f", "--exclude", "nvim/.config/nvim", "--exclude", ".git/*" },
-        prompt_title = "Dotfiles",
-        cwd = "~/Documents/dotfiles",
-    }
-    MAP(
-        "n",
-        "<leader>fd",
-        function() require("telescope.builtin").find_files(dotfiles_opt) end,
-        "[TEL] find file in dotfiles folder"
-    )
-
-    local nvim_config_opt = {
-        hidden = true,
-        prompt_title = "Nvim Config",
-        cwd = "~/.config/nvim",
-    }
+    MAP("n", "<leader>fd", function()
+        require("telescope.builtin").find_files {
+            hidden = true,
+            -- follow = true,
+            find_command = { "fd", "--type", "f", "--exclude", "nvim/.config/nvim", "--exclude", ".git/*" },
+            prompt_title = "Dotfiles",
+            cwd = "~/Documents/dotfiles",
+        }
+    end, "[TEL] find file in dotfiles folder")
     MAP("n", "<leader>cv", function()
-        require("telescope.builtin").find_files(nvim_config_opt)
-        vim.api.nvim_feedkeys("!scratch 'lua ", "n", false)
+        require("telescope.builtin").find_files {
+            hidden = true,
+            prompt_title = "Nvim Config",
+            cwd = "~/.config/nvim",
+        }
+        vim.api.nvim_feedkeys("!scratch lua$ | scm$ ", "n", false)
     end, { desc = "[TEL] find nvim config file" })
 end
 

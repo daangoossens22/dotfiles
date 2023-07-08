@@ -41,6 +41,9 @@ function M.config()
                 config = {
                     default_keybinds = true,
                     neorg_leader = "<Leader>",
+                    hook = function(keybinds)
+                        keybinds.remap_key("norg", "i", "<M-CR>", "<CR>") -- just undo with the <C-U> key
+                    end,
                 },
             },
             ["core.qol.todo_items"] = {
@@ -56,9 +59,9 @@ function M.config()
             ["core.completion"] = { config = { engine = "nvim-cmp" } },
             ["core.concealer"] = {
                 config = {
-                    dim_code_blocks = { conceal = false, width = "content" },
                     icon_preset = "diamond",
                     icons = {
+                        code_block = { conceal = false, width = "content" },
                         todo = {
                             undone = { enabled = false },
                             done = { icon = "" },

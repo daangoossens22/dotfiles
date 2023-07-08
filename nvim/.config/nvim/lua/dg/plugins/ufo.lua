@@ -10,14 +10,46 @@ function M.config()
     vim.o.foldnestmax = 1
     vim.o.foldenable = true
 
-    vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-    vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
-    vim.keymap.set("n", "zr", require("ufo").openFoldsExceptKinds)
-    vim.keymap.set("n", "zm", require("ufo").closeFoldsWith) -- closeAllFolds == closeFoldsWith(0)
-    vim.keymap.set("n", "K", function() require("ufo").peekFoldedLinesUnderCursor() end)
-    vim.keymap.set("n", "zk", function()
+    MAP("n", "zR", require("ufo").openAllFolds)
+    MAP("n", "zM", require("ufo").closeAllFolds)
+    MAP("n", "zr", require("ufo").openFoldsExceptKinds)
+    MAP("n", "zm", require("ufo").closeFoldsWith) -- closeAllFolds == closeFoldsWith(0)
+    MAP("n", "K", function() require("ufo").peekFoldedLinesUnderCursor() end)
+    MAP("n", "zk", function()
         require("ufo").goPreviousStartFold()
         vim.cmd [[norm 0]] -- so its consistent with builtin zj keymap
+    end)
+    MAP("n", "<Space>tm", function()
+        local filetype = vim.bo.filetype
+
+        local function toggle_fold(query, names)
+            local bufnr = vim.api.nvim_get_current_buf()
+            local parser = vim.treesitter.get_parser(bufnr, filetype, {})
+            local tree = parser:parse()[1]
+            local root = tree:root()
+            local cursor_start = vim.api.nvim_win_get_cursor(0)
+            for id, node, metadata in query:iter_captures(root, bufnr, 0, -1) do
+                local name = query.captures[id]
+                local row1, col1, row2, col2 = node:range()
+                if vim.tbl_contains(names, name) and row1 ~= row2 then -- test if it is a fold and a MAP() function call
+                    vim.api.nvim_win_set_cursor(0, { row1 + 1, 0 })
+                    vim.cmd(vim.b.foldopen_now and [[foldopen]] or [[foldclose]])
+                end
+            end
+            vim.api.nvim_win_set_cursor(0, cursor_start)
+            vim.b.foldopen_now = not vim.b.foldopen_now
+        end
+
+        if filetype == "lua" then
+            local query = vim.treesitter.query.parse(
+                filetype,
+                [[(function_call name: (identifier) @func_name (#eq? @func_name "MAP")) @map_func]]
+            )
+            toggle_fold(query, { "map_func" })
+        else
+            local query = vim.treesitter.query.get(filetype, "textobjects")
+            if query then toggle_fold(query, { "function.outer", "method.outer" }) end
+        end
     end)
 
     local ft_map = {
@@ -51,12 +83,30 @@ function M.config()
         -- NOTE: truncated folded line + number of lines folded + last line of fold
         enable_get_fold_virt_text = true,
         fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate, ctx)
-            -- local function get_first_non_whitespace(virt_line)
-            --
-            -- end
-            -- if virtText[1][1] == "MAP" or virtText[2][1] == "MAP" then
-            --     table.insert(virtText, { "mapfunc", "MoreMsg" })
-            -- end
+            local function remove_leading_whitespace(virt_line)
+                while #virt_line ~= 0 do
+                    local removed = table.remove(virt_line, 1)
+                    if removed[2] ~= "UfoFoldedFg" then
+                        table.insert(virt_line, 1, removed)
+                        break
+                    end
+                end
+                return virt_line
+            end
+            local end_text = remove_leading_whitespace(ctx.get_fold_virt_text(endLnum))
+            local virtText2 = remove_leading_whitespace(vim.deepcopy(virtText))
+            if #virtText2 == 2 and virtText2[1][1] == "MAP" then
+                for cur_lnum = lnum + 1, lnum + 2 do
+                    for _, v in ipairs(remove_leading_whitespace(ctx.get_fold_virt_text(cur_lnum))) do
+                        table.insert(virtText, v)
+                    end
+                end
+                if endLnum - lnum > 4 then
+                    for _, v in ipairs(remove_leading_whitespace(ctx.get_fold_virt_text(endLnum - 1))) do
+                        table.insert(end_text, 1, v)
+                    end
+                end
+            end
             local newVirtText = {}
             local suffix = (" 🡯 %d "):format(endLnum - lnum)
             local sufWidth = vim.fn.strdisplaywidth(suffix)
@@ -81,12 +131,8 @@ function M.config()
                 curWidth = curWidth + chunkWidth
             end
             table.insert(newVirtText, { suffix, "MoreMsg" })
-            local remove_leading_whitespace = true
-            for _, v in ipairs(ctx.get_fold_virt_text(endLnum)) do
-                if not remove_leading_whitespace or v[2] ~= "UfoFoldedFg" then
-                    remove_leading_whitespace = false
-                    table.insert(newVirtText, v)
-                end
+            for _, v in ipairs(end_text) do
+                table.insert(newVirtText, v)
             end
             return newVirtText
         end,

@@ -29,7 +29,7 @@ function M.config()
         },
         pre_hook = nil, -- called before commenting is done
         post_hook = nil, -- called after commenting is done
-        padding = true, -- add space before the comment
+        padding = function() return vim.bo.filetype ~= "norg" end, -- add space before the comment
         -- NOTE: This only affects NORMAL mode mappings and doesn't work with dot-repeat
         sticky = true, -- cursor stays at position
         -- ignore = "^$", -- ignore empty lines
@@ -37,6 +37,7 @@ function M.config()
 
     require("Comment.ft").set("query", ";%s")
     require("Comment.ft").set("vhdl", "--%s")
+    require("Comment.ft").set("norg", { "%%s%", "%%s%" })
 end
 
 ---Textobject for adjacent commented lines

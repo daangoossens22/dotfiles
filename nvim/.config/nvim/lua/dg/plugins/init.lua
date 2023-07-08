@@ -4,7 +4,7 @@ return {
     { "alvarosevilla95/luatab.nvim", event = "TabNew", config = true },
     { "tpope/vim-repeat", event = "VeryLazy" },
     { "tpope/vim-sleuth", event = "BufReadPre" },
-    { "tpope/vim-surround", keys = { "ds", "cs", "ys", { "S", mode = "v" } } },
+    { "kylechui/nvim-surround", keys = { "ds", "cs", "ys", { "S", mode = "v" } }, opts = {} },
     {
         "karb94/neoscroll.nvim",
         keys = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-y>", "<C-e>", "zt", "zz", "zb" },
@@ -70,7 +70,22 @@ return {
     },
 
     -- -- TODO: plugins to try out
+    -- "ThePrimeagen/refactoring.nvim"
+    -- "lewis6991/satellite.nvim"
+    -- "edluffy/hologram.nvim" or "3rd/image.nvim"
+    -- "jbyuki/nabla.nvim",
+    -- "jbyuki/venn.nvim" or "vim-scripts/DrawIt"
+    -- "smjonas/inc-rename.nvim"
+    -- "tommcdo/vim-lion"
+
     -- "stevearc/aerial.nvim" -- use telescope lsp_document_symbols??
     -- "famiu/bufdelete.nvim"
-    -- "ThePrimeagen/refactoring.nvim"
+    -- "stevearc/overseer.nvim"
+    -- "anuvyklack/hydra.nvim"
+    -- "nvimdev/lspsaga.nvim"
+    -- "RRethy/vim-illuminate"
+    -- "krady21/compiler-explorer.nvim"
+    -- "rebelot/heirline.nvim"
+    -- "nvim-colortils/colortils.nvim"
+    -- "lervag/vimtex"
 }
