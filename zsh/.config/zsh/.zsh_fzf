@@ -2,7 +2,7 @@ source /usr/share/fzf/key-bindings.zsh
 # source /usr/share/fzf/completion.zsh
 export FZF_DEFAULT_COMMAND='fd . --hidden --exclude ".git"'
 # export FZF_DEFAULT_OPTS='-i --height=50%'
-export FZF_DEFAULT_OPTS='--color hl:#7fb4ca,hl+:#7fb4ca'
+export FZF_DEFAULT_OPTS='--color hl:#7fb4ca,hl+:#7fb4ca --bind "ctrl-/:jump"'
 
 # NOTE: from https://github.com/junegunn/fzf/wiki/Examples#man-pages
 fman() {

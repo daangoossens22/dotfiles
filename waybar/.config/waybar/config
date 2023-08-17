@@ -50,7 +50,7 @@
             "4": "",
             "5": "",
             "urgent": "",
-            "focused": "",
+            // "focused": "",
             "default": ""
         }
     },
@@ -157,14 +157,14 @@
             "weeks-pos": "left",
             "on-click-right": "mode",
             "format": {
-                "months":     "<span color='#ffead3'><b>{}</b></span>",
-                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
-                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
-                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
-                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+                "months":     "<span color='#DCD7BA'><b>{}</b></span>",
+                "days":       "<span color='#DCD7BA'><b>{}</b></span>",
+                "weeks":      "<span color='#7E9CD8'><b>W{}</b></span>",
+                "weekdays":   "<span color='#FFA066'><b>{}</b></span>",
+                "today":      "<span color='#FF5D62'><b><u>{}</u></b></span>"
             }
         },
-        "format": " {:%d-%m-%Y  %H:%M:%S}"
+        "format": " {:%d-%m-%Y  %H:%M:%OS}"
     },
     "battery": {
         "interval": 60,

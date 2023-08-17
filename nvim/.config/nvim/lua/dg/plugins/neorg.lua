@@ -37,12 +37,18 @@ function M.config()
                     },
                 },
             },
+            -- ["core.esupports.hop"] = {
+            --     config = {
+            --         external_filetypes = { "" },
+            --     },
+            -- },
             ["core.keybinds"] = {
                 config = {
                     default_keybinds = true,
                     neorg_leader = "<Leader>",
                     hook = function(keybinds)
                         keybinds.remap_key("norg", "i", "<M-CR>", "<CR>") -- just undo with the <C-U> key
+                        -- { "<M-CR>", "core.itero.next-iteration", "<CR>", opts = { desc = "Continue Object" } },
                     end,
                 },
             },

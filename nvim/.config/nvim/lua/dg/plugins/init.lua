@@ -77,6 +77,8 @@ return {
     -- "jbyuki/venn.nvim" or "vim-scripts/DrawIt"
     -- "smjonas/inc-rename.nvim"
     -- "tommcdo/vim-lion"
+    -- "NeogitOrg/neogit" or "kdheepak/lazygit.nvim"
+    -- "lewis6991/hover.nvim"
 
     -- "stevearc/aerial.nvim" -- use telescope lsp_document_symbols??
     -- "famiu/bufdelete.nvim"

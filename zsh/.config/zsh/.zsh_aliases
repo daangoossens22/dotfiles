@@ -125,5 +125,10 @@ ex ()
     fi
 }
 
+detach ()
+{
+    ($@ &> /dev/null &|)
+}
+
 # kitty aliases
 alias icat='kitty +kitten icat'

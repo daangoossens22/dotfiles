@@ -30,7 +30,7 @@ function M.config()
         local moon = moons[frame + 1]
 
         local bufnr = vim.fn.bufnr()
-        local clients = vim.lsp.get_active_clients { bufnr = bufnr }
+        local clients = vim.lsp.get_clients { bufnr = bufnr }
         local client_names = {}
         for _, client in ipairs(clients) do
             local client_str = client.name
@@ -158,9 +158,9 @@ function M.config()
                     end,
                     on_click = function() vim.g.qflistglobal = not vim.g.qflistglobal end,
                 },
-                "encoding",
-                "fileformat",
-                "filetype",
+                { "encoding" },
+                { "fileformat", icons_enabled = true },
+                { "filetype", icons_enabled = true },
             },
             lualine_y = {
                 "progress",

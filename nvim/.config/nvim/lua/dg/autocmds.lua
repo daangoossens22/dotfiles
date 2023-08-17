@@ -82,7 +82,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- resize splits if window got resized
 vim.api.nvim_create_autocmd({ "VimResized" }, {
     group = AUGROUP "resize_splits",
-    callback = function() vim.cmd "tabdo wincmd =" end,
+    callback = function() vim.cmd "windo wincmd =" end,
 })
 
 -- Check if we need to reload the file when it changed
@@ -100,3 +100,21 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
         vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
     end,
 })
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+    group = AUGROUP "highlight_yank",
+    callback = function() vim.highlight.on_yank() end,
+})
+
+vim.cmd [[
+augroup Binary
+  au!
+  au BufReadPre  *.bin let &bin=1
+  au BufReadPost *.bin if &bin | %!xxd
+  au BufReadPost *.bin set ft=xxd | endif
+  au BufWritePre *.bin if &bin | %!xxd -r
+  au BufWritePre *.bin endif
+  au BufWritePost *.bin if &bin | %!xxd
+  au BufWritePost *.bin set nomod | endif
+augroup END
+]]

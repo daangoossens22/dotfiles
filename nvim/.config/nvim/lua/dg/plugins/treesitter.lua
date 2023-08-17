@@ -29,6 +29,7 @@ local M = {
 
 M.opts = {
     ensure_installed = {
+        "ada",
         "bash",
         "bibtex",
         "c",
@@ -71,7 +72,7 @@ M.opts = {
     highlight = {
         enable = true,
         -- disable = function(lang, buf)
-        --     local max_filesize = 100 * 1024 -- 100 KB
+        --     if lang == "help" then return true end
         --     local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
         --     if ok and stats and stats.size > max_filesize then return true end
         -- end,
@@ -81,10 +82,10 @@ M.opts = {
     incremental_selection = {
         enable = true,
         keymaps = {
-            init_selection = "gnn",
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
+            init_selection = "<C-space>",
+            node_incremental = "<C-space>",
+            scope_incremental = false,
+            node_decremental = "<bs>",
         },
     },
     textobjects = {
@@ -102,34 +103,37 @@ M.opts = {
             enable = true,
             swap_next = {
                 ["<leader>a"] = "@parameter.inner",
+                -- ["<leader>a"] = "@function.outer",
             },
             swap_previous = {
                 ["<leader>A"] = "@parameter.inner",
+                -- ["<leader>A"] = "@function.outer",
             },
         },
         move = {
             enable = true,
             set_jumps = true, -- whether to set jumps in the jumplist
             goto_next_start = {
-                ["]f"] = "@function.outer",
+                -- ["]f"] = "@function.outer",
                 -- ["]c"] = "@class.outer",
             },
             goto_next_end = {
-                ["]F"] = "@function.outer",
+                -- ["]F"] = "@function.outer",
                 -- ["]C"] = "@class.outer",
             },
             goto_previous_start = {
-                ["[f"] = "@function.outer",
+                -- ["[f"] = "@function.outer",
                 -- ["[c"] = "@class.outer",
             },
             goto_previous_end = {
-                ["[F"] = "@function.outer",
+                -- ["[F"] = "@function.outer",
                 -- ["[C"] = "@class.outer",
             },
         },
         lsp_interop = {
             enable = true,
-            border = "none",
+            border = "rounded",
+            floating_preview_opts = {},
             peek_definition_code = {
                 ["<leader>df"] = "@function.outer",
                 ["<leader>dF"] = "@class.outer",
@@ -159,6 +163,7 @@ M.opts = {
 
 function M.config(_, opts)
     -- vim.treesitter.language.register("bash", "zsh")
+    -- vim.treesitter.language.register("ada", "vhdl")
 
     require("nvim-treesitter.configs").setup(opts)
 
@@ -181,6 +186,31 @@ function M.config(_, opts)
     --     end,
     --     group = AUGROUP "treesitter_fold_workaround",
     -- })
+
+    MAP(
+        "n",
+        "]f",
+        "<cmd>TSTextobjectGotoNextStart @function.outer<cr>zz",
+        { desc = "]f but center the location", silent = true }
+    )
+    MAP(
+        "n",
+        "[f",
+        "<cmd>TSTextobjectGotoPreviousStart @function.outer<cr>zz",
+        { desc = "[f but center the location", silent = true }
+    )
+    MAP(
+        "n",
+        "]F",
+        "<cmd>TSTextobjectGotoNextEnd @function.outer<cr>zz",
+        { desc = "]F but center the location", silent = true }
+    )
+    MAP(
+        "n",
+        "[F",
+        "<cmd>TSTextobjectGotoPreviousEnd @function.outer<cr>zz",
+        { desc = "[F but center the location", silent = true }
+    )
 end
 
 return M

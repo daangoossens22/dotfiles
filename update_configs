@@ -1,13 +1,13 @@
 #!/bin/sh
 
 configs_root_file="configs_root.txt"
-configs_cur_file="configs_cur.txt"
+configs_default_file="configs_default.txt"
 
 # install/update the configs by using stow
 # NOTE: $# => number of arguments
 if [ $# -le 1 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || { [ "$1" != "install" ] && [ "$1" != "uninstall" ]; }; then
-    echo "$0 install [config_dir ...|cur]"
-    echo "$0 uninstall [config_dir ...|cur]"
+    echo "$0 install [config_dir ...|default]"
+    echo "$0 uninstall [config_dir ...|default]"
 else
     mode="-S"
     if [ "$1" = "uninstall" ]; then
@@ -24,8 +24,8 @@ else
 
     shift
     configs="$*"
-    if [ "$1" = "cur" ]; then
-        configs=$(test -r "$configs_cur_file" && cat "$configs_cur_file")
+    if [ "$1" = "default" ]; then
+        configs=$(test -r "$configs_default_file" && cat "$configs_default_file")
     fi
 
     for i in $configs; do

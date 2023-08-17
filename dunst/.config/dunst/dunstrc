@@ -1,6 +1,6 @@
 [global]
     # monitor = 0
-    # follow = none
+    follow = mouse
     enable_posix_regex = true # false
     width = 240 # 300
     # height = 300
@@ -21,11 +21,11 @@
     horizontal_padding = 0 # 8
     # text_icon_padding = 0
     frame_width = 2 # 3
-    frame_color = "#363646" # "#aaaaaa"
+    frame_color = "#363646CC" # "#aaaaaa"
     # separator_color = frame
-    background = "#1F1F28"
+    background = "#1F1F28CC"
     foreground = "#DCD7BA"
-    highlight = "#7E9CD8"
+    highlight = "#7E9CD8CC"
     # sort = true
     # idle_threshold = 0
     timeout = 1 # 0

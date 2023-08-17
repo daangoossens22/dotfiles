@@ -4,11 +4,14 @@ local M = {
 }
 
 function M.config()
-    require("notify").setup {
+    local notify = require "notify"
+    notify.setup {
+        timeout = 3000,
+        max_height = function() return math.floor(vim.o.lines * 0.75) end,
+        max_width = function() return math.floor(vim.o.columns * 0.75) end,
         -- render = "minimal",
         stages = "static",
     }
-    local notify = require "notify"
     vim.notify = notify
 
     MAP("n", "<leader>nd", notify.dismiss, "removes all notifications")

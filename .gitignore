@@ -4,3 +4,4 @@ nvim/.config/nvim/.luarc.json
 gtk-3.0/.config/gtk-3.0/bookmarks
 gtk-2.0/.config/gtk-2.0/gtkfilechooser.ini
 zsh/.config/zsh/.zcalc_history
+zsh/.config/zsh/.zcompdump

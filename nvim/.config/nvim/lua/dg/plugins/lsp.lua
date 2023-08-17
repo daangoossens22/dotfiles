@@ -14,6 +14,7 @@ local M = {
                         null_ls.builtins.formatting.yapf,
                         null_ls.builtins.formatting.shellharden,
                         null_ls.builtins.formatting.emacs_vhdl_mode,
+                        -- null_ls.builtins.formatting.cbfmt, -- format embedded codeblock in markdown
                         null_ls.builtins.diagnostics.shellcheck,
                         null_ls.builtins.code_actions.shellcheck,
                         -- null_ls.builtins.diagnostics.zsh,
@@ -69,6 +70,8 @@ M.opts = {
     },
     servers = {
         pyright = {},
+        -- ruff_lsp = {},
+        -- pylyzer = {},
         bashls = {},
         texlab = {},
         tsserver = {},
@@ -83,6 +86,7 @@ M.opts = {
                 ["rust-analyzer"] = {
                     checkOnSave = {
                         command = "clippy",
+                        -- extraArgs = { "--all", "--", "-W", "clippy::all" },
                         allTargets = false,
                     },
                 },
@@ -188,7 +192,7 @@ function M.config(_, opts)
         function() vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR } end,
         diag_opts "move to the next buffer diagnostic error"
     )
-    MAP("n", "<leader>q", function()
+    MAP("n", "<leader>qq", function()
         if next(vim.diagnostic.get(nil, { severity = vim.diagnostic.severity.ERROR })) == nil then
             vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
         else

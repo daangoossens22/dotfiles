@@ -16,6 +16,7 @@ elif [ "$1" = "+" ]; then
     cur_brightness=$(( cur_brightness * 12 / 10 ))
     # brightness cannot exceed the max brightness
     cur_brightness=$(( cur_brightness > max_brightness ? max_brightness : cur_brightness ))
+    cur_brightness=$(( cur_brightness <= 0 ? 2 : cur_brightness ))
 elif [ "$1" = "-" ]; then
     cur_brightness=$(( cur_brightness * 10 / 12 ))
     # brightness cannot got below 0

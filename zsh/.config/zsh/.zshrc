@@ -17,22 +17,39 @@ setopt share_history
 setopt autocd autopushd pushdignoredups
 setopt interactivecomments
 
+fpath+=($ZDOTDIR'/custom_completions')
+
 # autocomplete
+# zstyle ':completion:<function>:<completer>:<command>:<argument>:<tag>'
 autoload -Uz compinit
-zstyle ':completion:*'             menu select # shows the current selection in completion menu
-zstyle ':completion:*'             rehash true # automatically autocomplete new packages in /usr/bin
-zstyle ':completion:*'             matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*' # case insensitive autocompletion
-zstyle ':completion:*'             use-cache on
-zstyle ':completion:*'             cache-path $XDG_CACHE_HOME/zsh/zcompcache
-zstyle ':completion:*'             file-sort inode
-zstyle ':completion:*:default'     list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*:cd:*'        ignore-parents parent pwd
-# zstyle ':completion:*:functions'   ignored-patterns '_*'
-zstyle ':completion:*:*:kill:*'    menu yes select
-zstyle ':completion:*:*:killall:*' menu yes select
-# zstyle ':completion:*:manuals'     separate-sections true
-# zstyle ':completion:*:manuals.*'   insert-sections   true
-# zstyle ':completion:*:man:*'       menu yes select
+zstyle ':completion:*'                 menu select # shows the current selection in completion menu
+zstyle ':completion:*'                 rehash true # automatically autocomplete new packages in /usr/bin
+zstyle ':completion:*'                 matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*' # case insensitive autocompletion
+zstyle ':completion:*'                 use-cache on
+zstyle ':completion:*'                 cache-path $XDG_CACHE_HOME/zsh/zcompcache
+zstyle ':completion:*'                 file-sort inode
+zstyle ':completion:*'                 complete-options true
+zstyle ':completion:*'                 squeeze-slashes true
+zstyle ':completion:*'                 group-name ''
+# zstyle ':completion:*' tag-order 'options:-long:long\ options options:-short:short\ options options:-single-letter:single\ letter\ options'
+# zstyle ':completion:*:options-long' ignored-patterns '[-+](|-|[ˆ-]*)'
+# zstyle ':completion:*:options-short' ignored-patterns '--*' '[-+]?'
+# zstyle ':completion:*:options-single-letter' ignored-patterns '???*'
+zstyle ':completion:*:default'         list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*:cd:*'            ignore-parents parent pwd
+zstyle ':completion:*:descriptions'    format '%F{blue}-- %d --%f'
+zstyle ':completion:*:messages'        format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:warnings'        format ' %F{red}-- no matches found --%f'
+# zstyle ':completion:*:functions'       ignored-patterns '_*'
+zstyle ':completion:*:*:kill:*'        menu yes select
+zstyle ':completion:*:*:killall:*'     menu yes select
+zstyle ':completion:*:processes'       command 'ps -u $USERNAME -o pid,user,command --forest'
+zstyle ':completion:*:processes'       insert-ids menu yes select
+zstyle ':completion:*:processes'       sort false
+zstyle ':completion:*:processes-names' command 'ps -u $USERNAME xho command'
+# zstyle ':completion:*:manuals'         separate-sections true
+# zstyle ':completion:*:manuals.*'       insert-sections   true
+# zstyle ':completion:*:man:*'           menu yes select
 
 zmodload zsh/complist
 zmodload zsh/zpty
@@ -95,10 +112,13 @@ bindkey -a '^x' decarg
 # echo -ne '\e[6 q' # Use beam shape cursor on startup.
 # preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
 
-bindkey "^?" backward-delete-char # NOTE: fixes backspace not working after going from normal mode => insert mode
-# bindkey "^W" backward-kill-word 
+# NOTE: fixes keys not working when going from normal mode => insert mode
+bindkey "^?" backward-delete-char
+bindkey "^U" backward-kill-line
+bindkey "^W" backward-kill-word 
 # bindkey "^H" backward-delete-char      # Control-h also deletes the previous char
-# bindkey "^U" backward-kill-line
+
+bindkey "^G" list-expand
 
 # search history
 bindkey "^P" up-line-or-search
@@ -111,6 +131,7 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 
 autoload -Uz tetriscurses
+autoload -Uz zmv
 
 # Edit line in $EDITOR with ctrl-e
 autoload -Uz edit-command-line
@@ -132,9 +153,6 @@ change_window_title # change title on opening terminal
 path+=($HOME'/.local/bin')
 path+=($HOME'/.local/share/cargo/bin')
 path+=($HOME'/.local/share/python/bin')
-path+=($HOME'/Documents/Xilinx/Vitis/2022.2/bin')
-path+=($HOME'/Documents/Xilinx/Vivado/2022.2/bin')
-path+=($HOME'/Documents/Xilinx/Vitis_HLS/2022.2/bin')
 export PATH
 
 # open man pages in nvim where it is easier to navigate with colors (same as ':Man (opt:section) {pagename}' command in nvim)

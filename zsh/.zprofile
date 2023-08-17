@@ -31,6 +31,7 @@ export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 export JUPYTER_PLATFORM_DIRS="1"
 export PYTHONPYCACHEPREFIX=$XDG_CACHE_HOME/python
 export PYTHONUSERBASE=$XDG_DATA_HOME/python
+export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 
 # theming
 export QT_QPA_PLATFORMTHEME="qt5ct"

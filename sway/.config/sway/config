@@ -10,7 +10,7 @@ set $right l
 
 set $config_loc $XDG_CONFIG_HOME/sway
 set $screenshot_loc $HOME/Pictures/Screenshots/$(date +'%d-%m-%Y-%H%M%S.png')
-set $default_terminal kitty --single-instance
+set $default_terminal kitty --single-instance -o allow_remote_control=yes
 
 ### Output configuration
 # You can get the names of your outputs by running: swaymsg -t get_outputs
@@ -86,6 +86,7 @@ seat seat0 xcursor_theme "volantes_cursors" 48
 # set theming using LXAppearance and they are automatically used
 exec_always $config_loc/import-gsettings
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec gammastep-indicator
 
 default_border pixel 2
 gaps inner 6

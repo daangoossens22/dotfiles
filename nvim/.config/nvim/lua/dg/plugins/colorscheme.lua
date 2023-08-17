@@ -44,7 +44,7 @@ function M.config()
                 },
                 ["@text.note"] = { fg = colors.theme.ui.bg_m1, bg = colors.theme.diag.info, bold = true },
                 ["@text.danger"] = { fg = colors.theme.ui.bg_m1, bg = colors.palette.sakuraPink, bold = true },
-                ["@lsp.type.comment"] = {}, -- don't have semantic highlighting for comments (overwriting my todo highlighting)
+                -- ["@lsp.type.comment"] = {}, -- don't have semantic highlighting for comments (overwriting my todo highlighting)
 
                 -- copy tokyonight by having virtual diagnostic text be glowy
                 DiagnosticVirtualTextError = {
@@ -68,7 +68,7 @@ function M.config()
                     fg = colors.theme.ui.bg_p1,
                 },
                 LspInlayHint = { link = "LspReferenceText" },
-                CodeBlock = { bg = colors.theme.ui.bg_m3, bold = true },
+                CodeBlock = { bg = colors.theme.ui.bg_m3 },
                 DapSigns = { bg = colors.theme.ui.bg_gutter },
                 InclineNormal = { fg = colors.theme.ui.bg_m1, bg = colors.palette.crystalBlue },
                 InclineNormalNC = { fg = colors.palette.crystalBlue, bg = colors.theme.ui.bg_m1 },

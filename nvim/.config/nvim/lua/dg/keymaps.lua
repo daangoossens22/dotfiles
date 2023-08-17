@@ -12,6 +12,10 @@ MAP("n", "<leader>w", "<C-w>", "change window commands leader key")
 
 MAP("v", "J", ":m '>+1<cr>gv=gv", "move selected lines down")
 MAP("v", "K", ":m '<-2<cr>gv=gv", "move selected lines up")
+MAP("n", "[b", "<cmd>bprev<cr>", "move to previous buffer")
+MAP("n", "]b", "<cmd>bnext<cr>", "move to next buffer")
+MAP("n", "<leader>qn", "<cmd>cnewer<cr>", "go to the newer quickfixlist")
+MAP("n", "<leader>qp", "<cmd>colder<cr>", "go to the older quickfixlist")
 
 -- MAP("n", "<leader>Y", "ggyG<C-o>", "yank whole file")
 -- MAP("n", "<leader>\\", "<cmd>nohlsearch<cr>", "disable search highlighting")
@@ -20,6 +24,7 @@ MAP("n", "<leader>\\", function()
     require("notify").dismiss {}
 end, "disable search highlighting")
 
+MAP("", "<leader>y", '"+y', "yank into the system clipboard")
 MAP("", "<leader>d", '"_d', "delete operant doesn't overwrite any register")
 MAP("", "<leader>p", '"0p', "paste yank contents when it when the default register is overwritten by delete")
 MAP("v", "p", "P", "paste without yanking the contents of the visual selection")

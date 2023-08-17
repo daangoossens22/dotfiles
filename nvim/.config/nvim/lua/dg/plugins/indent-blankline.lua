@@ -29,7 +29,7 @@ function M.config()
         show_foldtext = false,
 
         -- filetype = {},
-        filetype_exclude = { "help", "packer", "man", "tsplayground", "", "norg" },
+        filetype_exclude = { "help", "man", "tsplayground", "", "norg", "notify", "lazy" },
     }
 
     MAP("n", "<leader>ri", require("indent_blankline.commands").refresh, "refresh indent guidelines")

@@ -71,7 +71,7 @@ function M.config()
         ),
     }
 
-    for _, token in pairs { "*", "/", "$", "_", "!", "^", ",", "&", "%" } do
+    for _, token in pairs { "*", "/", "$", "_", "!", "^", ",", "&", "%", "`" } do
         autopairs.add_rules {
             Rule(token, token, "norg")
                 :with_pair(function(opts)

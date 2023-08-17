@@ -5,11 +5,6 @@ local M = {
 }
 
 function M.config()
-    vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-    vim.o.foldlevelstart = 99
-    vim.o.foldnestmax = 1
-    vim.o.foldenable = true
-
     MAP("n", "zR", require("ufo").openAllFolds)
     MAP("n", "zM", require("ufo").closeAllFolds)
     MAP("n", "zr", require("ufo").openFoldsExceptKinds)
@@ -54,7 +49,7 @@ function M.config()
 
     local ft_map = {
         vim = "indent",
-        python = { "indent" },
+        python = "indent",
         git = "",
     }
     require("ufo").setup {
@@ -131,9 +126,9 @@ function M.config()
                 curWidth = curWidth + chunkWidth
             end
             table.insert(newVirtText, { suffix, "MoreMsg" })
-            for _, v in ipairs(end_text) do
-                table.insert(newVirtText, v)
-            end
+            -- for _, v in ipairs(end_text) do
+            --     table.insert(newVirtText, v)
+            -- end
             return newVirtText
         end,
         preview = {

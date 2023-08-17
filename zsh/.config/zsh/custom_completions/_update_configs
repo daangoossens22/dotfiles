@@ -1,0 +1,43 @@
+#compdef update_configs
+
+typeset -A opt_args
+
+_arguments -C \
+  '1:cmd:->cmds' \
+  '2:generators:->generator_lists' \
+  '*:: :->args' \
+&& ret=0
+
+local ignored; ignored=(
+  '.git'
+  'personal'
+)
+local configs; configs=(
+  'files:config directory:_path_files -/ -F ignored -S " " -q'
+)
+case "$state" in
+  (cmds)
+    local commands; commands=(
+      '-h:show help information'
+      '--help:show help information'
+      'install:link a configuration folder'
+      'uninstall:unlink a configuration folder'
+    )
+
+    _describe -t commands 'command' commands && ret=0
+  ;;
+  (generator_lists)
+    if [[ $line[1] == install ]] || [[ $line[1] == uninstall ]]; then
+      configs=('arguments:custom argument:((default\:"default configurations specified in configs_default.txt"))' "${configs[@]}")
+      _alternative $configs && ret=0
+    fi
+  ;;
+  (args)
+    if { [[ $line[1] == install ]] || [[ $line[1] == uninstall ]] } && [[ $line[2] != default ]]; then
+      ignored+=("${line[@]:1}")
+      _alternative $configs && ret=0
+    fi
+  ;;
+esac
+
+return 1;

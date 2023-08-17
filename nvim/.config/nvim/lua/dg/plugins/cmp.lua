@@ -15,8 +15,11 @@ local M = {
                 filetypes = { "zsh" },
             },
         },
+        -- "garyhurtz/cmp_kitty"
         -- { "kdheepak/cmp-latex-symbols", pin = true }
         -- "octaltree/cmp-look"
+        -- "lukas-reineke/cmp-rg"
+        -- "petertriho/cmp-git"
         -- "Saecki/crates.nvim"
     },
 }
@@ -44,7 +47,7 @@ function M.config()
             -- documentation = cmp.config.window.bordered(),
         },
         view = {
-            entries = { name = "custom", selection_order = "near_cursor" },
+            -- entries = { name = "custom", selection_order = "near_cursor" },
         },
         mapping = {
             ["<C-p>"] = cmp.mapping(complete_fallback(cmp.mapping.select_prev_item()), { "i" }),
