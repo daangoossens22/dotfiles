@@ -23,7 +23,7 @@ alias mv='mv -iv'
 alias cp='cp -riv'
 alias la='ls -lAhr --sort=time'
 alias lad='lsd -lAhr --timesort --hyperlink always' # --extensionsort --sizesort --timesort
-alias lf="du -shc * | sort -h"
+alias lf="du -shc *(D) | sort -h"
 open() {
     command xdg-open 2>/dev/null $@ &
 }

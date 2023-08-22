@@ -112,11 +112,12 @@ bindkey -a '^x' decarg
 # echo -ne '\e[6 q' # Use beam shape cursor on startup.
 # preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
 
-# NOTE: fixes keys not working when going from normal mode => insert mode
+# NOTE: don't use vi keybinds since they won't go further than where insert mode was last entered
+bindkey "^H" backward-delete-char
 bindkey "^?" backward-delete-char
-bindkey "^U" backward-kill-line
-bindkey "^W" backward-kill-word 
-# bindkey "^H" backward-delete-char      # Control-h also deletes the previous char
+WORDCHARS="_" # make it behave like vim
+bindkey "^W" backward-kill-word
+bindkey "^U" kill-line
 
 bindkey "^G" list-expand
 

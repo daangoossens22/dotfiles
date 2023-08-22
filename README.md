@@ -54,6 +54,11 @@ systemctl enable fstrim.service
 systemctl enable fstrim.timer
 ```
 
+Improving responsiveness in low-memory conditions
+```bash
+systemctl enable --now systemd-oomd.service
+```
+
 Enable bluetooth
 ```bash
 pacman -S bluez bluez-utils

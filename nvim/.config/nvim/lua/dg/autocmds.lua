@@ -40,7 +40,8 @@ vim.api.nvim_create_autocmd("FileType", {
 -- }
 -- local augroup_persistant_cursor_folds = AUGROUP "persistant_cursor_folds"
 -- -- NOTE: ZZ doesn't seem to save when folds and cursor when file hasn't changed
--- vim.api.nvim_create_autocmd({ "BufWritePost", "BufLeave", "WinLeave" }, {
+-- -- vim.api.nvim_create_autocmd({ "BufWritePost", "BufLeave", "WinLeave" }, {
+-- vim.api.nvim_create_autocmd({ "BufWinLeave", "BufUnload" }, {
 --     pattern = "?*",
 --     command = "mkview",
 --     group = augroup_persistant_cursor_folds,
