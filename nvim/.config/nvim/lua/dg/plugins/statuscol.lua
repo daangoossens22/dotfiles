@@ -11,11 +11,7 @@ function M.config()
         segments = {
             { text = { builtin.foldfunc }, click = "v:lua.ScFa", auto = true },
             {
-                sign = { name = { ".*" }, maxwidth = 2, colwidth = 1, auto = true },
-                click = "v:lua.ScSa",
-            },
-            {
-                sign = { name = { "Diagnostic" }, maxwidth = 1, colwidth = 1, auto = false },
+                sign = { name = { "Diagnostic*" }, maxwidth = 1, colwidth = 1, auto = false },
                 click = "v:lua.ScSa",
             },
             {
@@ -24,7 +20,7 @@ function M.config()
             },
             { text = { builtin.lnumfunc }, click = "v:lua.ScLa" },
             {
-                sign = { name = { "GitSigns*" }, maxwidth = 1, colwidth = 1 },
+                sign = { namespace = { "gitsigns_extmark_signs_" }, maxwidth = 1, colwidth = 1, auto = false },
                 click = "v:lua.ScSa",
             },
         },

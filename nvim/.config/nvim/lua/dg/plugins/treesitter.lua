@@ -20,10 +20,6 @@ local M = {
                 zindex = 20, -- The Z-index of the context window
             },
         },
-        {
-            "nvim-treesitter/playground",
-            cmd = { "TSPlaygroundToggle", "TSHighlightCapturesUnderCursor" },
-        },
     },
 }
 

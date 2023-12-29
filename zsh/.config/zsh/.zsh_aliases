@@ -1,6 +1,8 @@
 # add color
 # use --color=always, since color doesn't get passed down to pipes when doing for example tree | less
 alias ls='ls --color=always --hyperlink=auto'
+export EXA_COLORS='xx=38;5;244'
+alias eza='eza --hyperlink'
 alias grep='grep --color=always --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
 alias diff='diff --color=always'
 alias ip='ip -color=always'
@@ -22,6 +24,7 @@ alias md='mkdir'
 alias mv='mv -iv'
 alias cp='cp -riv'
 alias la='ls -lAhr --sort=time'
+alias l='eza -lag --icons --sort=time --group-directories-first'
 alias lad='lsd -lAhr --timesort --hyperlink always' # --extensionsort --sizesort --timesort
 alias lf="du -shc *(D) | sort -h"
 open() {

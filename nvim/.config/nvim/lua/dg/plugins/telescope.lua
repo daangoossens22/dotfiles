@@ -253,7 +253,7 @@ function M.config()
                 --     ["q"] = function(...) return require("telescope.actions").close(...) end,
                 -- },
             },
-
+            -- sorting_strategy = "ascending",
             layout_strategy = "flex",
             layout_config = {
                 flex = {

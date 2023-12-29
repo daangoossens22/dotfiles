@@ -164,7 +164,7 @@
                 "today":      "<span color='#FF5D62'><b><u>{}</u></b></span>"
             }
         },
-        "format": " {:%d-%m-%Y  %H:%M:%OS}"
+        "format": " {:%a %d-%m-%Y  %H:%M:%OS}"
     },
     "battery": {
         "interval": 60,

@@ -11,6 +11,7 @@ return {
         config = function()
             -- REF: https://github.com/karb94/neoscroll.nvim/issues/80
             require("neoscroll").setup {
+                -- performance_mode = true,
                 pre_hook = function()
                     ---@diagnostic disable-next-line: param-type-mismatch
                     vim.opt.eventignore:append {
@@ -79,6 +80,7 @@ return {
     -- "tommcdo/vim-lion"
     -- "NeogitOrg/neogit" or "kdheepak/lazygit.nvim"
     -- "lewis6991/hover.nvim"
+    -- "stevearc/oil.nvim"
 
     -- "stevearc/aerial.nvim" -- use telescope lsp_document_symbols??
     -- "famiu/bufdelete.nvim"

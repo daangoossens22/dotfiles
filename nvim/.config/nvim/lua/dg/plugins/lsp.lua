@@ -202,7 +202,7 @@ function M.config(_, opts)
     MAP(
         "n",
         "<leader>th",
-        function() vim.lsp.inlay_hint(0, nil) end,
+        function() vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled(0)) end,
         { silent = true, desc = "[LSP] toggle inlay hints for the current buffer" }
     )
 
