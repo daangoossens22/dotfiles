@@ -16,6 +16,9 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_STATE_HOME="$HOME/.local/state"
 
+# write stderr and stdout of the next commands to the zprofile.log file
+exec > >(tee "$XDG_STATE_HOME/zprofile.log") 2>&1
+
 # clean up home folder
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"

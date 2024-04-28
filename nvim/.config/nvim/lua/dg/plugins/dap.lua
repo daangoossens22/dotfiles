@@ -9,6 +9,7 @@ local M = {
         "jbyuki/one-small-step-for-vimkind",
         {
             "rcarriga/nvim-dap-ui",
+            dependencies = { "nvim-neotest/nvim-nio" },
             config = function()
                 local dap, dapui = require "dap", require "dapui"
                 dapui.setup {}

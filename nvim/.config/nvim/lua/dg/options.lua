@@ -39,7 +39,7 @@ o.splitkeep = "screen"
 -- opt.diffopt:append { "linematch:60", "algorithm:patience" }
 opt.diffopt:append "vertical"
 -- vim.opt.diffopt = { "internal", "filler", "closeoff", "hiddenoff", "algorithm:minimal" }
--- o.virtualedit = "all"
+o.virtualedit = "block"
 opt.fillchars = { diff = "╱", fold = " ", foldopen = "⮟", foldsep = " ", foldclose = "⮞" }
 -- o.inccommand = "split"
 o.modelines = 1

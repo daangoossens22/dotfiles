@@ -3,6 +3,8 @@ MAP("c", "<C-l>", "<right>", "move cursor left in command line")
 MAP("v", "<", "<gv", "< but keep block selected")
 MAP("v", ">", ">gv", "> but keep block selected")
 MAP("v", "=", "=gv", "= but keep block selected")
+MAP("x", ".", ":norm .<CR>")
+MAP("x", "@", ":norm @@<CR>")
 
 MAP("n", "<leader>w", "<C-w>", "change window commands leader key")
 -- MAP("n", "+", "<c-w>+", "increase the height of the pane")
@@ -21,7 +23,7 @@ MAP("n", "<leader>qp", "<cmd>colder<cr>", "go to the older quickfixlist")
 -- MAP("n", "<leader>\\", "<cmd>nohlsearch<cr>", "disable search highlighting")
 MAP("n", "<leader>\\", function()
     vim.cmd.nohlsearch()
-    require("notify").dismiss {}
+    require("notify").dismiss { silent = true, pending = true }
 end, "disable search highlighting")
 
 MAP("", "<leader>y", '"+y', "yank into the system clipboard")
@@ -39,6 +41,7 @@ MAP("n", "{", "{zz", "{ but center the location")
 
 MAP("n", "<leader>tn", "<cmd>tabnew<cr>")
 MAP("n", "<leader>tc", "<cmd>tabclose<cr>")
+MAP("n", "<leader>it", "<cmd>InspectTree<cr>")
 
 -- MAP("n", "]c", "]czz", "]c but center the location (diff mode)")
 -- MAP("n", "[c", "[czz", "[c but center the location (diff mode)")
@@ -80,7 +83,10 @@ local MoveQFList = function(next_item)
     exec_cmd = exec_cmd .. (next_item and "next" or "prev")
 
     local ok, result = pcall(vim.cmd, exec_cmd)
-    if not ok then
+    if ok then
+        local keys = vim.api.nvim_replace_termcodes("zz", true, false, true)
+        vim.api.nvim_feedkeys(keys, "n", false)
+    else
         result = result:gsub(".*%):", "")
         vim.notify(result, vim.log.levels.ERROR, { title = "module: remaps" })
     end

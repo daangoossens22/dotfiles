@@ -1,8 +1,8 @@
 diff --git a/waybar/.config/waybar/config b/waybar/.config/waybar/config
-index e74622d..7a4030a 100644
+index 4ccdabf..f9d263a 100644
 --- a/waybar/.config/waybar/config
 +++ b/waybar/.config/waybar/config
-@@ -17,6 +17,8 @@
+@@ -18,6 +18,8 @@
          "memory",
          "disk#home",
          "disk#root",
@@ -11,7 +11,7 @@ index e74622d..7a4030a 100644
          "pulseaudio",
          "bluetooth",
          "network",
-@@ -82,7 +84,7 @@
+@@ -89,7 +91,7 @@
          "tooltip": false
      },
      "temperature#cpu": {
@@ -20,7 +20,7 @@ index e74622d..7a4030a 100644
          "critical-threshold": 80,
          "format-critical": "{icon} CPU: {temperatureC}°C",
          "format": "{icon} CPU: {temperatureC}°C",
-@@ -128,6 +130,7 @@
+@@ -135,6 +137,7 @@
              "default": ["", ""]
          },
          "scroll-step": 1,
@@ -28,8 +28,18 @@ index e74622d..7a4030a 100644
          "on-click": "pavucontrol"
      },
      "network": {
+@@ -178,7 +181,8 @@
+         "format-plugged": " {icon} {capacity}%",
+         "on-click": "", // update module on click
+         "signal": 10, // for udev rule to force update the module when it doesn't do so itself
+-        "max-length": 25
++        "max-length": 25,
++        "on-update": "$HOME/.config/waybar/low_battery_warning.sh"
+     },
+     "backlight": {
+         "device": "intel_backlight",
 diff --git a/zsh/.zprofile b/zsh/.zprofile
-index 9799050..4877116 100644
+index 1a8cf23..f96b048 100644
 --- a/zsh/.zprofile
 +++ b/zsh/.zprofile
 @@ -1,5 +1,5 @@

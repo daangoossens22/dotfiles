@@ -23,7 +23,8 @@ function M.init()
         "[TEL] resume last picker"
     )
     MAP("n", "<leader>ff", function()
-        local default_fd_command = { "fd", "--type", "f", "--color", "never", "--exclude", ".git" }
+        local default_fd_command =
+            { "fd", "--type", "f", "--color", "never", "--exclude", ".git", "--exclude", "venv" }
         local hidden = true
         local no_ignore = false
         local notification = nil

@@ -27,7 +27,7 @@ output eDP-1 resolution 1920x1080 position 0,1080
 output eDP-1 max_render_time 5
 
 output DP-1 resolution 1920x1080 position 0,0
-output DP-2 resolution 1920x1080
+output DP-2 resolution 1920x1080 position 0,0
 
 workspace 1 output  eDP-1
 workspace 2 output  eDP-1

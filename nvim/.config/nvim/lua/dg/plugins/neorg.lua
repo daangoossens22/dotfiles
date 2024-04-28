@@ -4,6 +4,7 @@ local M = {
     build = ":Neorg sync-parsers",
     cmd = { "Neorg" },
     dependencies = "nvim-neorg/neorg-telescope",
+    enabled = false,
 }
 
 function M.init()

@@ -76,61 +76,61 @@ function M.config()
         end,
         -- close_fold_kinds = {},
         -- NOTE: truncated folded line + number of lines folded + last line of fold
-        enable_get_fold_virt_text = true,
-        fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate, ctx)
-            local function remove_leading_whitespace(virt_line)
-                while #virt_line ~= 0 do
-                    local removed = table.remove(virt_line, 1)
-                    if removed[2] ~= "UfoFoldedFg" then
-                        table.insert(virt_line, 1, removed)
-                        break
-                    end
-                end
-                return virt_line
-            end
-            local end_text = remove_leading_whitespace(ctx.get_fold_virt_text(endLnum))
-            local virtText2 = remove_leading_whitespace(vim.deepcopy(virtText))
-            if #virtText2 == 2 and virtText2[1][1] == "MAP" then
-                for cur_lnum = lnum + 1, lnum + 2 do
-                    for _, v in ipairs(remove_leading_whitespace(ctx.get_fold_virt_text(cur_lnum))) do
-                        table.insert(virtText, v)
-                    end
-                end
-                if endLnum - lnum > 4 then
-                    for _, v in ipairs(remove_leading_whitespace(ctx.get_fold_virt_text(endLnum - 1))) do
-                        table.insert(end_text, 1, v)
-                    end
-                end
-            end
-            local newVirtText = {}
-            local suffix = (" 🡯 %d "):format(endLnum - lnum)
-            local sufWidth = vim.fn.strdisplaywidth(suffix)
-            local targetWidth = width - sufWidth
-            local curWidth = 0
-            for _, chunk in ipairs(virtText) do
-                local chunkText = chunk[1]
-                local chunkWidth = vim.fn.strdisplaywidth(chunkText)
-                if targetWidth > curWidth + chunkWidth then
-                    table.insert(newVirtText, chunk)
-                else
-                    chunkText = truncate(chunkText, targetWidth - curWidth)
-                    local hlGroup = chunk[2]
-                    table.insert(newVirtText, { chunkText, hlGroup })
-                    chunkWidth = vim.fn.strdisplaywidth(chunkText)
-                    -- str width returned from truncate() may less than 2nd argument, need padding
-                    if curWidth + chunkWidth < targetWidth then
-                        suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
-                    end
-                    break
-                end
-                curWidth = curWidth + chunkWidth
-            end
-            table.insert(newVirtText, { suffix, "MoreMsg" })
-            -- for _, v in ipairs(end_text) do
-            --     table.insert(newVirtText, v)
-            -- end
-            return newVirtText
-        end,
+        -- enable_get_fold_virt_text = true,
+        -- fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate, ctx)
+        --     local function remove_leading_whitespace(virt_line)
+        --         while #virt_line ~= 0 do
+        --             local removed = table.remove(virt_line, 1)
+        --             if removed[2] ~= "UfoFoldedFg" then
+        --                 table.insert(virt_line, 1, removed)
+        --                 break
+        --             end
+        --         end
+        --         return virt_line
+        --     end
+        --     local end_text = remove_leading_whitespace(ctx.get_fold_virt_text(endLnum))
+        --     local virtText2 = remove_leading_whitespace(vim.deepcopy(virtText))
+        --     if #virtText2 == 2 and virtText2[1][1] == "MAP" then
+        --         for cur_lnum = lnum + 1, lnum + 2 do
+        --             for _, v in ipairs(remove_leading_whitespace(ctx.get_fold_virt_text(cur_lnum))) do
+        --                 table.insert(virtText, v)
+        --             end
+        --         end
+        --         if endLnum - lnum > 4 then
+        --             for _, v in ipairs(remove_leading_whitespace(ctx.get_fold_virt_text(endLnum - 1))) do
+        --                 table.insert(end_text, 1, v)
+        --             end
+        --         end
+        --     end
+        --     local newVirtText = {}
+        --     local suffix = (" 🡯 %d "):format(endLnum - lnum)
+        --     local sufWidth = vim.fn.strdisplaywidth(suffix)
+        --     local targetWidth = width - sufWidth
+        --     local curWidth = 0
+        --     for _, chunk in ipairs(virtText) do
+        --         local chunkText = chunk[1]
+        --         local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+        --         if targetWidth > curWidth + chunkWidth then
+        --             table.insert(newVirtText, chunk)
+        --         else
+        --             chunkText = truncate(chunkText, targetWidth - curWidth)
+        --             local hlGroup = chunk[2]
+        --             table.insert(newVirtText, { chunkText, hlGroup })
+        --             chunkWidth = vim.fn.strdisplaywidth(chunkText)
+        --             -- str width returned from truncate() may less than 2nd argument, need padding
+        --             if curWidth + chunkWidth < targetWidth then
+        --                 suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
+        --             end
+        --             break
+        --         end
+        --         curWidth = curWidth + chunkWidth
+        --     end
+        --     table.insert(newVirtText, { suffix, "MoreMsg" })
+        --     for _, v in ipairs(end_text) do
+        --         table.insert(newVirtText, v)
+        --     end
+        --     return newVirtText
+        -- end,
         preview = {
             -- win_config = {
             --     border = "rounded",

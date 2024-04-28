@@ -13,14 +13,12 @@ return {
             require("neoscroll").setup {
                 -- performance_mode = true,
                 pre_hook = function()
-                    ---@diagnostic disable-next-line: param-type-mismatch
                     vim.opt.eventignore:append {
                         "WinScrolled",
                         "CursorMoved",
                     }
                 end,
                 post_hook = function()
-                    ---@diagnostic disable-next-line: param-type-mismatch
                     vim.opt.eventignore:remove {
                         "WinScrolled",
                         "CursorMoved",
@@ -92,4 +90,5 @@ return {
     -- "rebelot/heirline.nvim"
     -- "nvim-colortils/colortils.nvim"
     -- "lervag/vimtex"
+    -- "benlubas/molten-nvim" or "vim-jukit"
 }

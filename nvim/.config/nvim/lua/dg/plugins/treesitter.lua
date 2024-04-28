@@ -163,6 +163,9 @@ function M.config(_, opts)
 
     require("nvim-treesitter.configs").setup(opts)
 
+    -- vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    -- vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
+
     -- vim.o.foldmethod = "expr"
     -- -- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
     -- vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"

@@ -232,7 +232,7 @@ function M.config(_, opts)
                 lsp_opts "list all implementations for the symbol under the cursor"
             )
             MAP(
-                { "i", "s" },
+                { "n", "i", "s" },
                 "<C-h>",
                 lb.signature_help,
                 lsp_opts "display signature information about the symbol under the cursor"

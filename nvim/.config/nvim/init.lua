@@ -22,6 +22,7 @@ require("lazy").setup("dg.plugins", {
     diff = { cmd = "diffview.nvim" },
     change_detection = { notify = false },
     -- concurrency = 4,
+    git = { timeout = 10 },
     performance = {
         cache = { enabled = true },
         rtp = {
