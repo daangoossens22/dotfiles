@@ -17,17 +17,23 @@ set $default_terminal kitty --single-instance -o allow_remote_control=yes
 output * bg ~/Pictures/background.jpg fill
 
 output HDMI-A-1 scale 2
-output HDMI-A-1 scale_filter nearest
+output HDMI-A-2 scale 2
+output HDMI-A-3 scale 2
+output HDMI-A-4 scale 2
 output HDMI-A-1 resolution 3840x2160 position 0,0
+output HDMI-A-2 resolution 3840x2160 position 0,0
+output HDMI-A-3 resolution 3840x2160 position 0,0
+output HDMI-A-4 resolution 3840x2160 position 0,0
 
 output eDP-1 scale 1
 output eDP-1 scale_filter nearest
-output eDP-1 resolution 1920x1080 position 0,1080
+output eDP-1 resolution 1920x1080@59.977Hz position 0,1080
 # NOTE: for half framerate on prime-run fullscreen (remove when fixed)
-output eDP-1 max_render_time 5
+# output eDP-1 max_render_time 5
 
 output DP-1 resolution 1920x1080 position 0,0
-output DP-2 resolution 1920x1080 position 0,0
+output DP-2 resolution 3840x2160@60.000Hz position 0,0
+output DP-2 scale 2
 
 workspace 1 output  eDP-1
 workspace 2 output  eDP-1
@@ -82,11 +88,18 @@ input "type:touchpad" {
     tap_button_map lrm # 1/2/3 finger tap -> left/right/middle button
 }
 
+input "type:mouse" {
+    accel_profile flat
+    pointer_accel 0 # speed while moving pointer in range [-1, 1]
+}
+
 seat seat0 xcursor_theme "volantes_cursors" 48
 # set theming using LXAppearance and they are automatically used
 exec_always $config_loc/import-gsettings
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec gammastep-indicator
+# bindswitch lid:on exec swaylock -c000000 --ignore-empty-password --show-failed-attempts
+exec xdg-settings set default-web-browser firefox-developer-edition.desktop
 
 default_border pixel 2
 gaps inner 6

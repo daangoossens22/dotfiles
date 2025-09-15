@@ -5,12 +5,14 @@
     "modules-left": [
         "sway/workspaces",
         "wlr/taskbar",
-        "custom/media",
+        // "custom/media",
+        "mpris",
         "sway/mode",
         "custom/recording"
     ],
     "modules-right": [
         "tray",
+        "power-profiles-daemon",
         "custom/pacman",
         "temperature#cpu",
         "temperature#gpu",
@@ -18,6 +20,8 @@
         "memory",
         "disk#home",
         "disk#root",
+        "battery",
+        "backlight",
         "pulseaudio",
         "bluetooth",
         "network",
@@ -29,7 +33,8 @@
 
     "wlr/taskbar": {
         "format": "{icon}",
-        "all-outputs": true,
+        "all-outputs": false,
+        "sort-by-app-id": true,
         //"icon-size": 16,
         "app_ids-mapping": {
             "firefoxdeveloperedition": "firefox-developer-edition"
@@ -41,8 +46,16 @@
     },
     "sway/workspaces": {
         "disable-scroll": true,
-        "all-outputs": true,
-        "format": "{name}: {icon}",
+        "all-outputs": false,
+        // "format": "{name}: {icon}",
+        "format": "<span size='larger'>{name}</span> {windows}",
+        "format-window-separator": " | ",
+        "window-format": "<span color='#e0e0e0'>{name}</span>",
+        "window-rewrite": {
+            "class<firefox-developer-edition>": "",
+            "class<kitty>": "",
+            "class<steam>": ""
+        },
         "format-icons": {
             "1": "",
             "2": "",
@@ -52,6 +65,18 @@
             "urgent": "",
             // "focused": "",
             "default": ""
+        },
+        "persistent-workspaces": {
+            "1": ["eDP-1"],
+            "2": ["eDP-1"],
+            "3": ["eDP-1"],
+            "4": ["eDP-1"],
+            "5": ["eDP-1"],
+            "6": ["DP-1", "DP-2"],
+            "7": ["DP-1", "DP-2"],
+            "8": ["DP-1", "DP-2"],
+            "9": ["DP-1", "DP-2"],
+            "10": ["DP-1", "DP-2"]
         }
     },
     "sway/mode": {
@@ -79,6 +104,17 @@
         "exec": "playerctl -a metadata --format '{\"text\": \"{{playerName}}: {{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
         "on-click": "playerctl play-pause"
     },
+    "mpris": {
+        "format": "{status_icon} {dynamic}",
+        "interval": 1,
+        "status-icons": {
+            "default": " ",
+            "paused": " "
+        },
+        "dynamic-order": ["position", "length", "title", "artist", "album"],
+        "dynamic-importance-order": ["position", "length", "title", "artist", "album"],
+        "dynamic-len": 50
+    },
     "custom/pacman": {
         "format": "  {}",
         "interval": 3600,                     // every hour
@@ -89,7 +125,7 @@
         "tooltip": false
     },
     "temperature#cpu": {
-        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input", // check if path is correct for CPU temps
+        "hwmon-path": "/sys/class/hwmon/hwmon4/temp1_input", // check if path is correct for CPU temps
         "critical-threshold": 80,
         "format-critical": "{icon} CPU: {temperatureC}°C",
         "format": "{icon} CPU: {temperatureC}°C",
@@ -103,6 +139,17 @@
         "format": "{icon} GPU: {temperatureC}°C",
         "format-icons": ["", "", ""],
         "tooltip": false
+    },
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+            "default": "",
+            "performance": "",
+            "balanced": "",
+            "power-saver": ""
+        }
     },
     "tray": {
         "show-passive-items": true,
@@ -135,6 +182,7 @@
             "default": ["", ""]
         },
         "scroll-step": 1,
+        "smooth-scrolling-threshold": 2,
         "on-click": "pavucontrol"
     },
     "network": {
@@ -178,7 +226,8 @@
         "format-plugged": " {icon} {capacity}%",
         "on-click": "", // update module on click
         "signal": 10, // for udev rule to force update the module when it doesn't do so itself
-        "max-length": 25
+        "max-length": 25,
+        "on-update": "$HOME/.config/waybar/low_battery_warning.sh"
     },
     "backlight": {
         "device": "intel_backlight",

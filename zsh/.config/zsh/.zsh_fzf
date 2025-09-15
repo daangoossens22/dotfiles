@@ -10,7 +10,7 @@ fman() {
 }
 
 fpi() {
-    pacman -Sl --color=always | fzf --ansi -q "$1" -m --preview "paru -Si {2}" --bind 'ctrl-a:reload(paru -Sl --color=always)' | awk '{print $2}' | xargs -ro paru -S
+    pacman -Sl --color=always | fzf --ansi -q "$1" -m --preview "paru -Si {2}" --bind 'ctrl-r:reload(paru -Sl --color=always)' | awk '{print $2}' | xargs -ro paru -S
 }
 
 fpr() {

@@ -25,10 +25,10 @@
 @define-color oniViolet #957FB8; /* memory accent color */
 @define-color crystalBlue #7E9CD8; /* custom-pacman accent color */
 @define-color springViolet2 #9CABCA; /* backlight accent color */
-@define-color springBlue #7FB4CA; /* tray accent color */
+@define-color springBlue #7FB4CA; /* tray + power-profiles-daemon accent color */
 @define-color lightBlue #A3D4D5; /* battery/upower accent color */
 @define-color waveAqua2 #7AA89F; /* clock accent color */
-@define-color springGreen #98BB6C; /* custom-media accent color */
+@define-color springGreen #98BB6C; /* mpris accent color */
 @define-color boatYellow #938056;
 @define-color boatYellow #C0A36E;
 @define-color carpYellow #E6C384;
@@ -106,7 +106,7 @@ tooltip {
     animation-direction: alternate;
 }
 
-#custom-media {
+#mpris {
     border-bottom: 3px solid @springGreen;
 }
 
@@ -158,15 +158,14 @@ tooltip {
     border-bottom: 3px solid @waveRed;
 }
 
-#tray {
+#tray, #power-profiles-daemon {
     border-bottom: 3px solid @springBlue;
 }
 
 
-#custom-media,
+#mpris,
 #mode,
-#clock,
-#tray,
+#power-profiles-daemon,
 #custom-bluetooth,
 #bluetooth,
 #custom-pacman,
@@ -185,6 +184,10 @@ tooltip {
     background: @sumiInk2;
 }
 
+#tray {
+    padding: 0px 6px;
+    background: @sumiInk2;
+}
 
 /* NOTE: attaches itselft to the module on the right */
 #disk.home {
@@ -204,4 +207,8 @@ tooltip {
 #workspaces,
 #taskbar {
     margin-right: 4px;
+}
+#clock {
+    padding: 0px 6px;
+    background: @sumiInk2;
 }

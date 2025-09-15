@@ -92,32 +92,38 @@ zle -N decarg
 bindkey -a '^a' incarg
 bindkey -a '^x' decarg
 
-# # NOTE: kitty seems to do this by default
-# # NOTE: source: https://gist.github.com/LukeSmithxyz/e62f26e55ea8b0ed41a65912fbebbe52#file-zshrc-L31
-# # Change cursor shape for different vi modes.
-# function zle-keymap-select {
-#     if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
-#         echo -ne '\e[2 q'
-#     elif [[ ${KEYMAP} == main ]] || [[ ${KEYMAP} == viins ]] ||
-#          [[ ${KEYMAP} = '' ]] || [[ $1 = 'beam' ]]; then
-#         echo -ne '\e[6 q'
-#     fi
-# }
-# zle -N zle-keymap-select
-# zle-line-init() {
-#     zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-#     echo -ne "\e[6 q"
-# }
-# zle -N zle-line-init
-# echo -ne '\e[6 q' # Use beam shape cursor on startup.
-# preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
+# NOTE: kitty can do this by default when 'shell_integration' for cursor is turned on, but is needed by nvim
+# integrated terminal to actually change the terminal shape
+# NOTE: source: https://gist.github.com/LukeSmithxyz/e62f26e55ea8b0ed41a65912fbebbe52#file-zshrc-L31
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+    if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
+        echo -ne '\e[2 q'
+    elif [[ ${KEYMAP} == main ]] || [[ ${KEYMAP} == viins ]] ||
+         [[ ${KEYMAP} = '' ]] || [[ $1 = 'beam' ]]; then
+        echo -ne '\e[6 q'
+    fi
+}
+zle -N zle-keymap-select
+zle-line-init() {
+    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    echo -ne "\e[6 q"
+}
+zle -N zle-line-init
+echo -ne '\e[6 q' # Use beam shape cursor on startup.
+preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
 
 # NOTE: don't use vi keybinds since they won't go further than where insert mode was last entered
 bindkey "^H" backward-delete-char
 bindkey "^?" backward-delete-char
 WORDCHARS="_" # make it behave like vim
 bindkey "^W" backward-kill-word
-bindkey "^U" kill-line
+bindkey "^U" backward-kill-line
+bindkey "^A" beginning-of-line
+bindkey "^E" end-of-line
+bindkey "^L" clear-screen
+bindkey "^B" backward-char
+bindkey "^F" forward-char
 
 bindkey "^G" list-expand
 
@@ -137,7 +143,7 @@ autoload -Uz zmv
 # Edit line in $EDITOR with ctrl-e
 autoload -Uz edit-command-line
 zle -N edit-command-line
-bindkey '^e' edit-command-line
+bindkey '^V' edit-command-line
 
 DISABLE_AUTO_TITLE="true"
 function change_window_title() {
