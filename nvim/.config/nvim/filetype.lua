@@ -1,22 +1,10 @@
 vim.filetype.add {
     extension = {
-        vert = "glsl",
-        tesc = "glsl",
-        tese = "glsl",
-        geom = "glsl",
-        frag = "glsl",
-        comp = "glsl",
         mesh = "glsl",
         task = "glsl",
-        rgen = "glsl",
-        rint = "glsl",
-        rahit = "glsl",
-        rchit = "glsl",
-        rmiss = "glsl",
-        rcall = "glsl",
+        nml = "xml",
 
         -- rasi = 'css',
-        rasi = "rasi",
     },
     filename = {
         [".clang-format"] = "yaml",

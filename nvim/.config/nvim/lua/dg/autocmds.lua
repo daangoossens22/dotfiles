@@ -69,6 +69,7 @@ vim.api.nvim_create_autocmd("FileType", {
         "notify",
         "qf",
         "tsplayground",
+        "query",
         "checkhealth",
         "neotest-summary",
         "neotest-output-panel",
@@ -104,6 +105,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 
 vim.api.nvim_create_autocmd("TextYankPost", {
     group = AUGROUP "highlight_yank",
+    -- callback = function() vim.hl.on_yank() end,
     callback = function() vim.highlight.on_yank() end,
 })
 

@@ -4,8 +4,9 @@ local M = {
     dependencies = {
         { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
         "nvim-telescope/telescope-ui-select.nvim",
-        "nvim-telescope/telescope-file-browser.nvim",
+        -- "nvim-telescope/telescope-file-browser.nvim",
     },
+    enabled = false,
 }
 
 function M.init()
@@ -172,23 +173,23 @@ function M.init()
         "[TEL] list tracked git files"
     )
 
-    -- extensions
-    MAP("n", "<leader>fe", function()
-        require("telescope").extensions.file_browser.file_browser {
-            cwd = require("telescope.utils").buffer_dir(), -- function so this is evaluated when opening the file explorer
-            previewer = true,
-            -- initial_mode = "normal",
-            hidden = true,
-            depth = 1,
-            respect_gitignore = false,
-        }
-    end, "[TEL] file explorer")
-    MAP(
-        "n",
-        "<leader>fn",
-        function() require("telescope").extensions.notify.notify() end,
-        "[TEL] list notifications"
-    )
+    -- -- extensions
+    -- MAP("n", "<leader>fe", function()
+    --     require("telescope").extensions.file_browser.file_browser {
+    --         cwd = require("telescope.utils").buffer_dir(), -- function so this is evaluated when opening the file explorer
+    --         previewer = true,
+    --         -- initial_mode = "normal",
+    --         hidden = true,
+    --         depth = 1,
+    --         respect_gitignore = false,
+    --     }
+    -- end, "[TEL] file explorer")
+    -- MAP(
+    --     "n",
+    --     "<leader>fn",
+    --     function() require("telescope").extensions.notify.notify() end,
+    --     "[TEL] list notifications"
+    -- )
     -- NMAP("<leader>fp", require("telescope").extensions.project.project, "[TEL] add and open a project")
 
     -- custom functions
@@ -288,14 +289,14 @@ function M.config()
             ["ui-select"] = {
                 require("telescope.themes").get_dropdown {},
             },
-            ["file_browser"] = {
-                hijack_netrw = true,
-                mappings = {
-                    i = {
-                        ["<bs>"] = false,
-                    },
-                },
-            },
+            -- ["file_browser"] = {
+            --     hijack_netrw = false,
+            --     mappings = {
+            --         i = {
+            --             ["<bs>"] = false,
+            --         },
+            --     },
+            -- },
         },
     }
 
@@ -303,8 +304,8 @@ function M.config()
     require("telescope").load_extension "fzf"
     require("telescope").load_extension "ui-select"
     -- require"telescope".load_extension("frecency")
-    require("telescope").load_extension "file_browser"
-    require("telescope").load_extension "notify"
+    -- require("telescope").load_extension "file_browser"
+    -- require("telescope").load_extension "notify"
 end
 
 return M

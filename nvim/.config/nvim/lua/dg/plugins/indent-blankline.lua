@@ -2,6 +2,7 @@ local M = {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
     event = "BufReadPre",
+    enabled = false,
 }
 
 function M.config()
@@ -15,13 +16,15 @@ function M.config()
             enabled = false,
         },
         exclude = {
-            filetypes = { "help", "man", "tsplayground", "", "norg", "notify", "lazy" },
+            filetypes = { "help", "man", "tsplayground", "", "norg", "notify", "lazy", "markdown" },
         },
+        indent = {},
     }
 
     local hooks = require "ibl.hooks"
-    hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
-    hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_tab_indent_level)
+    -- hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+    -- hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_tab_indent_level)
+    -- hooks.register(hooks.type.SKIP_LINE, hooks.builtin.skip_preproc_lines, { bufnr = 0 })
 end
 
 return M

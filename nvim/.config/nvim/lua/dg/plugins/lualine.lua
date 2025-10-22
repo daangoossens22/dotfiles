@@ -16,8 +16,8 @@ function M.config()
     vim.api.nvim_create_autocmd("LspProgress", {
         callback = function(event)
             local lsp_id = event.data.client_id
-            LSP_PERCENTAGES[lsp_id] = event.data.result.value.percentage or LSP_PERCENTAGES[lsp_id]
-            if event.data.result.value.kind == "end" then LSP_PERCENTAGES[lsp_id] = nil end
+            LSP_PERCENTAGES[lsp_id] = event.data.params.value.percentage or LSP_PERCENTAGES[lsp_id]
+            if event.data.params.value.kind == "end" then LSP_PERCENTAGES[lsp_id] = nil end
             require("lualine").refresh { place = { "statusline" } }
         end,
         group = AUGROUP "lualine_lsp_progress_refresh",
@@ -37,11 +37,7 @@ function M.config()
             local percentage = LSP_PERCENTAGES[client.id]
             if percentage then client_str = moon .. percentage .. "%% " .. client_str end
 
-            if client.name == "null-ls" then
-                table.insert(client_names, client_str)
-            else
-                table.insert(client_names, 1, client_str)
-            end
+            table.insert(client_names, client_str)
         end
         local res = table.concat(client_names, "|")
 
@@ -102,7 +98,7 @@ function M.config()
             },
         },
         sections = {
-            lualine_a = { "mode" },
+            lualine_a = { { "mode", fmt = function(str) return str:sub(1, 1) end } },
             lualine_b = {
                 {
                     require("noice").api.status.mode.get,
@@ -166,6 +162,7 @@ function M.config()
                 "progress",
                 { "searchcount" },
                 {
+                    -- TODO: show keys as you type (instead of only showing when full command is formed)
                     require("noice").api.status.command.get,
                     cond = require("noice").api.status.command.has,
                 },

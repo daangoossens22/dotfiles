@@ -1,7 +1,6 @@
 local M = {
     "nvim-neorg/neorg",
     ft = "norg",
-    build = ":Neorg sync-parsers",
     cmd = { "Neorg" },
     dependencies = "nvim-neorg/neorg-telescope",
     enabled = false,

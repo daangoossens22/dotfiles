@@ -4,43 +4,29 @@ local M = {
     dependencies = {
         "williamboman/mason.nvim", -- needs to be setup before the lsps are configured so that automatic_installation works
         {
-            "jose-elias-alvarez/null-ls.nvim",
-            opts = function()
-                local null_ls = require "null-ls"
-                return {
-                    sources = {
-                        null_ls.builtins.formatting.stylua,
-                        null_ls.builtins.formatting.prettier,
-                        null_ls.builtins.formatting.yapf,
-                        null_ls.builtins.formatting.shellharden,
-                        null_ls.builtins.formatting.emacs_vhdl_mode,
-                        -- null_ls.builtins.formatting.cbfmt, -- format embedded codeblock in markdown
-                        null_ls.builtins.diagnostics.shellcheck,
-                        null_ls.builtins.code_actions.shellcheck,
-                        -- null_ls.builtins.diagnostics.zsh,
-                        null_ls.builtins.diagnostics.cppcheck,
-                        null_ls.builtins.diagnostics.glslc.with {
-                            extra_args = {
-                                "-fauto-map-locations",
-                                "--target-env=opengl",
-                            },
-                        },
-                    },
-                }
-            end,
+            "folke/lazydev.nvim",
+            ft = "lua",
+            opts = {
+                library = {
+                    -- { path = "luvit-meta/library", words = { "vim%.uv" } },
+                    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                    { path = "snacks.nvim",        words = { "Snacks" } },
+                },
+            },
         },
         {
-            "folke/neodev.nvim",
+            "stevearc/conform.nvim",
             opts = {
-                -- setup_jsonls = false,
-                -- library = {
-                --     plugins = false,
-                -- },
+                formatters_by_ft = {
+                    lua = { "stylua" },
+                    sh = { "shellharden" },
+                },
             },
         },
         -- "p00f/clangd_extensions.nvim",
         -- "simrat39/rust-tools.nvim",
-        { url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
+        -- TODO: replace with builtin version https://github.com/neovim/neovim/pull/31959
+        -- { url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim" },
     },
 }
 
@@ -53,6 +39,23 @@ M.opts = {
         -- signs = true,
         -- update_in_insert = false,
         severity_sort = true,
+        jump = {
+            float = true,
+        },
+        signs = {
+            text = {
+                [vim.diagnostic.severity.ERROR] = "󰅚",
+                [vim.diagnostic.severity.WARN] = "󰀪",
+                [vim.diagnostic.severity.INFO] = "󰋽",
+                [vim.diagnostic.severity.HINT] = "󰌶",
+            },
+            texthl = {
+                [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+                [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+                [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+                [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+            },
+        },
     },
     additional_capabilities = {
         textDocument = {
@@ -65,16 +68,22 @@ M.opts = {
         -- semanticTokensProvider = nil
     },
     format = {
-        ignore_lsp = { "lua_ls", "jedi_language_server" },
         timeout_ms = 5000,
     },
     servers = {
-        pyright = {},
+        -- pyright = {},
+        basedpyright = {
+            settings = {
+                basedpyright = {
+                    typeCheckingMode = "standard",
+                },
+            },
+        },
         -- ruff_lsp = {},
         -- pylyzer = {},
         bashls = {},
         texlab = {},
-        tsserver = {},
+        ts_ls = {},
         cssls = {},
         html = {},
         jsonls = {},
@@ -99,7 +108,7 @@ M.opts = {
                 "--background-index",
                 -- "--clang-tidy",
                 -- "--completion-style=detailed",
-                -- '--fallback-style="Microsoft"',
+                -- "--fallback-style=Microsoft",
                 "--header-insertion=iwyu",
                 "--header-insertion-decorators",
                 "--inlay-hints",
@@ -113,7 +122,7 @@ M.opts = {
                     telemetry = { enable = false },
                     -- diagnostics = { globals = { "vim", "describe", "it", "before_each" } },
                     completion = { callSnippet = "Replace" },
-                    workspace = { checkThirdParty = false },
+                    workspace = { checkThirdParty = true },
                     -- semantic = { enable = false },
                     hint = { enable = true },
                 },
@@ -124,33 +133,28 @@ M.opts = {
 
 ---@param opts PluginLspOpts
 function M.config(_, opts)
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
     local function toggle_autoformat(lang)
         lang = lang or vim.bo.filetype
         AUTOFORMAT_LANGUAGES[lang] = not AUTOFORMAT_LANGUAGES[lang]
     end
-
-    local function lsp_format()
-        vim.lsp.buf.format {
-            filter = function(format_client)
-                return not vim.tbl_contains(opts.format.ignore_lsp, format_client.name)
-            end,
-            timeout_ms = opts.format.timeout_ms,
+    local function lsp_format(bufnr)
+        bufnr = bufnr or 0
+        require("conform").format {
+            bufnr = bufnr,
+            timeout_ms = 500,
+            lsp_format = "fallback",
+            quiet = true,
         }
     end
-
     vim.api.nvim_create_autocmd("BufWritePre", {
-        callback = function()
-            if AUTOFORMAT_LANGUAGES[vim.bo.filetype] then lsp_format() end
+        callback = function(args)
+            if AUTOFORMAT_LANGUAGES[vim.bo.filetype] then lsp_format(args.buf) end
         end,
         group = AUGROUP "lsp_autoformat",
     })
 
-    vim.fn.sign_define("DiagnosticSignError", { text = "󰅚", texthl = "DiagnosticSignError" })
-    vim.fn.sign_define("DiagnosticSignWarn", { text = "󰀪", texthl = "DiagnosticSignWarn" })
-    vim.fn.sign_define("DiagnosticSignInfo", { text = "󰋽", texthl = "DiagnosticSignInfo" })
-    vim.fn.sign_define("DiagnosticSignHint", { text = "󰌶", texthl = "DiagnosticSignHint" })
     vim.diagnostic.config(vim.deepcopy(opts.diagnostic))
-    require("lsp_lines").setup()
     local function diag_opts(desc) return { silent = true, desc = "[DIAG] " .. desc } end
     MAP("n", "<leader>e", function()
         local virtual_lines = vim.diagnostic.config().virtual_lines
@@ -166,30 +170,40 @@ function M.config(_, opts)
             underline = not underline,
         }
     end, diag_opts "toggle diagnostics underline")
-    MAP("n", "[d", vim.diagnostic.goto_prev, diag_opts "move to the previous buffer diagnostic")
-    MAP("n", "]d", vim.diagnostic.goto_next, diag_opts "move to the next buffer diagnostic")
+    MAP(
+        "n",
+        "[d",
+        function() vim.diagnostic.jump { count = -1 } end,
+        diag_opts "move to the previous buffer diagnostic"
+    )
+    MAP(
+        "n",
+        "]d",
+        function() vim.diagnostic.jump { count = 1 } end,
+        diag_opts "move to the next buffer diagnostic"
+    )
     MAP(
         "n",
         "[w",
-        function() vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.WARN } end,
+        function() vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.WARN } end,
         diag_opts "move to the previous buffer diagnostic warning"
     )
     MAP(
         "n",
         "]w",
-        function() vim.diagnostic.goto_next { severity = vim.diagnostic.severity.WARN } end,
+        function() vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.WARN } end,
         diag_opts "move to the next buffer diagnostic warning"
     )
     MAP(
         "n",
         "[e",
-        function() vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR } end,
+        function() vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR } end,
         diag_opts "move to the previous buffer diagnostic error"
     )
     MAP(
         "n",
         "]e",
-        function() vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR } end,
+        function() vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR } end,
         diag_opts "move to the next buffer diagnostic error"
     )
     MAP("n", "<leader>qq", function()
@@ -202,58 +216,30 @@ function M.config(_, opts)
     MAP(
         "n",
         "<leader>th",
-        function() vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled(0)) end,
+        function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end,
         { silent = true, desc = "[LSP] toggle inlay hints for the current buffer" }
     )
 
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
-            -- local client = vim.lsp.get_client_by_id(args.data.client_id)
-
-            -- Enable completion triggered by <c-x><c-o>
-            vim.bo[args.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-
             local lb = vim.lsp.buf
-
             local function lsp_opts(desc) return { buffer = true, silent = true, desc = "[LSP] " .. desc } end
-            -- See `:help vim.lsp.*` for documentation on any of the below functions
+
+            MAP("n", "gra", lb.code_action, lsp_opts "code actions under the cursor")
+            MAP("n", "grn", lb.rename, lsp_opts "rename variable under the cursor project wide")
             MAP("n", "<leader>cl", vim.lsp.codelens.run, lsp_opts "run one of the codelens actions")
             MAP("n", "gD", lb.declaration, lsp_opts "jumps to the declaration of the symbol under the cursor")
-            MAP("n", "gd", lb.definition, lsp_opts "jumps to the definition of the symbol under the cursor")
-            MAP("n", "K", function()
-                local winid = nil
-                if pcall(require, "ufo") then winid = require("ufo").peekFoldedLinesUnderCursor() end
-                if not winid then vim.lsp.buf.hover() end
-            end, lsp_opts "display hover information of the symbol under the cursor")
-            MAP(
-                "n",
-                "<leader>gi",
-                lb.implementation,
-                lsp_opts "list all implementations for the symbol under the cursor"
-            )
+            -- MAP(
+            --     "n",
+            --     "gri",
+            --     lb.implementation,
+            --     lsp_opts "list all implementations for the symbol under the cursor"
+            -- )
             MAP(
                 { "n", "i", "s" },
-                "<C-h>",
+                "<C-s>",
                 lb.signature_help,
                 lsp_opts "display signature information about the symbol under the cursor"
-            )
-            MAP(
-                "n",
-                "<leader>wa",
-                lb.add_workspace_folder,
-                lsp_opts "add the folder at the path to the workspace folders"
-            )
-            MAP(
-                "n",
-                "<leader>wr",
-                lb.remove_workspace_folder,
-                lsp_opts "remove the folder at the path to the workspace folders"
-            )
-            MAP(
-                "n",
-                "<leader>lw",
-                function() P(lb.list_workspace_folders()) end,
-                lsp_opts "list workspace folders"
             )
             MAP(
                 "n",
@@ -261,25 +247,7 @@ function M.config(_, opts)
                 lb.type_definition,
                 lsp_opts "jumps to the definition of the type of the symbol under the cursor"
             )
-            MAP(
-                "n",
-                "<leader>rn",
-                lb.rename,
-                lsp_opts "renames all references of the symbol under the cursor"
-            )
-            MAP(
-                "n",
-                "<leader>ca",
-                lb.code_action,
-                lsp_opts "selects a code action available at the current cursor position"
-            )
-            MAP(
-                "n",
-                "gr",
-                lb.references,
-                lsp_opts "lists all the references to the symbol under the cursor in the quickfix window"
-            )
-            MAP("n", "<leader>lf", lsp_format, lsp_opts "formats the current buffer")
+            MAP("n", "gqb", lsp_format, lsp_opts "formats the current buffer")
             MAP("n", "<leader>laf", toggle_autoformat, lsp_opts "toggle format current buffer on write")
         end,
     })
@@ -288,6 +256,7 @@ function M.config(_, opts)
         "force",
         vim.lsp.protocol.make_client_capabilities(),
         require("cmp_nvim_lsp").default_capabilities(),
+        -- require("blink.cmp").get_lsp_capabilities(),
         opts.additional_capabilities
     )
 
@@ -298,13 +267,7 @@ function M.config(_, opts)
         require("lspconfig")[lsp].setup(new_lsp_opts)
     end
 
-    -- don't start the cssls lsp server for the waybar config
-    vim.api.nvim_create_autocmd("LspAttach", {
-        pattern = "*/.config/waybar/style.css",
-        callback = function(args) vim.lsp.stop_client(args.data.client_id) end,
-        group = AUGROUP "lsp_disable_certain_files",
-    })
-    -- vim.cmd [[autocmd LspAttach,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
+    -- vim.cmd [[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh({ bufnr = 0 })]]
 end
 
 return M

@@ -210,6 +210,12 @@ function M.config(_, opts)
         "<cmd>TSTextobjectGotoPreviousEnd @function.outer<cr>zz",
         { desc = "[F but center the location", silent = true }
     )
+
+    -- require("vim.treesitter.query").set(
+    --     "markdown",
+    --     "highlights",
+    --     "(fenced_code_block_delimiter) @punctuation.delimiter"
+    -- )
 end
 
 return M

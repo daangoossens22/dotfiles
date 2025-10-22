@@ -4,12 +4,13 @@ local M = {
     event = "BufRead",
 }
 
+-- NOTE: can this plugin be replaced by builtin nvim folding (which also now has builtin lsp folds)
 function M.config()
     MAP("n", "zR", require("ufo").openAllFolds)
     MAP("n", "zM", require("ufo").closeAllFolds)
     MAP("n", "zr", require("ufo").openFoldsExceptKinds)
     MAP("n", "zm", require("ufo").closeFoldsWith) -- closeAllFolds == closeFoldsWith(0)
-    MAP("n", "K", function() require("ufo").peekFoldedLinesUnderCursor() end)
+    -- MAP("n", "K", function() require("ufo").peekFoldedLinesUnderCursor() end)
     MAP("n", "zk", function()
         require("ufo").goPreviousStartFold()
         vim.cmd [[norm 0]] -- so its consistent with builtin zj keymap

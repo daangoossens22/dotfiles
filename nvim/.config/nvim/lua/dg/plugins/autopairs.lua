@@ -2,8 +2,10 @@ local M = {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     dependencies = "hrsh7th/nvim-cmp",
+    enabled = false,
 }
 
+-- TODO: can do this with luasnip autosnippets??
 function M.config()
     local autopairs = require "nvim-autopairs"
     autopairs.setup {

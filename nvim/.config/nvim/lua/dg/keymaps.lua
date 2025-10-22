@@ -1,29 +1,27 @@
-MAP("c", "<C-h>", "<left>", "move cursor left in command line")
-MAP("c", "<C-l>", "<right>", "move cursor left in command line")
+MAP({ "c", "i" }, "<C-b>", "<left>", "move cursor left in the command line")
+MAP({ "c", "i" }, "<C-f>", "<right>", "move cursor right in the command line")
+MAP({ "c", "i" }, "<C-a>", "<Home>", "move cursor to the start in the command line")
+MAP({ "c", "i" }, "<M-b>", "<S-left>", "move cursor one word left in the command line")
+MAP({ "c", "i" }, "<M-f>", "<S-right>", "move cursor one word left in the command line")
+-- TODO: map <C-d> <M-d> <S-BS>
 MAP("v", "<", "<gv", "< but keep block selected")
 MAP("v", ">", ">gv", "> but keep block selected")
 MAP("v", "=", "=gv", "= but keep block selected")
 MAP("x", ".", ":norm .<CR>")
-MAP("x", "@", ":norm @@<CR>")
+-- MAP("x", "@", ":norm @@<CR>")
 
 MAP("n", "<leader>w", "<C-w>", "change window commands leader key")
--- MAP("n", "+", "<c-w>+", "increase the height of the pane")
--- MAP("n", "-", "<c-w>-", "decrease the height of the pane")
--- MAP("n", "<C-m>", "<c-w>>", "increase the width of the pane")
--- MAP("n", "<C-n>", "<c-w><", "decrease the width of the pane")
 
 MAP("v", "J", ":m '>+1<cr>gv=gv", "move selected lines down")
 MAP("v", "K", ":m '<-2<cr>gv=gv", "move selected lines up")
 MAP("n", "[b", "<cmd>bprev<cr>", "move to previous buffer")
 MAP("n", "]b", "<cmd>bnext<cr>", "move to next buffer")
-MAP("n", "<leader>qn", "<cmd>cnewer<cr>", "go to the newer quickfixlist")
-MAP("n", "<leader>qp", "<cmd>colder<cr>", "go to the older quickfixlist")
+-- MAP("n", "<leader>qn", "<cmd>cnewer<cr>", "go to the newer quickfixlist")
+-- MAP("n", "<leader>qp", "<cmd>colder<cr>", "go to the older quickfixlist")
 
--- MAP("n", "<leader>Y", "ggyG<C-o>", "yank whole file")
--- MAP("n", "<leader>\\", "<cmd>nohlsearch<cr>", "disable search highlighting")
 MAP("n", "<leader>\\", function()
     vim.cmd.nohlsearch()
-    require("notify").dismiss { silent = true, pending = true }
+    -- require("notify").dismiss { silent = true, pending = true }
 end, "disable search highlighting")
 
 MAP("", "<leader>y", '"+y', "yank into the system clipboard")
@@ -42,14 +40,18 @@ MAP("n", "{", "{zz", "{ but center the location")
 MAP("n", "<leader>tn", "<cmd>tabnew<cr>")
 MAP("n", "<leader>tc", "<cmd>tabclose<cr>")
 MAP("n", "<leader>it", "<cmd>InspectTree<cr>")
+MAP("n", "gK", ":Man<CR>", "open the manpage of the word under the cursor")
 
 -- MAP("n", "]c", "]czz", "]c but center the location (diff mode)")
 -- MAP("n", "[c", "[czz", "[c but center the location (diff mode)")
 -- MAP("n", "<leader>dg", "<cmd>.diffg<cr>", "undo the current line (diff mode)")
 -- MAP("v", "<leader>dg", "<cmd>diffg<cr>", "undo the whole hunk (diff mode)")
 
+MAP("n", "<leader>x", ":.lua<CR>", "execute current ua line")
+MAP("v", "<leader>x", ":lua<CR>", "execute selected lua block")
+MAP("n", "<leader><leader>x", "<cmd>source %<CR>", "source/execute focused buffer")
 -- MAP("n", "<leader>x", "<cmd>execute getline('.')<cr>", "execute the line under the cursor as an Ex command")
-MAP("c", "%%", "<C-R>=fnameescape(expand('%:h')).'/'<cr>", "expand foldername current file is in")
+-- MAP("c", "%%", "<C-R>=fnameescape(expand('%:h')).'/'<cr>", "expand foldername current file is in")
 
 -- -- make tags (is this still needed with lsp)
 -- vim.cmd [[command! MakeTags !ctags -R .]]
@@ -84,8 +86,7 @@ local MoveQFList = function(next_item)
 
     local ok, result = pcall(vim.cmd, exec_cmd)
     if ok then
-        local keys = vim.api.nvim_replace_termcodes("zz", true, false, true)
-        vim.api.nvim_feedkeys(keys, "n", false)
+        vim.api.nvim_feedkeys("zz", "n", false)
     else
         result = result:gsub(".*%):", "")
         vim.notify(result, vim.log.levels.ERROR, { title = "module: remaps" })
@@ -98,18 +99,18 @@ MAP("n", "<leader>ls", ToggleQFList, "show all contents of currently selected QF
 MAP("n", "<C-l>", function() MoveQFList(true) end, "move to next item in currently selected QF list")
 MAP("n", "<C-h>", function() MoveQFList(false) end, "move to prev item in currently selected QF list")
 
-vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = "*.md",
-    callback = function()
-        if vim.b.autopdf then
-            vim.cmd [[silent !pandoc -f markdown-implicit_figures -s %:p -o %:p:r.pdf --highlight-style=tango &]]
-        end
-    end,
-    group = AUGROUP "markdown_autopdf",
-})
-MAP(
-    "n",
-    "<leader>tp",
-    function() vim.b.autopdf = not vim.b.autopdf end,
-    "autogenerates a pdf on write for the current buffer if it is a markdown file"
-)
+-- vim.api.nvim_create_autocmd("BufWritePost", {
+--     pattern = "*.md",
+--     callback = function()
+--         if vim.b.autopdf then
+--             vim.cmd [[silent !pandoc -f markdown-implicit_figures -s %:p -o %:p:r.pdf --highlight-style=tango &]]
+--         end
+--     end,
+--     group = AUGROUP "markdown_autopdf",
+-- })
+-- MAP(
+--     "n",
+--     "<leader>tp",
+--     function() vim.b.autopdf = not vim.b.autopdf end,
+--     "autogenerates a pdf on write for the current buffer if it is a markdown file"
+-- )

@@ -22,13 +22,7 @@ function M.config()
         PATH = "append",
     }
     local mason_packages = {
-        "stylua",
-        "prettier",
-        "yapf",
-        "shellharden",
-        "shellcheck",
         "codelldb",
-        "debugpy",
     }
     for _, cur_package in ipairs(mason_packages) do
         local p = require("mason-registry").get_package(cur_package)

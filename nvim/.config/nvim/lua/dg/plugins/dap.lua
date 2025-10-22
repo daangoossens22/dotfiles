@@ -80,10 +80,17 @@ function M.init()
     MAP("n", "<F2>", function() require("dap").step_into() end, "[DAP] step into")
     MAP("n", "<F3>", function() require("dap").step_over() end, "[DAP] step over")
     MAP("n", "<F4>", function() require("dap").step_out() end, "[DAP] step out")
+    MAP("n", "<F5>", function() require("dap").step_back() end, "[DAP] step back")
     MAP("n", "<F9>", function() require("dap").run_to_cursor() end, "[DAP] continue till cursor")
     MAP("n", "<F12>", function() require("dap").terminate() end, "[DAP] terminate session")
     MAP("n", "<leader>rt", function() require("dap").repl.toggle() end, "[DAP] toggle repl pane")
     MAP("n", "<leader>rl", function() require("dap").run_last() end, "[DAP] run last")
+    MAP(
+        "n",
+        "<leader>?",
+        function() require("dapui").eval(nil, { enter = true }) end,
+        "[DAP] show value under cursor in float window"
+    )
 
     MAP("n", "<leader>dt", function() require("dap").toggle() end, "[DAP] toggle dapui panes")
     -- NOTE: experimental -> likely to change in later versions

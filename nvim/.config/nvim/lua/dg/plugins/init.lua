@@ -5,28 +5,6 @@ return {
     { "tpope/vim-repeat", event = "VeryLazy" },
     { "tpope/vim-sleuth", event = "BufReadPre" },
     { "kylechui/nvim-surround", keys = { "ds", "cs", "ys", { "S", mode = "v" } }, opts = {} },
-    {
-        "karb94/neoscroll.nvim",
-        keys = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-y>", "<C-e>", "zt", "zz", "zb" },
-        config = function()
-            -- REF: https://github.com/karb94/neoscroll.nvim/issues/80
-            require("neoscroll").setup {
-                -- performance_mode = true,
-                pre_hook = function()
-                    vim.opt.eventignore:append {
-                        "WinScrolled",
-                        "CursorMoved",
-                    }
-                end,
-                post_hook = function()
-                    vim.opt.eventignore:remove {
-                        "WinScrolled",
-                        "CursorMoved",
-                    }
-                end,
-            }
-        end,
-    },
 
     {
         "b0o/incline.nvim",
@@ -66,6 +44,7 @@ return {
         },
         config = true,
         ft = { "help", "markdown" },
+        enabled = false,
     },
 
     -- -- TODO: plugins to try out
@@ -78,7 +57,7 @@ return {
     -- "tommcdo/vim-lion"
     -- "NeogitOrg/neogit" or "kdheepak/lazygit.nvim"
     -- "lewis6991/hover.nvim"
-    -- "stevearc/oil.nvim"
+    -- "mfussenegger/nvim-lint"
 
     -- "stevearc/aerial.nvim" -- use telescope lsp_document_symbols??
     -- "famiu/bufdelete.nvim"

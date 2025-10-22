@@ -76,6 +76,7 @@ function M.config()
             { name = "zsh" },
             { name = "neorg" },
             { name = "buffer", keyword_length = 5 },
+            { name = "lazydev" },
         },
         sorting = {
             priority_weight = 2,
@@ -138,6 +139,7 @@ function M.config()
             disallow_partial_fuzzy_matching = true,
             disallow_partial_matching = false,
             disallow_prefix_unmatching = false,
+            disallow_symbol_nonprefix_matching = true,
         },
         formatting = {
             format = require("lspkind").cmp_format {
@@ -161,19 +163,17 @@ function M.config()
     -- NOTE: doesn't work if `native_menu` is enabled
     local cmdline_mappings = {
         ["<C-n>"] = cmp.mapping(function()
-            local key = vim.api.nvim_replace_termcodes("<Down>", true, false, true)
             if cmp.visible() then
                 cmp.select_next_item()
             else
-                vim.api.nvim_feedkeys(key, "c", false)
+                vim.api.nvim_feedkeys(vim.keycode "<Down>", "c", false)
             end
         end, { "c" }),
         ["<C-p>"] = cmp.mapping(function()
-            local key = vim.api.nvim_replace_termcodes("<Up>", true, false, true)
             if cmp.visible() then
                 cmp.select_prev_item()
             else
-                vim.api.nvim_feedkeys(key, "c", false)
+                vim.api.nvim_feedkeys(vim.keycode "<Up>", "c", false)
             end
         end, { "c" }),
         ["<Tab>"] = cmp.mapping(function()

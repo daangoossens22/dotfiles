@@ -40,7 +40,7 @@ o.splitkeep = "screen"
 opt.diffopt:append "vertical"
 -- vim.opt.diffopt = { "internal", "filler", "closeoff", "hiddenoff", "algorithm:minimal" }
 o.virtualedit = "block"
-opt.fillchars = { diff = "╱", fold = " ", foldopen = "⮟", foldsep = " ", foldclose = "⮞" }
+opt.fillchars = { diff = "╱", fold = " ", foldopen = "🞃", foldsep = " ", foldclose = "🞂" }
 -- o.inccommand = "split"
 o.modelines = 1
 o.updatetime = 1000
@@ -61,7 +61,7 @@ o.cursorlineopt = "number"
 o.number = true
 o.relativenumber = true
 o.wrap = false
-o.textwidth = 110
+o.textwidth = 120
 o.colorcolumn = "+1"
 o.conceallevel = 2
 o.foldcolumn = "1"
@@ -69,6 +69,7 @@ o.smoothscroll = true
 o.signcolumn = "yes"
 o.linebreak = true
 o.breakindent = true
+o.numberwidth = 1
 
 -- NOTE: local to buffer options
 o.autoindent = true

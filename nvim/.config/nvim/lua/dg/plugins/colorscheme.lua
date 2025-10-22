@@ -5,6 +5,7 @@ local M = {
 }
 
 function M.config()
+    -- TODO: see README of kanagawa to shorten this by using internal blend util method
     -- REF: https://github.com/folke/tokyonight.nvim
     ---@param foreground string foreground color
     ---@param background string background color

@@ -5,21 +5,23 @@ local M = {
         "rafamadriz/friendly-snippets",
         "nvim-treesitter/nvim-treesitter",
     },
+    version = "v2.*",
 }
 
 function M.init()
     -- TODO: keymap to start typing after selection when jumping between options
-    MAP({ "i", "s" }, "<C-k>", function()
+    -- TODO: also set these keymaps for vim.snippet.jump defaults (which are now <Tab> <S-Tab>
+    MAP({ "i", "s" }, "<C-j>", function()
         if require("luasnip").jumpable(1) then require("luasnip").jump(1) end
     end, { silent = true, desc = "[SNIP] jump to next snippet field" })
-    MAP({ "i", "s" }, "<C-j>", function()
+    MAP({ "i", "s" }, "<C-k>", function()
         if require("luasnip").jumpable(-1) then require("luasnip").jump(-1) end
     end, { silent = true, desc = "[SNIP] jump to prev snippet field" })
 
-    MAP({ "i", "s" }, "<C-'>", function()
+    MAP({ "i", "s" }, "<C-;>", function()
         if require("luasnip").choice_active() then require("luasnip").change_choice(1) end
     end, { desc = "[SNIP] change snippet version" })
-    MAP({ "i", "s" }, "<C-;>", function()
+    MAP({ "i", "s" }, "<C-,>", function()
         if require("luasnip").choice_active() then require("luasnip").change_choice(-1) end
     end, { desc = "[SNIP] change snippet version" })
 end

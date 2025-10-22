@@ -3,7 +3,7 @@ local M = {
     event = "VeryLazy",
     dependencies = {
         "MunifTanjim/nui.nvim",
-        "rcarriga/nvim-notify",
+        -- "rcarriga/nvim-notify",
     },
 }
 
@@ -28,7 +28,7 @@ function M.config()
         },
         popupmenu = {
             enabled = false,
-            backend = "cmp",
+            -- backend = "cmp",
         },
         redirect = {
             view = "split",
