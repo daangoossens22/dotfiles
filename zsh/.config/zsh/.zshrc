@@ -160,6 +160,7 @@ change_window_title # change title on opening terminal
 path+=($HOME'/.local/bin')
 path+=($HOME'/.local/share/cargo/bin')
 path+=($HOME'/.local/share/python/bin')
+path+=($HOME'/.local/share/npm/bin')
 export PATH
 
 # open man pages in nvim where it is easier to navigate with colors (same as ':Man (opt:section) {pagename}' command in nvim)

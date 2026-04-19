@@ -69,24 +69,24 @@ else
     export VDPAU_DRIVER="radeonsi"
 fi
 
-# start window manager (only once) automatically on /dev/ttyX
-if [ -z $DISPLAY ]; then
-    case "$(tty)" in
-        "/dev/tty1")
-            exec start-cosmic
-            ;;
-        "/dev/tty2")
-            dbus-update-activation-environment --all
-            XDG_SESSION_TYPE=wayland exec dbus-run-session gnome-session
-            # XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
-            # XDG_SESSION_TYPE=wayland exec gnome-shell --wayland
-            ;;
-        "/dev/tty3")
-            # export WLR_DRM_NO_MODIFIERS=1
-            # export WLR_DRM_NO_ATOMIC=1
-            # export WLR_RENDERER=vulkan
-            exec sway --unsupported-gpu -d 2> "$XDG_STATE_HOME/sway.log"
-            # sway --unsupported-gpu
-            ;;
-    esac
-fi
+# # start window manager (only once) automatically on /dev/ttyX
+# if [ -z $DISPLAY ]; then
+#     case "$(tty)" in
+#         "/dev/tty1")
+#             exec start-cosmic
+#             ;;
+#         "/dev/tty2")
+#             dbus-update-activation-environment --all
+#             XDG_SESSION_TYPE=wayland exec dbus-run-session gnome-session
+#             # XDG_SESSION_TYPE=wayland dbus-run-session gnome-session
+#             # XDG_SESSION_TYPE=wayland exec gnome-shell --wayland
+#             ;;
+#         "/dev/tty3")
+#             # export WLR_DRM_NO_MODIFIERS=1
+#             # export WLR_DRM_NO_ATOMIC=1
+#             # export WLR_RENDERER=vulkan
+#             exec sway --unsupported-gpu -d 2> "$XDG_STATE_HOME/sway.log"
+#             # sway --unsupported-gpu
+#             ;;
+#     esac
+# fi

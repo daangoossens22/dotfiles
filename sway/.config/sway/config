@@ -122,7 +122,7 @@ for_window [app_id="^float_todos$"] floating enable, resize set 60 ppt 90 ppt, b
 ### Key bindings
 ### custom
 bindsym $mod+Return exec $default_terminal
-bindsym $mod+f exec firefox-developer-edition
+bindsym $mod+b exec firefox-developer-edition
 # toggle scaling between 1 and 2
 bindsym $mod+t exec swaymsg output HDMI-A-1 scale `swaymsg -r -t get_outputs | python -c "import sys, json; obj=json.load(sys.stdin); val=int(obj[0]['scale']); print(1 if val == 2 else 2)"`
 bindsym $mod+d exec 'rofi -show drun'
@@ -139,7 +139,7 @@ bindsym $mod+Print exec swaymsg -t get_tree | jq -j '.. | select(.type?) | selec
 bindsym Ctrl+Shift+BackSpace exec killall -s SIGINT wf-recorder
 
 ### basics
-bindsym $mod+w kill
+bindsym $mod+q kill
 # floating_modifier $mod inverse
 floating_modifier $mod normal
 bindsym $mod+Shift+c reload
